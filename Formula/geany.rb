@@ -29,7 +29,7 @@ class Geany < Formula
   depends_on "libsoup"
   depends_on "enchant"
   depends_on "libvterm"
-  depends_on "z80oolong/vte/geany-scintilla@5.3.4"
+  depends_on "z80oolong/dep/scintilla@5.3.4"
   depends_on "source-highlight"
   depends_on "lua"
 

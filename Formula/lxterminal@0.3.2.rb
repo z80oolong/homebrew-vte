@@ -14,6 +14,7 @@ class LxterminalAT032 < Formula
   depends_on "libxslt" => :build
   depends_on "docbook-xsl" => :build
   depends_on "libxml2" => :build
+  depends_on "perl-xml-parser" => :build
   depends_on "gtk+3"
   depends_on "glib"
   depends_on "z80oolong/vte/libvte@2.91"
@@ -21,6 +22,8 @@ class LxterminalAT032 < Formula
   patch :p1, :DATA
 
   def install
+    ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
+
     inreplace "man/Makefile.am" do |s|
       s.gsub!(%r|http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl|, "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl")
     end

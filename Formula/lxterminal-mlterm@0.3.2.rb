@@ -1,18 +1,11 @@
-class Lxterminal < Formula
+class LxterminalMltermAT032 < Formula
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
+  url "https://github.com/lxde/lxterminal/archive/refs/tags/0.3.2.tar.gz"
+  sha256 "03c6bdc0fcf7a2e2760e780d2499b618471b0960625d73f9b77654cd58c54ec5"
+  version "0.3.2"
 
-  stable do
-    url "https://github.com/lxde/lxterminal/archive/refs/tags/0.4.0.tar.gz"
-    sha256 "1a179138ebca932ece6d70c033bc10f8125550183eb675675ee9b487c4a5a5cf"
-    version "0.4.0"
-    patch :p1, Formula["z80oolong/vte/lxterminal@0.4.0"].diff_data
-  end
-
-  head do
-    url "https://github.com/lxde/lxterminal.git"
-    patch :p1, :DATA
-  end
+  keg_only :versioned_formula
 
   depends_on "pkg-config" => :build
   depends_on "autoconf" => :build
@@ -24,7 +17,9 @@ class Lxterminal < Formula
   depends_on "perl-xml-parser" => :build
   depends_on "gtk+3"
   depends_on "glib"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "z80oolong/mlterm/mlterm@3.9.3"
+
+  patch :p1, :DATA
 
   def install
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
@@ -58,31 +53,31 @@ end
 
 __END__
 diff --git a/configure.ac b/configure.ac
-index bf06726..d0676fe 100644
+index b438e7a..696c56e 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -92,11 +92,11 @@ if test x"$enable_man" = x"yes"; then
- 		AC_MSG_ERROR([xsltproc is required to regenerate the pre-built man page; consider --disable-man])
+@@ -90,11 +90,11 @@ if test x"$enable_man" = x"yes"; then
+ 		enable_man=no
  	fi
  
 -	dnl check for DocBook DTD and stylesheets in the local catalog.
 -	JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
--		[DocBook XML DTD V4.1.2], [], AC_MSG_ERROR([DocBook XML DTD is required to regenerate the pre-built man page; consider --disable-man]))
+-		[DocBook XML DTD V4.1.2], [], enable_man=no)
 -	JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
--		[DocBook XSL Stylesheets >= 1.70.1], [], AC_MSG_ERROR([DocBook XSL Stylesheets are required to regenerate the pre-built man page; consider --disable-man]))
+-		[DocBook XSL Stylesheets >= 1.70.1], [], enable_man=no)
 +	#dnl check for DocBook DTD and stylesheets in the local catalog.
 +	#JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
-+	#	[DocBook XML DTD V4.1.2], [], AC_MSG_ERROR([DocBook XML DTD is required to regenerate the pre-built man page; consider --disable-man]))
++	#	[DocBook XML DTD V4.1.2], [], enable_man=no)
 +	#JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
-+	#	[DocBook XSL Stylesheets >= 1.70.1], [], AC_MSG_ERROR([DocBook XSL Stylesheets are required to regenerate the pre-built man page; consider --disable-man]))
- 
- 	rm -f $srcdir/man/lxterminal.1
++	#	[DocBook XSL Stylesheets >= 1.70.1], [], enable_man=no)
  fi
+ 
+ AM_CONDITIONAL(ENABLE_REGENERATE_MAN, test "x$enable_man" != "xno")
 diff --git a/src/lxterminal.c b/src/lxterminal.c
-index 680e411..142867c 100644
+index 70ed131..8b2f9cc 100644
 --- a/src/lxterminal.c
 +++ b/src/lxterminal.c
-@@ -1182,6 +1182,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
+@@ -1143,6 +1143,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
      /* Create and initialize Term structure for new terminal. */
      Term * term = g_slice_new0(Term);
      term->parent = terminal;
@@ -93,7 +88,7 @@ index 680e411..142867c 100644
  
      /* Create a VTE and a vertical scrollbar, and place them inside a horizontal box. */
      term->vte = vte_terminal_new();
-@@ -1222,6 +1226,14 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
+@@ -1162,6 +1166,14 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
  #endif
      vte_terminal_set_backspace_binding(VTE_TERMINAL(term->vte), VTE_ERASE_ASCII_DELETE);
      vte_terminal_set_delete_binding(VTE_TERMINAL(term->vte), VTE_ERASE_DELETE_SEQUENCE);
