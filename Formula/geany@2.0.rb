@@ -1,20 +1,16 @@
-class GeanyAT138 < Formula
+class GeanyAT20 < Formula
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
-  url "https://download.geany.org/geany-1.38.tar.gz"
-  sha256 "e91e903924b993b79ef88f33708372dc7c79aee78e15a02e728338695e9dc155"
+  url "https://download.geany.org/geany-2.0.tar.gz"
+  sha256 "50d28a45ac9b9695e9529c73fe7ed149edb512093c119db109cea6424114847f"
 
   resource("geany-plugins") do
-    url "https://github.com/geany/geany-plugins/archive/refs/tags/1.38.0.tar.gz"
-    sha256 "86d2fe05290136d020b0d22f849a1aaa74b83cb49b767ae2dc19aaedcdf3d469"
+    url "https://github.com/geany/geany-plugins/releases/download/2.0.0/geany-plugins-2.0.tar.bz2"
+    sha256 "9fc2ec5c99a74678fb9e8cdfbd245d3e2061a448d70fd110a6aefb62dd514705"
   end
 
   keg_only :versioned_formula
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
-  depends_on "docutils" => :build
   depends_on "pkg-config" => :build
   depends_on "intltool" => :build
   depends_on "perl-xml-parser" => :build
@@ -30,7 +26,7 @@ class GeanyAT138 < Formula
   depends_on "gnupg"
   depends_on "gpgme"
   depends_on "libsoup@2"
-  depends_on "z80oolong/dep/libgit2@1.3.2"
+  depends_on "libgit2"
   depends_on "webkitgtk"
   depends_on "lua@5.1"
   depends_on "source-highlight"
@@ -63,14 +59,12 @@ class GeanyAT138 < Formula
       system "cp", "-v", "#{buildpath}/geany-plugins.diff", "./geany-plugins.diff"
       system "patch -p1 < ./geany-plugins.diff"
 
-      system "sh", "./autogen.sh"
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args = %W[
         --disable-dependency-tracking
         --prefix=#{prefix}
-        --enable-markdown
-        --disable-devhelp
+        --enable-all-plugins
         --with-geany-libdir=#{lib}
       ]
 
@@ -96,15 +90,15 @@ end
 __END__
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
-index 0000000..7c99f37
+index 0000000..73fb2a1
 --- /dev/null
 +++ b/geany-plugins.diff
 @@ -0,0 +1,74 @@
 +diff --git a/debugger/src/debug.c b/debugger/src/debug.c
-+index 6a019c5..5498edb 100644
++index 23bde5c..f5bd6ca 100644
 +--- a/debugger/src/debug.c
 ++++ b/debugger/src/debug.c
-+@@ -1000,6 +1000,9 @@ void debug_init(void)
++@@ -1004,6 +1004,9 @@ void debug_init(void)
 + 	gchar *configfile;
 + 	gchar *font;
 + 	GtkTextBuffer *buffer;
@@ -114,7 +108,7 @@ index 0000000..7c99f37
 + 
 + #if GTK_CHECK_VERSION(3, 0, 0)
 + 	VtePty *pty;
-+@@ -1053,6 +1056,15 @@ void debug_init(void)
++@@ -1057,6 +1060,15 @@ void debug_init(void)
 + 	vte_terminal_set_pty(VTE_TERMINAL(terminal), pty_master);
 + 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(terminal)->adjustment));
 + #endif
@@ -175,10 +169,10 @@ index 0000000..7c99f37
 + 		dc_output_nl = console_output_nl;
 + 		g_signal_connect_after(debug_console, "realize", G_CALLBACK(on_vte_realize), NULL);
 diff --git a/src/plugins.c b/src/plugins.c
-index cfc4efd..da18949 100644
+index 8545b18..8afe5aa 100644
 --- a/src/plugins.c
 +++ b/src/plugins.c
-@@ -1192,11 +1192,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
+@@ -1143,11 +1143,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
  	}
  }
  
@@ -199,7 +193,7 @@ index cfc4efd..da18949 100644
  	gchar *plugin_path_system;
  	gchar *plugin_path_custom;
  
-@@ -1213,6 +1222,15 @@ static void load_all_plugins(void)
+@@ -1164,6 +1173,15 @@ static void load_all_plugins(void)
  		load_plugins_from_path(plugin_path_custom);
  		g_free(plugin_path_custom);
  	}
@@ -216,7 +210,7 @@ index cfc4efd..da18949 100644
  	/* finally load plugins from $prefix/lib/geany */
  	load_plugins_from_path(plugin_path_system);
 diff --git a/src/vte.c b/src/vte.c
-index 916e2c2..b8c8b2c 100644
+index be600b3..1aedd03 100644
 --- a/src/vte.c
 +++ b/src/vte.c
 @@ -136,6 +136,10 @@ struct VteFunctions
@@ -230,7 +224,7 @@ index 916e2c2..b8c8b2c 100644
  };
  
  
-@@ -335,6 +339,9 @@ static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
+@@ -339,6 +343,9 @@ static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
  static void create_vte(void)
  {
  	GtkWidget *vte, *scrollbar, *hbox;
@@ -238,9 +232,9 @@ index 916e2c2..b8c8b2c 100644
 +	char *vte_cjk_width = NULL;
 +#endif
  
- 	vc->vte = vte = vf->vte_terminal_new();
+ 	vte_config.vte = vte = vf->vte_terminal_new();
  	scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
-@@ -378,6 +385,14 @@ static void create_vte(void)
+@@ -382,6 +389,14 @@ static void create_vte(void)
  	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, terminal_label, MSG_VTE);
  
  	g_signal_connect_after(vte, "realize", G_CALLBACK(on_vte_realize), NULL);
@@ -255,7 +249,7 @@ index 916e2c2..b8c8b2c 100644
  }
  
  
-@@ -626,6 +641,10 @@ static gboolean vte_register_symbols(GModule *mod)
+@@ -629,6 +644,10 @@ static gboolean vte_register_symbols(GModule *mod)
  	if (! BIND_SYMBOL(vte_terminal_get_adjustment))
  		/* vte_terminal_get_adjustment() is available since 0.9 and removed in 0.38 */
  		vf->vte_terminal_get_adjustment = default_vte_terminal_get_adjustment;

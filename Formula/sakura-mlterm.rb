@@ -6,7 +6,7 @@ class SakuraMlterm < Formula
   stable do
     url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_6.tar.gz"
     sha256 "2cea5840c34e8d1a17b055dadc6efa6b5f1d97bb39d6b78590dba0915d19b0a7"
-    patch :p1, Formula["z80oolong/mlterm/sakura-mlterm@3.8.6"].diff_data
+    patch :p1, Formula["z80oolong/vte/sakura-mlterm@3.8.6"].diff_data
   end
 
   head do
