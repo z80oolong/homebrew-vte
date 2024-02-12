@@ -3,9 +3,9 @@ class MateTerminal < Formula
   homepage "https://github.com/mate-desktop/mate-terminal"
 
   stable do
-    url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.26.1/mate-terminal-1.26.1.tar.xz"
-    sha256 "7c130206f0b47887e8c9274e73f8c19fae511134572869a7c23111b789e1e1d0"
-    patch :p1, Formula["z80oolong/vte/mate-terminal@1.26.1"].diff_data
+    url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.27.1/mate-terminal-1.27.1.tar.xz"
+    sha256 "8d6b16ff2cac930afce4625b1b8f30c055e314e5b3dae806ac5b80c809f08dbe"
+    patch :p1, Formula["z80oolong/vte/mate-terminal@1.27.1"].diff_data
   end
 
   head do
@@ -64,10 +64,10 @@ end
 
 __END__
 diff --git a/src/terminal-window.c b/src/terminal-window.c
-index 4608267..a5f1b9d 100644
+index 51468df..6cefda5 100644
 --- a/src/terminal-window.c
 +++ b/src/terminal-window.c
-@@ -917,6 +917,24 @@ terminal_set_encoding_callback (GtkToggleAction *action,
+@@ -910,6 +910,24 @@ terminal_set_encoding_callback (GtkToggleAction *action,
  {
      TerminalWindowPrivate *priv = window->priv;
      TerminalEncoding *encoding;
@@ -92,11 +92,10 @@ index 4608267..a5f1b9d 100644
  
      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
      if (!gtk_toggle_action_get_active (action))
-@@ -926,6 +944,7 @@ terminal_set_encoding_callback (GtkToggleAction *action,
+@@ -919,6 +937,7 @@ terminal_set_encoding_callback (GtkToggleAction *action,
      if (priv->active_screen == NULL)
          return;
  
 +#endif
      encoding = g_object_get_data (G_OBJECT (action), ENCODING_DATA_KEY);
      g_assert (encoding);
- 

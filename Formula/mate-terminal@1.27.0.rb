@@ -1,17 +1,10 @@
-class MateTerminalMlterm < Formula
+class MateTerminalAT1270 < Formula
   desc "Terminal emulator for the MATE desktop environment"
   homepage "https://github.com/mate-desktop/mate-terminal"
+  url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.27.0/mate-terminal-1.27.0.tar.xz"
+  sha256 "42889c98045f011b7e633c2c1706dfc379d52c9c26aef386c8d6890c09d3681b"
 
-  stable do
-    url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.26.1/mate-terminal-1.26.1.tar.xz"
-    sha256 "7c130206f0b47887e8c9274e73f8c19fae511134572869a7c23111b789e1e1d0"
-    patch :p1, Formula["z80oolong/vte/mate-terminal-mlterm@1.26.1"].diff_data
-  end
-
-  head do
-    url "https://github.com/mate-desktop/mate-terminal.git"
-    patch :p1, :HEAD
-  end
+  patch :p1, :DATA
 
   depends_on "pkg-config" => :build
   depends_on "automake" => :build
@@ -27,11 +20,11 @@ class MateTerminalMlterm < Formula
   depends_on "glib"
   depends_on "gtk+3"
   depends_on "gdk-pixbuf"
-  depends_on "z80oolong/mlterm/mlterm@3.9.3"
+  depends_on "z80oolong/vte/libvte@2.91"
   depends_on "z80oolong/dep/dconf@0"
   depends_on "z80oolong/dep/mate-desktop"
 
-  keg_only "it conflicts with 'z80oolong/vte/mate-terminal'"
+  keg_only :versioned_formula
 
   def install
     aclocal_flags =  ""
@@ -58,6 +51,15 @@ class MateTerminalMlterm < Formula
     EOS
   end
 
+  def diff_data
+    lines = self.path.each_line.inject([]) do |result, line|
+      result.push(line) if ((/^__END__/ === line) || result.first)
+      result
+    end
+    lines.shift
+    return lines.join("")
+  end
+
   test do
     system "false"
   end
@@ -65,7 +67,7 @@ end
 
 __END__
 diff --git a/src/terminal-window.c b/src/terminal-window.c
-index 4608267..a5f1b9d 100644
+index aa5288f..42eeb25 100644
 --- a/src/terminal-window.c
 +++ b/src/terminal-window.c
 @@ -917,6 +917,24 @@ terminal_set_encoding_callback (GtkToggleAction *action,
@@ -100,4 +102,3 @@ index 4608267..a5f1b9d 100644
 +#endif
      encoding = g_object_get_data (G_OBJECT (action), ENCODING_DATA_KEY);
      g_assert (encoding);
- 

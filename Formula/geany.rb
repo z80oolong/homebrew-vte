@@ -50,7 +50,7 @@ class Geany < Formula
   depends_on "z80oolong/dep/ctpl@0.3.4"
 
   def install
-    ENV.append "CFLAGS", %[-DDEFAULT_HOMEBREW_PATH=\\""#{ENV["HOMEBREW_PREFIX"]}"\\"]
+    ENV.append "CFLAGS", %[-DNO_USE_HOMEBREW_GEANY_PLUGINS]
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", "#{prefix}/lib/pkgconfig"
 

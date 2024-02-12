@@ -1,8 +1,8 @@
-class RoxtermMltermAT3121 < Formula
+class RoxtermAT3143 < Formula
   desc "ROXTerm is a terminal emulator intended to provide similar features to gnome-terminal, based on the same VTE library, but with a smaller footprint and quicker start-up time."
   homepage "https://roxterm.sourceforge.io/"
-  url "https://github.com/realh/roxterm/archive/refs/tags/3.12.1.tar.gz"
-  sha256 "9a662a00fe555ae9ff38301a1707a3432d8f678326062c98740f20827280a5aa"
+  url "https://github.com/realh/roxterm/archive/refs/tags/3.14.3.tar.gz"
+  sha256 "4f801371113ff33d6a53dfa77aef6c3d09d29620fcf27e844c755904f9776e5b"
 
   depends_on "cmake" => :build
   depends_on "pkg-config" => :build
@@ -11,7 +11,7 @@ class RoxtermMltermAT3121 < Formula
   depends_on "glib"
   depends_on "dbus-glib"
   depends_on "gtk+3"
-  depends_on "z80oolong/mlterm/mlterm@3.9.3"
+  depends_on "z80oolong/vte/libvte@2.91"
 
   keg_only :versioned_formula
 
@@ -44,10 +44,10 @@ end
 
 __END__
 diff --git a/src/roxterm.c b/src/roxterm.c
-index 74de25e..8ad791b 100644
+index 1a8173f..5760e37 100644
 --- a/src/roxterm.c
 +++ b/src/roxterm.c
-@@ -3123,6 +3123,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3233,6 +3233,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
      gboolean custom_tab_name = FALSE;
      MultiWin *template_win = roxterm_get_win(roxterm_template);
      GtkWidget *viewport = NULL;
@@ -57,7 +57,7 @@ index 74de25e..8ad791b 100644
  
      roxterm_terms = g_list_append(roxterm_terms, roxterm);
  
-@@ -3149,6 +3152,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3259,6 +3262,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
              roxterm->columns, roxterm->rows);
      gtk_widget_grab_focus(roxterm->widget);
      vte = VTE_TERMINAL(roxterm->widget);

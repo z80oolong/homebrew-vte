@@ -9,7 +9,7 @@ class SakuraAT384 < Formula
 
   patch :p1, :DATA
 
-  depends_on "gtk+3"
+  #depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
   depends_on "systemd"
   depends_on "gettext"
