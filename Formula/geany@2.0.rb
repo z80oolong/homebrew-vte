@@ -13,6 +13,7 @@ class GeanyAT20 < Formula
 
   depends_on "pkg-config" => :build
   depends_on "intltool" => :build
+  depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
   depends_on "gettext"
   depends_on "gtk+3"
@@ -28,10 +29,10 @@ class GeanyAT20 < Formula
   depends_on "libsoup@2"
   depends_on "libgit2"
   depends_on "webkitgtk"
-  depends_on "lua@5.1"
+  depends_on "z80oolong/dep/lua@5.1"
   depends_on "source-highlight"
   depends_on "z80oolong/dep/scintilla@5.3.4"
-  depends_on "z80oolong/dep/ctpl@0.3.4"
+  depends_on "z80oolong/dep/ctpl@0.3.5"
 
   patch :p1, :DATA
 
@@ -90,10 +91,10 @@ end
 __END__
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
-index 0000000..73fb2a1
+index 0000000..25fed67
 --- /dev/null
 +++ b/geany-plugins.diff
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,90 @@
 +diff --git a/debugger/src/debug.c b/debugger/src/debug.c
 +index 23bde5c..f5bd6ca 100644
 +--- a/debugger/src/debug.c
@@ -124,6 +125,22 @@ index 0000000..73fb2a1
 + 	gtk_widget_set_can_focus(GTK_WIDGET(scrollbar), FALSE);
 + 	tab_terminal = gtk_frame_new(NULL);
 + 	gtk_frame_set_shadow_type (GTK_FRAME(tab_terminal), GTK_SHADOW_NONE);
++diff --git a/projectorganizer/src/prjorg-sidebar.c b/projectorganizer/src/prjorg-sidebar.c
++index b6422f0..b36d991 100644
++--- a/projectorganizer/src/prjorg-sidebar.c
+++++ b/projectorganizer/src/prjorg-sidebar.c
++@@ -1562,7 +1562,11 @@ gchar **prjorg_sidebar_get_expanded_paths(void)
++ 		(GtkTreeViewMappingFunc)on_map_expanded, expanded_paths);
++ 	g_ptr_array_add(expanded_paths, NULL);
++ 
+++#if NO_FIX_CAST_GCHAR
++ 	return g_ptr_array_free(expanded_paths, FALSE);
+++#else
+++	return (gchar **)g_ptr_array_free(expanded_paths, FALSE);
+++#endif
++ }
++ 
++ 
 +diff --git a/scope/src/conterm.c b/scope/src/conterm.c
 +index b9f6a38..9ef76ec 100644
 +--- a/scope/src/conterm.c

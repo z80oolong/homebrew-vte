@@ -1,17 +1,10 @@
-class MateTerminal < Formula
+class MateTerminalAT1280 < Formula
   desc "Terminal emulator for the MATE desktop environment"
   homepage "https://github.com/mate-desktop/mate-terminal"
+  url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.28.0/mate-terminal-1.28.0.tar.xz"
+  sha256 "dea52c6fe8d61005ba5f85a7cbf0d096c27b90bcec3f915421ce81e5f7dd1692"
 
-  stable do
-    url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.28.1/mate-terminal-1.28.1.tar.xz"
-    sha256 "f135eb1a9e2ae22798ecb2dc1914fdb4cfd774e6bb65c0152be37cc6c9469e92"
-    patch :p1, Formula["z80oolong/vte/mate-terminal@1.28.1"].diff_data
-  end
-
-  head do
-    url "https://github.com/mate-desktop/mate-terminal.git"
-    patch :p1, :HEAD
-  end
+  patch :p1, :DATA
 
   depends_on "pkg-config" => :build
   depends_on "automake" => :build
@@ -31,6 +24,8 @@ class MateTerminal < Formula
   depends_on "z80oolong/dep/dconf@0"
   depends_on "z80oolong/dep/mate-desktop"
 
+  keg_only :versioned_formula
+
   def install
     aclocal_flags =  ""
     aclocal_flags << "-I #{Formula["z80oolong/dep/autoconf-archive@2023"].opt_share}/aclocal "
@@ -40,7 +35,6 @@ class MateTerminal < Formula
     system "sh", "./autogen.sh", "--prefix=#{prefix}"
     system "make"
     system "make", "install"
-    system "rm", "#{share}/glib-2.0/schemas/gschemas.compiled"
   end
 
   def post_install
@@ -50,10 +44,10 @@ class MateTerminal < Formula
   end
 
   def caveats; <<~EOS
-    When starting mate-terminal installed with this Formula, the environment variables should be set as follows.
+    When starting #{name} installed with this Formula, the environment variables should be set as follows.
     
-      export GSETTINGS_SCHEMA_DIR="#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
-      export XDG_DATA_DIRS="#{HOMEBREW_PREFIX}/share:${XDG_DATA_DIRS}"
+      export GSETTINGS_SCHEMA_DIR="#{opt_share}/glib-2.0/schemas:#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
+      export XDG_DATA_DIRS="#{opt_share}:#{HOMEBREW_PREFIX}/share:${XDG_DATA_DIRS}"
     EOS
   end
 

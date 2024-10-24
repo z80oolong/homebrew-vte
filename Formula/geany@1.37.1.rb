@@ -17,6 +17,7 @@ class GeanyAT1371 < Formula
   depends_on "docutils" => :build
   depends_on "pkg-config" => :build
   depends_on "intltool" => :build
+  depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
   depends_on "gettext"
   depends_on "gtk+3"
@@ -32,10 +33,10 @@ class GeanyAT1371 < Formula
   depends_on "libsoup@2"
   depends_on "z80oolong/dep/libgit2@1.3.2"
   depends_on "webkitgtk"
-  depends_on "lua@5.1"
+  depends_on "z80oolong/dep/lua@5.1"
   depends_on "source-highlight"
   depends_on "z80oolong/dep/scintilla@5.3.4"
-  depends_on "z80oolong/dep/ctpl@0.3.4"
+  depends_on "z80oolong/dep/ctpl@0.3.5"
 
   patch :p1, :DATA
 
@@ -43,6 +44,10 @@ class GeanyAT1371 < Formula
     ENV.append "CFLAGS", %[-DNO_USE_HOMEBREW_GEANY_PLUGINS]
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", "#{prefix}/lib/pkgconfig"
+
+    system Formula["glibc"].opt_bin/"localedef", "-i", "ja_JP", "-f", "UTF-8", "ja_JP.UTF-8"
+    system Formula["glibc"].opt_bin/"localedef", "-i", "en_US", "-f", "UTF-8", "en_US.UTF-8"
+    ENV["LC_ALL"] = "ja_JP.UTF-8"; ENV["LC_CTYPE"] = "ja_JP.UTF-8"; ENV["LANG"] = "ja"
 
     args = %W[
       --disable-dependency-tracking
@@ -96,10 +101,10 @@ end
 __END__
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
-index 000000000..7c99f3796
+index 000000000..6eebf338f
 --- /dev/null
 +++ b/geany-plugins.diff
-@@ -0,0 +1,74 @@
+@@ -0,0 +1,90 @@
 +diff --git a/debugger/src/debug.c b/debugger/src/debug.c
 +index 6a019c5..5498edb 100644
 +--- a/debugger/src/debug.c
@@ -174,6 +179,22 @@ index 000000000..7c99f3796
 + 		dc_output = console_output;
 + 		dc_output_nl = console_output_nl;
 + 		g_signal_connect_after(debug_console, "realize", G_CALLBACK(on_vte_realize), NULL);
++diff --git a/scope/src/stack.c b/scope/src/stack.c
++index b03909f..40acda3 100644
++--- a/scope/src/stack.c
+++++ b/scope/src/stack.c
++@@ -165,7 +165,11 @@ void on_stack_follow(GArray *nodes)
++ gboolean stack_entry(void)
++ {
++ 	GtkTreeIter iter;
+++#if NO_FIX_GBOOLEAN_BUG
++ 	gboolean entry = NULL;
+++#else
+++	gboolean entry = FALSE;
+++#endif
++ 
++ 	if (gtk_tree_selection_get_selected(selection, NULL, &iter))
++ 	{
 diff --git a/src/plugins.c b/src/plugins.c
 index 52c847f08..4e0fb319d 100644
 --- a/src/plugins.c

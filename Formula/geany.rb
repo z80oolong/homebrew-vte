@@ -29,6 +29,7 @@ class Geany < Formula
 
   depends_on "pkg-config" => :build
   depends_on "intltool" => :build
+  depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
   depends_on "gettext"
   depends_on "gtk+3"
@@ -44,15 +45,20 @@ class Geany < Formula
   depends_on "libsoup@2"
   depends_on "libgit2"
   depends_on "webkitgtk"
-  depends_on "lua@5.1"
+  depends_on "z80oolong/dep/lua@5.1"
   depends_on "source-highlight"
   depends_on "z80oolong/dep/scintilla@5.3.4"
-  depends_on "z80oolong/dep/ctpl@0.3.4"
+  depends_on "z80oolong/dep/ctpl@0.3.5"
 
   def install
     ENV.append "CFLAGS", %[-DNO_USE_HOMEBREW_GEANY_PLUGINS]
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", "#{prefix}/lib/pkgconfig"
+    if head? then
+      system Formula["glibc"].opt_bin/"localedef", "-i", "ja_JP", "-f", "UTF-8", "ja_JP.UTF-8"
+      system Formula["glibc"].opt_bin/"localedef", "-i", "en_US", "-f", "UTF-8", "en_US.UTF-8"
+      ENV["LC_ALL"] = "ja_JP.UTF-8"; ENV["LC_CTYPE"] = "ja_JP.UTF-8"; ENV["LANG"] = "ja"
+    end
 
     system "sh", "./autogen.sh" if head?
 
@@ -186,10 +192,10 @@ index 000000000..71e70eb26
 + 		dc_output_nl = console_output_nl;
 + 		g_signal_connect_after(debug_console, "realize", G_CALLBACK(on_vte_realize), NULL);
 diff --git a/src/plugins.c b/src/plugins.c
-index 8545b18fa..8afe5aa93 100644
+index 3b1c1c8a8..a446d1b6b 100644
 --- a/src/plugins.c
 +++ b/src/plugins.c
-@@ -1143,11 +1143,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
+@@ -1142,11 +1142,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
  	}
  }
  
@@ -210,7 +216,7 @@ index 8545b18fa..8afe5aa93 100644
  	gchar *plugin_path_system;
  	gchar *plugin_path_custom;
  
-@@ -1164,6 +1173,15 @@ static void load_all_plugins(void)
+@@ -1163,6 +1172,15 @@ static void load_all_plugins(void)
  		load_plugins_from_path(plugin_path_custom);
  		g_free(plugin_path_custom);
  	}
@@ -227,7 +233,7 @@ index 8545b18fa..8afe5aa93 100644
  	/* finally load plugins from $prefix/lib/geany */
  	load_plugins_from_path(plugin_path_system);
 diff --git a/src/vte.c b/src/vte.c
-index 6adaa40b4..f4648873a 100644
+index 1fde0d749..c5c9e0a70 100644
 --- a/src/vte.c
 +++ b/src/vte.c
 @@ -135,6 +135,10 @@ struct VteFunctions

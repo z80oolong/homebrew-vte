@@ -1,18 +1,13 @@
-class Sakura < Formula
+class SakuraAT388 < Formula
   desc "GTK/VTE based terminal emulator."
   homepage "https://launchpad.net/sakura"
   license "GPL-2.0"
+  url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_8.tar.gz"
+  sha256 "b2b05e9e389dafe7bf41fd2fd4ca38a23afdd2e207bf0734d7f3aa3bb6346d50"
 
-  stable do
-    url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_8.tar.gz"
-    sha256 "b2b05e9e389dafe7bf41fd2fd4ca38a23afdd2e207bf0734d7f3aa3bb6346d50"
-    patch :p1, Formula["z80oolong/vte/sakura@3.8.8"].diff_data
-  end
+  keg_only :versioned_formula
 
-  head do
-    url "https://github.com/dabisu/sakura.git"
-    patch :p1, :DATA
-  end
+  patch :p1, :DATA
 
   depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
@@ -22,6 +17,8 @@ class Sakura < Formula
   depends_on "cmake" => :build
 
   def install
+    std_cmake_args << "CMAKE_BUILD_TYPE=Debug"
+
     system "cmake", "-S", ".", "-B", "build", *std_cmake_args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
@@ -43,10 +40,10 @@ end
 
 __END__
 diff --git a/src/sakura.c b/src/sakura.c
-index 72ec13f..8bfca37 100644
+index 18c55bd..94b22d0 100644
 --- a/src/sakura.c
 +++ b/src/sakura.c
-@@ -3001,6 +3001,9 @@ sakura_add_tab()
+@@ -3000,6 +3000,9 @@ sakura_add_tab()
  	GtkWidget *event_box;
  	gint index, page, npages;
  	gchar *cwd = NULL; gchar *default_label_text = NULL;
@@ -56,7 +53,7 @@ index 72ec13f..8bfca37 100644
  
  	sk_tab = g_new0(struct sakura_tab, 1);
  
-@@ -3278,6 +3281,14 @@ sakura_add_tab()
+@@ -3273,6 +3276,14 @@ sakura_add_tab()
  	vte_terminal_set_audible_bell (VTE_TERMINAL(sk_tab->vte), sakura.audible_bell ? TRUE : FALSE);
  	vte_terminal_set_cursor_blink_mode (VTE_TERMINAL(sk_tab->vte), sakura.blinking_cursor ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
  	vte_terminal_set_cursor_shape (VTE_TERMINAL(sk_tab->vte), sakura.cursor_type);
@@ -70,4 +67,3 @@ index 72ec13f..8bfca37 100644
 +#endif
  
  }
- 

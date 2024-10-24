@@ -15,8 +15,8 @@ class LxterminalAT040 < Formula
   depends_on "docbook-xsl" => :build
   depends_on "libxml2" => :build
   depends_on "perl-xml-parser" => :build
-  depends_on "gtk+3"
   depends_on "glib"
+  depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
@@ -74,7 +74,7 @@ index bf48846..c2657d1 100644
  
  AM_CONDITIONAL(ENABLE_REGENERATE_MAN, test "x$enable_man" != "xno")
 diff --git a/src/lxterminal.c b/src/lxterminal.c
-index 015f5e4..385cd4b 100644
+index 015f5e4..3bd246e 100644
 --- a/src/lxterminal.c
 +++ b/src/lxterminal.c
 @@ -1176,6 +1176,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
@@ -103,3 +103,30 @@ index 015f5e4..385cd4b 100644
  
      /* steal from tilda-0.09.6/src/tilda_terminal.c:145 */
      /* Match URL's, etc. */
+@@ -1210,6 +1222,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
+     vte_terminal_match_set_cursor_type(VTE_TERMINAL(term->vte), ret, GDK_HAND2);
+     ret = vte_terminal_match_add_regex(VTE_TERMINAL(term->vte), dingus2, 0);
+     vte_terminal_match_set_cursor_type(VTE_TERMINAL(term->vte), ret, GDK_HAND2);
++#ifndef NO_FIX_G_REGEX
++    vte_regex_unref(dingus1);
++    vte_regex_unref(dingus2);
++#endif
+ #else
+     GRegex * dingus1 = g_regex_new(DINGUS1, G_REGEX_OPTIMIZE, 0, NULL);
+     GRegex * dingus2 = g_regex_new(DINGUS2, G_REGEX_OPTIMIZE, 0, NULL);
+@@ -1217,9 +1233,15 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
+     vte_terminal_match_set_cursor_type(VTE_TERMINAL(term->vte), ret, GDK_HAND2);
+     ret = vte_terminal_match_add_gregex(VTE_TERMINAL(term->vte), dingus2, 0);
+     vte_terminal_match_set_cursor_type(VTE_TERMINAL(term->vte), ret, GDK_HAND2);
++#ifndef NO_FIX_G_REGEX
++    g_regex_unref(dingus1);
++    g_regex_unref(dingus2);
+ #endif
++#endif
++#ifdef NO_FIX_G_REGEX
+     g_regex_unref(dingus1);
+     g_regex_unref(dingus2);
++#endif
+ 
+     /* Create a horizontal box inside an event box as the toplevel for the tab label. */
+     term->tab = gtk_event_box_new();

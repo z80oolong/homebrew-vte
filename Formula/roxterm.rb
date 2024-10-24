@@ -33,6 +33,15 @@ class Roxterm < Formula
     end
   end
 
+  def diff_data
+    lines = self.path.each_line.inject([]) do |result, line|
+      result.push(line) if ((/^__END__/ === line) || result.first)
+      result
+    end
+    lines.shift
+    return lines.join("")
+  end
+
   test do
     assert_match version.to_s, shell_output("#{bin}/roxterm --version")
   end

@@ -15,8 +15,8 @@ class LxterminalAT032 < Formula
   depends_on "docbook-xsl" => :build
   depends_on "libxml2" => :build
   depends_on "perl-xml-parser" => :build
-  depends_on "gtk+3"
   depends_on "glib"
+  depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA

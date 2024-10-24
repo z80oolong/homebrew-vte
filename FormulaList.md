@@ -30,16 +30,23 @@ Unicode の規格における東アジア圏の各種文字のうち、いわゆ
 
 ### z80oolong/vte/lxterminal
 
-Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの端末エミュレータである lxterminal のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの LXDE 用端末エミュレータである lxterminal のうち、最新の安定版及び HEAD 版を導入するための Formula です。
 
 この Formula によって導入された lxterminal では、前述の ```z80oolong/vte/sakura``` と同様に、環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。
 
 
 ### z80oolong/vte/mate-terminal
 
-Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの端末エミュレータである mate-terminal のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの MATE 用端末エミュレータである mate-terminal のうち、最新の安定版及び HEAD 版を導入するための Formula です。
 
 この Formula によって導入された mate-terminal では、前述の ```z80oolong/vte/sakura``` と同様に、環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。
+
+**なお、この Formula によって導入された mate-terminal を正常に起動させるには、以下のように環境変数 ```GSETTINGS_SCHEMA_DIR, XDG_DATA_DIRS``` を適切に設定する必要があることに留意して下さい。**
+
+```
+  export GSETTINGS_SCHEMA_DIR="/home/linuxbrew/.linuxbrew/opt/mate-terminal/share/glib-2.0/schemas:/home/linuxbrew/.linuxbrew/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
+  export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/opt/mate-terminal/share:/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS}"
+```
 
 ### z80oolong/vte/geany
 
@@ -82,7 +89,7 @@ GTK の端末エミュレータウィジェットである [libvte][LVTE] を提
 
 (注：上記 ```{version}``` には、 lxterminal の各バージョン番号が入ります。以下同様。)
 
-Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの端末エミュレータである lxterminal のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 ```lxterminal {version}``` を導入するための Formula です。
 
 この Formula で導入した lxterminal の使用法については、前述の ```z80oolong/vte/lxterminal``` の Formula についての記述を参照して下さい。
 
@@ -92,7 +99,7 @@ Unicode の規格における東アジア圏の各種文字のうち、いわゆ
 
 (注：上記 ```{version}``` には、 mate-terminal の各バージョン番号が入ります。以下同様。)
 
-Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの端末エミュレータである mate-terminal のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 ```mate-terminal {version}``` を導入するための Formula です。
 
 この Formula で導入した mate-terminal の使用法については、前述の ```z80oolong/vte/mate-terminal``` の Formula についての記述を参照して下さい。
 
