@@ -4,8 +4,8 @@ class LibvteAT291 < Formula
   license "CC-BY-4.0 GPL-3.0 LGPL-3.0"
 
   stable do
-    url "https://github.com/GNOME/vte/archive/refs/tags/0.76.2.tar.gz"
-    sha256 "70a38449fda947e5cb7b4cecbe8a7a77586c799168bfb22162708c94084f21ae"
+    url "https://github.com/GNOME/vte/archive/refs/tags/0.78.1.tar.gz"
+    sha256 "e474770649ddeee5873ac1ed9319702a3a46458de1441a7dbe13ebd481993612"
   end
 
   head do
@@ -29,12 +29,7 @@ class LibvteAT291 < Formula
   keg_only :versioned_formula
 
   def install
-#    inreplace "src/vtedefines.hh" do |s|
-#      s.gsub!(%r|^#define VTE_SIXEL_ENABLED_DEFAULT false|, "#define VTE_SIXEL_ENABLED_DEFAULT true")
-#    end
-
     ENV.append "LDFLAGS", "-ldl -lm"
-#    system "meson", "setup", "build", "-Dsixel=true", "-Ddebug=true", *std_meson_args
     system "meson", "setup", "build", "-Ddebug=true", *std_meson_args
     system "meson", "compile", "-C", "build", "--verbose"
     system "meson", "install", "-C", "build"
