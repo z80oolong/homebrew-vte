@@ -1,4 +1,4 @@
-# z80oolong/vte -- libvte 対応端末エミュレータ及びアプリケーションにおいて East Asian Ambiguous Character を全角文字の幅で表示するための Formula 群
+# z80oolong/vte -- libvte 対応端末エミュレータ及びアプリケーションにおいて各種問題を修正するための Formula 群
 
 ## 概要
 
