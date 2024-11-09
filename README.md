@@ -4,11 +4,18 @@
 
 [Homebrew for Linux][BREW] とは、Linux の各ディストリビューションにおけるソースコードの取得及びビルドに基づいたパッケージ管理システムです。 [Homebrew for Linux][BREW] の使用により、ソースコードからのビルドに基づいたソフトウェアの導入を単純かつ容易に行うことが出来ます。
 
-また、 [libvte][LVTE] は、 GNOME において、端末エミュレータを実装するためのコアとしての機能を Gtk ウィジェットのライブラリとして纏めたものです。
+また、 [libvte][LVTE] は、 [GNOME][GNME] において、端末エミュレータを実装するためのコアとしての機能を [Gtk ウィジェット][DGTK]のライブラリとして纏めたものです。
 
-この [Homebrew for Linux][BREW] 向け Tap リポジトリは、 Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題の修正を適用した [libvte][LVTE] 対応端末エミュレータ及びアプリケーションを導入するための Formula 群を含む Tap リポジトリです。
+この [Homebrew for Linux][BREW] 向け Tap リポジトリは、 [libvte][LVTE] に対応した各種端末エミュレータにおいて：
 
-なお本リポジトリにおいて、現時点で問題の修正に対応している [libvte][LVTE] 対応端末エミュレータ及びアプリケーションに関しては、本リポジトリに同梱する  ```FormulaList.md``` を参照してください。
+- Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題。
+    - 一部の端末エミュレータにおいて、環境変数 ```VTE_CJK_WIDTH``` を用いることにより、設定を可能にしました。
+- 一部の端末エミュレータにおいて、メニュー表示及び設定画面等について日本語化が行われていない問題。
+    - 一部のメニュー及び設定画面の表示を除き、機械翻訳による簡易な日本語翻訳に基づく日本語化を行いました。
+
+以上の問題を修正した [libvte][LVTE] 対応端末エミュレータ及びアプリケーションを導入するための Formula 群を含む Tap リポジトリです。
+
+なお本リポジトリにおいて、現時点で上記の問題の修正に対応している [libvte][LVTE] 対応端末エミュレータ及びアプリケーションに関しては、本リポジトリに同梱する  ```FormulaList.md``` を参照してください。
 
 ## 使用法
 
@@ -47,6 +54,8 @@
 <!-- 外部リンク一覧 -->
 
 [BREW]:https://linuxbrew.sh/
+[GNME]:https://www.gnome.org/
+[DGTK]:https://gtk.org/
 [LVTE]:https://github.com/GNOME/vte
 [EAWA]:http://www.unicode.org/reports/tr11/#Ambiguous
 [THER]:https://qiita.com/thermes
