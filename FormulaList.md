@@ -136,6 +136,8 @@
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [lxterminal][LXTM] は、 keg only で導入されることに留意して下さい。**
 
+この Formula によって導入される [lxterminal][LXTM] を使用するには、 ```brew link --force z80oolong/vte/lxterminal@{version}``` コマンドを実行する必要があります。
+
 ### z80oolong/vte/mate-terminal@{version}
 
 (注：上記 ```{version}``` には、 [mate-terminal][MTTM] の各バージョン番号が入ります。以下同様。)
@@ -146,15 +148,19 @@
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [mate-terminal][MTTM] は、 keg only で導入されることに留意して下さい。**
 
+この Formula によって導入される [mate-terminal][MTTM] を使用するには、 ```brew link --force z80oolong/vte/mate-terminal@{version}``` コマンドを実行する必要があります。
+
 ### z80oolong/vte/xfce4-terminal@{version}
 
 (注：上記 ```{version}``` には、 [xfce4-terminal][XFTM] の各バージョン番号が入ります。以下同様。)
 
 この Formula は、 ```z80oolong/vte/xfce4-terminal``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 [xfce4-terminal {version}][MTTM] を導入するための Formula です。
 
-なお、この Formula で導入した [xfce4-terminal][XFTM] の使用法については、前述の ```z80oolong/vte/mate-terminal``` の Formula についての記述を参照して下さい。
+なお、この Formula で導入した [xfce4-terminal][XFTM] の使用法については、前述の ```z80oolong/vte/xfce4-terminal``` の Formula についての記述を参照して下さい。
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [xfce4-terminal][MTTM] は、 keg only で導入されることに留意して下さい。**
+
+この Formula によって導入される [xfce4-terminal][XFTM] を使用するには、 ```brew link --force z80oolong/vte/xfce4-terminal@{version}``` コマンドを実行する必要があります。
 
 ### z80oolong/vte/geany@{version}
 
