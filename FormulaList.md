@@ -84,13 +84,13 @@
 
 また、この Formula によって導入された [geany][GEAN] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。 [geany][GEAN] の端末機能において、 [East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
 
-### z80oolong/eaw/libvte@2.91
+### z80oolong/vte/libvte@2.91
 
 [GTK][DGTK] の端末エミュレータウィジェットである [libvte][LVTE] を提供する為のライブラリを導入するための Formula です。上述した [libvte][LVTE] ベースの端末エミュレータを持つアプリケーションがこのライブラリに依存します。
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される libvte は、 keg only で導入されることに留意して下さい。**
 
-### z80oolong/eaw/sakura@{version}
+### z80oolong/vte/sakura@{version}
 
 (注：上記 ```{version}``` には、 [sakura][SAKU] の各バージョン番号が入ります。以下同様。)
 
@@ -100,9 +100,9 @@
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [sakura][SAKU] は、 keg only で導入されることに留意して下さい。**
 
-この Formula によって導入される [sakura][SAKU] を使用するには、 ```brew link --force z80oolong/eaw/sakura@{version}``` コマンドを実行する必要があります。
+この Formula によって導入される [sakura][SAKU] を使用するには、 ```brew link --force z80oolong/vte/sakura@{version}``` コマンドを実行する必要があります。
 
-### z80oolong/eaw/roxterm@{version}
+### z80oolong/vte/roxterm@{version}
 
 (注：上記 ```{version}``` には、 [roxterm][ROXT] の各バージョン番号が入ります。以下同様。)
 
@@ -112,9 +112,9 @@
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [roxterm][ROXT] は、 keg only で導入されることに留意して下さい。**
 
-この Formula によって導入される [roxterm][ROXT] を使用するには、 ```brew link --force z80oolong/eaw/roxterm@{version}``` コマンドを実行する必要があります。
+この Formula によって導入される [roxterm][ROXT] を使用するには、 ```brew link --force z80oolong/vte/roxterm@{version}``` コマンドを実行する必要があります。
 
-### z80oolong/eaw/tilda@{version}
+### z80oolong/vte/tilda@{version}
 
 (注：上記 ```{version}``` には、 [tilda][TILD] の各バージョン番号が入ります。以下同様。)
 
@@ -124,7 +124,7 @@
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [tilda][TILD] は、 keg only で導入されることに留意して下さい。**
 
-この Formula によって導入される [tilda][TILD] を使用するには、 ```brew link --force z80oolong/eaw/tilda@{version}``` コマンドを実行する必要があります。
+この Formula によって導入される [tilda][TILD] を使用するには、 ```brew link --force z80oolong/vte/tilda@{version}``` コマンドを実行する必要があります。
 
 ### z80oolong/vte/lxterminal@{version}
 
@@ -156,17 +156,17 @@
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [xfce4-terminal][MTTM] は、 keg only で導入されることに留意して下さい。**
 
-### z80oolong/eaw/geany@{version}
+### z80oolong/vte/geany@{version}
 
 (注：上記 ```{version}``` には、 [geany][GEAN] の各バージョン番号が入ります。以下同様。)
 
 この Formula は、 ```z80oolong/vte/geany``` において述べた問題を修正した [libvte][LVTE] ベースの軽量 IDE である [geany][GEAN] の安定版 [geany {version}][GEAN] を導入します。
 
-なお、この Formula で導入した [geany][GEAN] の使用法については、前述の ```z80oolong/eaw/geany``` の Formula についての記述を参照して下さい。
+なお、この Formula で導入した [geany][GEAN] の使用法については、前述の ```z80oolong/vte/geany``` の Formula についての記述を参照して下さい。
 
 **この Formula は、 versioned formula であるため、この Formula によって導入される [geany][GEAN] は、 keg only で導入されることに留意して下さい。**
 
-この Formula によって導入される [geany][GEAN] を使用するには、 ```brew link --force z80oolong/eaw/geany@{version}``` コマンドを実行する必要があります。
+この Formula によって導入される [geany][GEAN] を使用するには、 ```brew link --force z80oolong/vte/geany@{version}``` コマンドを実行する必要があります。
 
 <!-- 外部リンク一覧 -->
 
