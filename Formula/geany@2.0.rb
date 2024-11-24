@@ -4,83 +4,84 @@ class GeanyAT20 < Formula
   url "https://download.geany.org/geany-2.0.tar.gz"
   sha256 "50d28a45ac9b9695e9529c73fe7ed149edb512093c119db109cea6424114847f"
 
+  keg_only :versioned_formula
+
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "docutils" => :build
+  depends_on "intltool" => :build
+  depends_on "libtool" => :build
+  depends_on "perl" => :build
+  depends_on "perl-xml-parser" => :build
+  depends_on "pkg-config" => :build
+  depends_on "ctags"
+  depends_on "enchant"
+  depends_on "gettext"
+  depends_on "glibc"
+  depends_on "gnupg"
+  depends_on "gpgme"
+  depends_on "gtk+3"
+  depends_on "hicolor-icon-theme"
+  depends_on "libsoup@2"
+  depends_on "libvterm"
+  depends_on "pcre"
+  depends_on "source-highlight"
+  depends_on "webkitgtk"
+  depends_on "z80oolong/dep/ctpl@0.3.5"
+  depends_on "z80oolong/dep/libgit2@1.3.2"
+  depends_on "z80oolong/dep/lua@5.1"
+  depends_on "z80oolong/dep/scintilla@5.3.4"
+  depends_on "z80oolong/vte/libvte@2.91"
+
   resource("geany-plugins") do
     url "https://github.com/geany/geany-plugins/releases/download/2.0.0/geany-plugins-2.0.tar.bz2"
     sha256 "9fc2ec5c99a74678fb9e8cdfbd245d3e2061a448d70fd110a6aefb62dd514705"
   end
 
-  keg_only :versioned_formula
-
-  depends_on "pkg-config" => :build
-  depends_on "intltool" => :build
-  depends_on "perl" => :build
-  depends_on "perl-xml-parser" => :build
-  depends_on "gettext"
-  depends_on "gtk+3"
-  depends_on "hicolor-icon-theme"
-  depends_on "z80oolong/vte/libvte@2.91"
-  depends_on "ctags"
-  depends_on "pcre"
-  depends_on "libsoup"
-  depends_on "enchant"
-  depends_on "libvterm"
-  depends_on "gnupg"
-  depends_on "gpgme"
-  depends_on "libsoup@2"
-  depends_on "libgit2"
-  depends_on "webkitgtk"
-  depends_on "z80oolong/dep/lua@5.1"
-  depends_on "source-highlight"
-  depends_on "z80oolong/dep/scintilla@5.3.4"
-  depends_on "z80oolong/dep/ctpl@0.3.5"
-
   patch :p1, :DATA
 
   def install
-    ENV.append "CFLAGS", %[-DNO_USE_HOMEBREW_GEANY_PLUGINS]
-    ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
-    ENV.prepend_path "PKG_CONFIG_PATH", "#{prefix}/lib/pkgconfig"
+    ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
+    ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
+    ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
 
-    args = %W[
-      --disable-dependency-tracking
-      --prefix=#{prefix}
-      --disable-silent-rules
-      --enable-gtk3
-      --enable-vte
-      --enable-enchant
-      --enable-lua
-      --enable-plugins
-      --with-libvterm=#{Formula["libvterm"].opt_prefix}
-    ]
+    %w[ja_JP zh_CN zh_HK zh_SG zh_TW ko_KR en_US].each do |lang|
+      system Formula["glibc"].opt_bin/"localedef", "-i", lang, "-f", "UTF-8", "#{lang}.UTF-8"
+    end
+    ENV["LC_ALL"]   = "ja_JP.UTF-8"
+    ENV["LC_CTYPE"] = "ja_JP.UTF-8"
+    ENV["LANG"]     = "ja"
+
+    args  = std_configure_args
+    args << "--enable-vte"
+    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
 
     system "./configure", *args
+    system "make"
     system "make", "install"
 
     resource("geany-plugins").stage do
-      system "cp", "-v", "#{buildpath}/geany-plugins.diff", "./geany-plugins.diff"
-      system "patch -p1 < ./geany-plugins.diff"
+      system "patch -p1 < #{buildpath}/geany-plugins.diff"
 
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
-      args = %W[
-        --disable-dependency-tracking
-        --prefix=#{prefix}
-        --enable-all-plugins
-        --with-geany-libdir=#{lib}
-      ]
+      args  = std_configure_args
+      args << "--enable-markdown"
+      args << "--disable-devhelp"
+      args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args
+      system "make"
       system "make", "install"
     end
   end
 
   def diff_data
-    lines = self.path.each_line.inject([]) do |result, line|
-      result.push(line) if ((/^__END__/ === line) || result.first)
-      result
+    lines = path.each_line.with_object([]) do |line, result|
+      result.push(line) if /^__END__/.match?(line) || result.first
     end
     lines.shift
-    return lines.join("")
+    lines.join
   end
 
   test do

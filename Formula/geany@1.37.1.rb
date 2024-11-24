@@ -4,93 +4,77 @@ class GeanyAT1371 < Formula
   url "https://download.geany.org/geany-1.37.1.tar.gz"
   sha256 "3978148c57570df8ed817afe050bc038f1b4dd39dc8efeb0acb19cd4f0690a58"
 
+  keg_only :versioned_formula
+
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "docutils" => :build
+  depends_on "intltool" => :build
+  depends_on "libtool" => :build
+  depends_on "perl" => :build
+  depends_on "perl-xml-parser" => :build
+  depends_on "pkg-config" => :build
+  depends_on "ctags"
+  depends_on "enchant"
+  depends_on "gettext"
+  depends_on "glibc"
+  depends_on "gnupg"
+  depends_on "gpgme"
+  depends_on "gtk+3"
+  depends_on "hicolor-icon-theme"
+  depends_on "libsoup@2"
+  depends_on "libvterm"
+  depends_on "pcre"
+  depends_on "source-highlight"
+  depends_on "webkitgtk"
+  depends_on "z80oolong/dep/ctpl@0.3.5"
+  depends_on "z80oolong/dep/libgit2@1.3.2"
+  depends_on "z80oolong/dep/lua@5.1"
+  depends_on "z80oolong/dep/scintilla@5.3.4"
+  depends_on "z80oolong/vte/libvte@2.91"
+
   resource("geany-plugins") do
     url "https://github.com/geany/geany-plugins/archive/refs/tags/1.37.0.tar.gz"
     sha256 "14df1dda3760eedd3a28daba0788f3bee5b83ae31f042c57a78c20f37a77eb28"
   end
 
-  keg_only :versioned_formula
-
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "libtool" => :build
-  depends_on "docutils" => :build
-  depends_on "pkg-config" => :build
-  depends_on "intltool" => :build
-  depends_on "perl" => :build
-  depends_on "perl-xml-parser" => :build
-  depends_on "gettext"
-  depends_on "gtk+3"
-  depends_on "hicolor-icon-theme"
-  depends_on "z80oolong/vte/libvte@2.91"
-  depends_on "ctags"
-  depends_on "pcre"
-  depends_on "libsoup"
-  depends_on "enchant"
-  depends_on "libvterm"
-  depends_on "gnupg"
-  depends_on "gpgme"
-  depends_on "libsoup@2"
-  depends_on "z80oolong/dep/libgit2@1.3.2"
-  depends_on "webkitgtk"
-  depends_on "z80oolong/dep/lua@5.1"
-  depends_on "source-highlight"
-  depends_on "z80oolong/dep/scintilla@5.3.4"
-  depends_on "z80oolong/dep/ctpl@0.3.5"
-
   patch :p1, :DATA
 
   def install
-    ENV.append "CFLAGS", %[-DNO_USE_HOMEBREW_GEANY_PLUGINS]
-    ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
-    ENV.prepend_path "PKG_CONFIG_PATH", "#{prefix}/lib/pkgconfig"
+    ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
+    ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
+    ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
 
-    system Formula["glibc"].opt_bin/"localedef", "-i", "ja_JP", "-f", "UTF-8", "ja_JP.UTF-8"
-    system Formula["glibc"].opt_bin/"localedef", "-i", "en_US", "-f", "UTF-8", "en_US.UTF-8"
-    ENV["LC_ALL"] = "ja_JP.UTF-8"; ENV["LC_CTYPE"] = "ja_JP.UTF-8"; ENV["LANG"] = "ja"
+    %w[ja_JP zh_CN zh_HK zh_SG zh_TW ko_KR en_US].each do |lang|
+      system Formula["glibc"].opt_bin/"localedef", "-i", lang, "-f", "UTF-8", "#{lang}.UTF-8"
+    end
+    ENV["LC_ALL"]   = "ja_JP.UTF-8"
+    ENV["LC_CTYPE"] = "ja_JP.UTF-8"
+    ENV["LANG"]     = "ja"
 
-    args = %W[
-      --disable-dependency-tracking
-      --prefix=#{prefix}
-      --disable-silent-rules
-      --enable-gtk3
-      --enable-vte
-      --enable-enchant
-      --enable-lua
-      --enable-plugins
-      --with-libvterm=#{Formula["libvterm"].opt_prefix}
-    ]
+    args  = std_configure_args
+    args << "--enable-vte"
+    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
 
     system "./configure", *args
+    system "make"
     system "make", "install"
 
     resource("geany-plugins").stage do
-      system "cp", "-v", "#{buildpath}/geany-plugins.diff", "./geany-plugins.diff"
-      system "patch -p1 < ./geany-plugins.diff"
+      system "patch -p1 < #{buildpath}/geany-plugins.diff"
 
       system "sh", "./autogen.sh"
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
-      args = %W[
-        --disable-dependency-tracking
-        --prefix=#{prefix}
-        --enable-markdown
-        --disable-devhelp
-        --with-geany-libdir=#{lib}
-      ]
+      args  = std_configure_args
+      args << "--enable-markdown"
+      args << "--disable-devhelp"
+      args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args
+      system "make"
       system "make", "install"
     end
-  end
-
-  def diff_data
-    lines = self.path.each_line.inject([]) do |result, line|
-      result.push(line) if ((/^__END__/ === line) || result.first)
-      result
-    end
-    lines.shift
-    return lines.join("")
   end
 
   test do

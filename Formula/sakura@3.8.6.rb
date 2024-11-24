@@ -1,36 +1,35 @@
 class SakuraAT386 < Formula
-  desc "GTK/VTE based terminal emulator."
+  desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
-  license "GPL-2.0"
   url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_6.tar.gz"
   sha256 "2cea5840c34e8d1a17b055dadc6efa6b5f1d97bb39d6b78590dba0915d19b0a7"
+  license "GPL-2.0"
 
   keg_only :versioned_formula
 
+  depends_on "cmake" => :build
+  depends_on "pod2man" => :build
+  depends_on "gettext"
+  depends_on "systemd"
+  depends_on "z80oolong/vte/libvte@2.91"
+
   patch :p1, :DATA
 
-  depends_on "gtk+3"
-  depends_on "z80oolong/vte/libvte@2.91"
-  depends_on "systemd"
-  depends_on "gettext"
-  depends_on "pod2man" => :build
-  depends_on "cmake" => :build
-
   def install
-    std_cmake_args << "CMAKE_BUILD_TYPE=Debug"
+    args  = std_cmake_args
+    args << "CMAKE_BUILD_TYPE=Debug"
 
-    system "cmake", "-S", ".", "-B", "build", *std_cmake_args
+    system "cmake", "-S", ".", "-B", "build", *args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
   end
 
   def diff_data
-    lines = self.path.each_line.inject([]) do |result, line|
-      result.push(line) if ((/^__END__/ === line) || result.first)
-      result
+    lines = path.each_line.with_object([]) do |line, result|
+      result.push(line) if /^__END__/.match?(line) || result.first
     end
     lines.shift
-    return lines.join("")
+    lines.join
   end
 
   test do
