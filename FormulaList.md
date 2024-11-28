@@ -78,15 +78,11 @@
 
 [libvte][LVTE] ベースの [xfce4][MATE] 用端末エミュレータである [xfce4-terminal][XFTM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
 
-この Formula によって導入された [xfce4-terminal][XFTM] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
-
 なお、 Formula によって導入された [xfce4-terminal][XFTM] において、**[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、 [xfce4-terminal][XFTM] の設定画面より設定を行う必要があることに留意して下さい。**
 
 ### z80oolong/vte/gnome-terminal
 
 [libvte][LVTE] ベースの [GNOME][GNME] 標準の端末エミュレータである [gnome-terminal][GTRM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
-
-この Formula によって導入された [gnome-terminal][GTRM] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
 
 なお、 Formula によって導入された [gnome-terminal][GTRM] において、**[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、 [gnome-terminal][GTRM] の設定画面より設定を行う必要があることに留意して下さい。**
 
