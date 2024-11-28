@@ -45,7 +45,7 @@
 
 ## 謝辞
 
-本リポジトリの作成にあたっては、[https://developer-old.gnome.org/vte/unstable/VteTerminal.html][DVTE] 等のページを参照しました。 GNOME プロジェクトの開発者コミュニティ各位と各種 libvte 対応端末エミュレータ及びアプリケーションの開発者及び開発コニュニティの各位に心より感謝致します。
+本リポジトリの作成にあたっては、[https://developer-old.gnome.org/vte/unstable/VteTerminal.html][DVTE] 等のページを参照しました。 [GNOME プロジェクト][GNME]の開発者コミュニティ各位と各種 [libvte][LVTE] 対応端末エミュレータ及びアプリケーションの開発者及び開発コニュニティの各位に心より感謝致します。
 
 ## 使用条件
 

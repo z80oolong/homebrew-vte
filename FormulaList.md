@@ -6,6 +6,12 @@
 
 ## Formula 一覧
 
+### z80oolong/vte/libvte@2.91
+
+[GTK][DGTK] の端末エミュレータウィジェットを提供するライブラリである [libvte][LVTE] の安定版及び HEAD 版を導入するための Formula です。これ以降に述べる [libvte][LVTE] ベースの端末エミュレータを持つアプリケーションがこのライブラリに依存します。
+
+**この Formula は、 versioned formula であるため、この Formula によって導入される [libvte][LVTE] は、 keg only で導入されることに留意して下さい。**
+
 ### z80oolong/vte/sakura
 
 [GTK][DGTK] と [libvte][LVTE] ベースの端末エミュレータである [sakura][SAKU] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
@@ -76,6 +82,14 @@
 
 なお、 Formula によって導入された [xfce4-terminal][XFTM] において、**[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、 [xfce4-terminal][XFTM] の設定画面より設定を行う必要があることに留意して下さい。**
 
+### z80oolong/vte/gnome-terminal
+
+[libvte][LVTE] ベースの [GNOME][GNME] 標準の端末エミュレータである [gnome-terminal][GTRM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+
+この Formula によって導入された [gnome-terminal][GTRM] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
+
+なお、 Formula によって導入された [gnome-terminal][GTRM] において、**[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、 [gnome-terminal][GTRM] の設定画面より設定を行う必要があることに留意して下さい。**
+
 ### z80oolong/vte/geany
 
 [libvte][LVTE] ベースの軽量 IDE である [geany][GEAN] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
@@ -83,12 +97,6 @@
 この Formula によって導入された [geany][GEAN] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
 
 また、この Formula によって導入された [geany][GEAN] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。 [geany][GEAN] の端末機能において、 [East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
-
-### z80oolong/vte/libvte@2.91
-
-[GTK][DGTK] の端末エミュレータウィジェットである [libvte][LVTE] を提供する為のライブラリを導入するための Formula です。上述した [libvte][LVTE] ベースの端末エミュレータを持つアプリケーションがこのライブラリに依存します。
-
-**この Formula は、 versioned formula であるため、この Formula によって導入される libvte は、 keg only で導入されることに留意して下さい。**
 
 ### z80oolong/vte/sakura@{version}
 
@@ -162,6 +170,18 @@
 
 この Formula によって導入される [xfce4-terminal][XFTM] を使用するには、 ```brew link --force z80oolong/vte/xfce4-terminal@{version}``` コマンドを実行する必要があります。
 
+### z80oolong/vte/gnome-terminal@{version}
+
+(注：上記 ```{version}``` には、 [gnome-terminal][GTRM] の各バージョン番号が入ります。以下同様。)
+
+この Formula は、 ```z80oolong/vte/gnome-terminal``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 [gnome-terminal {version}][GTRM] を導入するための Formula です。
+
+なお、この Formula で導入した [gnome-terminal][GTRM] の使用法については、前述の ```z80oolong/vte/gnome-terminal``` の Formula についての記述を参照して下さい。
+
+**この Formula は、 versioned formula であるため、この Formula によって導入される [gnome-terminal][GTRM] は、 keg only で導入されることに留意して下さい。**
+
+この Formula によって導入される [gnome-terminal][GTRM] を使用するには、 ```brew link --force z80oolong/vte/gnome-terminal@{version}``` コマンドを実行する必要があります。
+
 ### z80oolong/vte/geany@{version}
 
 (注：上記 ```{version}``` には、 [geany][GEAN] の各バージョン番号が入ります。以下同様。)
@@ -180,6 +200,7 @@
 [TMUX]:https://tmux.github.io/
 [EAWA]:http://www.unicode.org/reports/tr11/#Ambiguous
 [GNME]:https://www.gnome.org/
+[GTRM]:https://github.com/GNOME/gnome-terminal
 [LXDE]:http://www.lxde.org/
 [LXTM]:https://github.com/lxde/lxterminal
 [MATE]:https://mate-desktop.org/ja/
