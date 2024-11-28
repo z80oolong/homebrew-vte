@@ -1,5 +1,5 @@
 class Tilda < Formula
-  desc "A Gtk based drop down terminal for Linux and Unix"
+  desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
   license "GPL-2.0"
 
@@ -34,16 +34,15 @@ class Tilda < Formula
   end
 
   def diff_data
-    lines = self.path.each_line.inject([]) do |result, line|
-      result.push(line) if ((/^__END__/ === line) || result.first)
-      result
+    lines = path.each_line.with_object([]) do |line, result|
+      result.push(line) if /^__END__/.match?(line) || result.first
     end
     lines.shift
-    return lines.join("")
+    lines.join
   end
 
   test do
-    system "#{bin}/tilda", "--version"
+    system bin/"tilda", "--version"
   end
 end
 

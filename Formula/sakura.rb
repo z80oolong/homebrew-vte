@@ -40,7 +40,7 @@ class Sakura < Formula
   end
 
   test do
-    system "#{bin}/sakura", "--version"
+    system bin/"sakura", "--version"
   end
 end
 

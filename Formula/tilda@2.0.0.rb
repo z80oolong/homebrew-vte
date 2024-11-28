@@ -1,13 +1,11 @@
 class TildaAT200 < Formula
-  desc "A Gtk based drop down terminal for Linux and Unix"
+  desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
   url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-2.0.0.tar.gz"
   sha256 "ff9364244c58507cd4073ac22e580a4cded048d416c682496c1b1788ee8a30df"
   license "GPL-2.0"
 
   keg_only :versioned_formula
-
-  patch :p1, :DATA
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -16,6 +14,8 @@ class TildaAT200 < Formula
   depends_on "gettext"
   depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
+
+  patch :p1, :DATA
 
   def install
     ENV["LC_ALL"] = "C"
@@ -27,16 +27,15 @@ class TildaAT200 < Formula
   end
 
   def diff_data
-    lines = self.path.each_line.inject([]) do |result, line|
-      result.push(line) if ((/^__END__/ === line) || result.first)
-      result
+    lines = path.each_line.with_object([]) do |line, result|
+      result.push(line) if /^__END__/.match?(line) || result.first
     end
     lines.shift
-    return lines.join("")
+    lines.join
   end
 
   test do
-    system "#{bin}/tilda", "--version"
+    system bin/"tilda", "--version"
   end
 end
 

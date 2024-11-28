@@ -7,10 +7,10 @@ class Xfce4TerminalAT113 < Formula
 
   keg_only :versioned_formula
 
-  depends_on "pkg-config" => :build
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
   depends_on "z80oolong/dep/xfce4-dev-tools@4.19.3" => :build
   depends_on "glib"
   depends_on "gtk+3"
@@ -25,22 +25,21 @@ class Xfce4TerminalAT113 < Formula
     system "./autogen.sh"
 
     inreplace "./configure" do |s|
-      s.gsub!(%r{MAINTAINER_MODE_TRUE='#'}, %{MAINTAINER_MODE_TRUE=})
-      s.gsub!(%r{MAINTAINER_MODE_FALSE=}, %{MAINTAINER_MODE_FALSE='#'})
+      s.gsub!("MAINTAINER_MODE_TRUE='#'", "MAINTAINER_MODE_TRUE=")
+      s.gsub!("MAINTAINER_MODE_FALSE=", "MAINTAINER_MODE_FALSE='#'")
     end
 
-    system "./configure", "--disable-silent-rules", *std_configure_args, "--bindir=#{libexec}/bin"
+    system "./configure", "--disable-silent-rules", "--bindir=#{libexec}/bin", *std_configure_args
     system "make"
     system "make", "install"
 
-    script =  ""
-    script << "#!/bin/sh\n"
+    script  = "#!/bin/sh\n"
     script << "#{Formula["z80oolong/dep/xfconf@4.19.3"].opt_lib}/xfce4/xfconf/xfconfd 2>&1 &\n"
     script << "exec #{libexec}/bin/xfce4-terminal $@\n"
 
     ohai "Create #{bin}/xfce4-terminal script."
     (bin/"xfce4-terminal").write(script)
-    system "chmod", "0755", "#{bin}/xfce4-terminal"
+    (bin/"xfce4-terminal").chmod(0755)
   end
 
   test do

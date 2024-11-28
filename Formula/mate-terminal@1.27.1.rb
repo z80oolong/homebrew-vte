@@ -4,27 +4,27 @@ class MateTerminalAT1271 < Formula
   url "https://github.com/mate-desktop/mate-terminal/releases/download/v1.27.1/mate-terminal-1.27.1.tar.xz"
   sha256 "8d6b16ff2cac930afce4625b1b8f30c055e314e5b3dae806ac5b80c809f08dbe"
 
-  patch :p1, :DATA
+  keg_only :versioned_formula
 
-  depends_on "pkg-config" => :build
-  depends_on "automake" => :build
   depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "itstool" => :build
   depends_on "libtool" => :build
   depends_on "meson" => :build
+  depends_on "pkg-config" => :build
   depends_on "yelp-tools" => :build
-  depends_on "itstool" => :build
   depends_on "z80oolong/dep/autoconf-archive@2023" => :build
   depends_on "z80oolong/dep/mate-common@1.24.0" => :build
-  depends_on "intltool"
+  depends_on "gdk-pixbuf"
   depends_on "gettext"
   depends_on "glib"
   depends_on "gtk+3"
-  depends_on "gdk-pixbuf"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "intltool"
   depends_on "z80oolong/dep/dconf@0"
   depends_on "z80oolong/dep/mate-desktop"
+  depends_on "z80oolong/vte/libvte@2.91"
 
-  keg_only :versioned_formula
+  patch :p1, :DATA
 
   def install
     aclocal_flags =  ""
@@ -38,30 +38,30 @@ class MateTerminalAT1271 < Formula
   end
 
   def post_install
-    Dir.chdir("#{HOMEBREW_PREFIX}/share/glib-2.0/schemas") do
-      system "#{Formula["glib"].opt_bin}/glib-compile-schemas", "--targetdir=.", "."
+    Dir.chdir(HOMEBREW_PREFIX/"share/glib-2.0/schemas") do
+      system Formula["glib"].opt_bin/"glib-compile-schemas", "--targetdir=.", "."
     end
-  end
-
-  def caveats; <<~EOS
-    When starting #{name} installed with this Formula, the environment variables should be set as follows.
-    
-      export GSETTINGS_SCHEMA_DIR="#{opt_share}/glib-2.0/schemas:#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
-      export XDG_DATA_DIRS="#{opt_share}:#{HOMEBREW_PREFIX}/share:${XDG_DATA_DIRS}"
-    EOS
   end
 
   def diff_data
-    lines = self.path.each_line.inject([]) do |result, line|
-      result.push(line) if ((/^__END__/ === line) || result.first)
-      result
+    lines = path.each_line.with_object([]) do |line, result|
+      result.push(line) if /^__END__/.match?(line) || result.first
     end
     lines.shift
-    return lines.join("")
+    lines.join
+  end
+
+  def caveats
+    <<~EOS
+      When starting mate-terminal installed with this Formula, the environment variables should be set as follows.
+
+        export GSETTINGS_SCHEMA_DIR="#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
+        export XDG_DATA_DIRS="#{HOMEBREW_PREFIX}/share:${XDG_DATA_DIRS}"
+    EOS
   end
 
   test do
-    system "false"
+    system bin/"mate-terminal", "--version"
   end
 end
 
