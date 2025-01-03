@@ -14,6 +14,7 @@ class MateTerminal < Formula
 
     patch :p1, :DATA
   end
+
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "itstool" => :build
@@ -30,7 +31,7 @@ class MateTerminal < Formula
   depends_on "gtk+3"
   depends_on "intltool"
   depends_on "z80oolong/dep/dconf@0"
-  depends_on "z80oolong/dep/mate-desktop"
+  depends_on "z80oolong/dep/mate-desktop@1.27.1"
   depends_on "z80oolong/vte/libvte@2.91"
 
   def install
@@ -40,17 +41,35 @@ class MateTerminal < Formula
     ENV["ACLOCAL_FLAGS"] = aclocal_flags
     ENV["LC_ALL"] = "C"
 
-    system "sh", "./autogen.sh", "--prefix=#{prefix}"
+    args  = std_configure_args
+    args << "--disable-schemas-compile"
+    args << "--prefix=#{prefix}"
+    args << "--bindir=#{libexec}/bin"
+
+    system "sh", "./autogen.sh", *args
     system "make"
     system "make", "install"
 
-    (share/"glib-2.0/schemas/gschemas.compiled").unlink
+    script  = "#!/bin/sh\n"
+    script << 'export GSETTINGS_SCHEMA_DIR="'
+    script << "#{Formula["z80oolong/dep/mate-desktop@1.27.1"].opt_share}/glib-2.0/schemas:"
+    script << "#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:"
+    script << '${GSETTINGS_SCHEMA_DIR}"'
+    script << "\n"
+    script << 'export XDG_DATA_DIRS="'
+    script << "#{Formula["z80oolong/dep/mate-desktop@1.27.1"].opt_share}:"
+    script << "#{HOMEBREW_PREFIX}/share:"
+    script << '${XDG_DATA_DIRS}"'
+    script << "\n"
+    script << "exec #{libexec}/bin/mate-terminal $@\n"
+
+    ohai "Create #{bin}/mate-terminal script."
+    (bin/"mate-terminal").write(script)
+    (bin/"mate-terminal").chmod(0755)
   end
 
   def post_install
-    Dir.chdir(HOMEBREW_PREFIX/"share/glib-2.0/schemas") do
-      system Formula["glib"].opt_bin/"glib-compile-schemas", "--targetdir=.", "."
-    end
+    system Formula["glib"].opt_bin/"glib-compile-schemas", HOMEBREW_PREFIX/"share/glib-2.0/schemas"
   end
 
   def diff_data
@@ -59,15 +78,6 @@ class MateTerminal < Formula
     end
     lines.shift
     lines.join
-  end
-
-  def caveats
-    <<~EOS
-      When starting mate-terminal installed with this Formula, the environment variables should be set as follows.
-
-        export GSETTINGS_SCHEMA_DIR="#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
-        export XDG_DATA_DIRS="#{HOMEBREW_PREFIX}/share:${XDG_DATA_DIRS}"
-    EOS
   end
 
   test do
