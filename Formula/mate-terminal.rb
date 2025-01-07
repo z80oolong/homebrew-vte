@@ -23,7 +23,6 @@ class MateTerminal < Formula
   depends_on "perl" => :build
   depends_on "pkg-config" => :build
   depends_on "yelp-tools" => :build
-  depends_on "z80oolong/dep/autoconf-archive@2023" => :build
   depends_on "z80oolong/dep/mate-common@1.28.0" => :build
   depends_on "gdk-pixbuf"
   depends_on "gettext"
@@ -35,11 +34,8 @@ class MateTerminal < Formula
   depends_on "z80oolong/vte/libvte@2.91"
 
   def install
-    aclocal_flags =  ""
-    aclocal_flags << " -I #{Formula["z80oolong/dep/autoconf-archive@2023"].opt_share}/aclocal"
-    aclocal_flags << " -I #{Formula["z80oolong/dep/mate-common@1.28.0"].opt_share}/aclocal"
-    ENV["ACLOCAL_FLAGS"] = aclocal_flags
     ENV["LC_ALL"] = "C"
+    ENV["ACLOCAL_FLAGS"] = "-I #{Formula["z80oolong/dep/mate-common@1.28.0"].opt_share}/aclocal"
 
     args  = std_configure_args
     args << "--disable-schemas-compile"

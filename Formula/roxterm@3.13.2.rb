@@ -37,10 +37,9 @@ class RoxtermAT3132 < Formula
       s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
-    mkdir "build" do
-      system "cmake", "..", *std_cmake_args
-      system "make", "install"
-    end
+    system "cmake", "-S", ".", "-B", "build", *args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
 
     resource("roxterm-ja-po").stage do
       (share/"locale/ja/LC_MESSAGES").mkpath

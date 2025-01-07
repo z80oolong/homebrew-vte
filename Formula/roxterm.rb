@@ -3,10 +3,10 @@ class Roxterm < Formula
   homepage "https://roxterm.sourceforge.io/"
 
   stable do
-    url "https://github.com/realh/roxterm/archive/refs/tags/3.12.1.tar.gz"
-    sha256 "9a662a00fe555ae9ff38301a1707a3432d8f678326062c98740f20827280a5aa"
+    url "https://github.com/realh/roxterm/archive/refs/tags/3.14.3.tar.gz"
+    sha256 "4f801371113ff33d6a53dfa77aef6c3d09d29620fcf27e844c755904f9776e5b"
 
-    patch :p1, Formula["z80oolong/vte/roxterm@3.12.1"].diff_data
+    patch :p1, Formula["z80oolong/vte/roxterm@3.14.3"].diff_data
   end
 
   head do
@@ -44,10 +44,9 @@ class Roxterm < Formula
       s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
-    mkdir "build" do
-      system "cmake", "..", *std_cmake_args
-      system "make", "install"
-    end
+    system "cmake", "-S", ".", "-B", "build", *args
+    system "cmake", "--build", "build"
+    system "cmake", "--install", "build"
 
     resource("roxterm-ja-po").stage do
       (share/"locale/ja/LC_MESSAGES").mkpath
