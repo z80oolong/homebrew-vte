@@ -32,8 +32,8 @@ class LxterminalAT040 < Formula
 
     args  = std_configure_args
     args << "--enable-gtk3"
-    system "./configure", *args
 
+    system "./configure", *args
     system "make"
     system "make", "install"
   end

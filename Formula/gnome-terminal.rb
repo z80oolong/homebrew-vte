@@ -5,12 +5,6 @@ class GnomeTerminal < Formula
   sha256 "101e69d2c4abec2789e01605588d09e43d8a65fdf327e13b74d78773c71f55b5"
   license "GPL-3.0"
 
-  head do
-    url "https://github.com/GNOME/gnome-terminal.git"
-
-    depends_on "libadwaita"
-  end
-
   depends_on "cmake" => :build
   depends_on "gettext" => :build
   depends_on "itstool" => :build
@@ -44,7 +38,19 @@ class GnomeTerminal < Formula
 
     (share/"glib-2.0/schemas/gschemas.compiled").unlink
 
+    gschema_dirs = [share/"glib-2.0/schemas"]
+    gschema_dirs << (HOMEBREW_PREFIX/"share/glib-2.0/schemas")
+    gschema_dirs << "${GSETTINGS_SCHEMA_DIR}"
+
+    xdg_data_dirs = [share]
+    xdg_data_dirs << (HOMEBREW_PREFIX/"share")
+    xdg_data_dirs << "/usr/local/share"
+    xdg_data_dirs << "/usr/share"
+    xdg_data_dirs << "${XDG_DATA_DIRS}"
+
     script  = "#!/bin/sh\n"
+    script << "export GSETTINGS_SCHEMA_DIR=\"#{gschema_dirs.join(":")}\"\n"
+    script << "export XDG_DATA_DIRS=\"#{xdg_data_dirs.join(":")}\"\n"
     script << "#{libexec}/gnome-terminal-server 2>&1 &\n"
     script << "sleep 1\n"
     script << "exec #{libexec}/bin/gnome-terminal $@\n"
@@ -55,9 +61,7 @@ class GnomeTerminal < Formula
   end
 
   def post_install
-    Dir.chdir(HOMEBREW_PREFIX/"share/glib-2.0/schemas") do
-      system Formula["glib"].opt_bin/"glib-compile-schemas", "--targetdir=.", "."
-    end
+    system Formula["glib"].opt_bin/"glib-compile-schemas", HOMEBREW_PREFIX/"share/glib-2.0/schemas"
   end
 
   test do

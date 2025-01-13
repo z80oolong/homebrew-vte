@@ -23,40 +23,43 @@ class MateTerminal < Formula
   depends_on "perl" => :build
   depends_on "pkg-config" => :build
   depends_on "yelp-tools" => :build
-  depends_on "z80oolong/dep/mate-common@1.28.0" => :build
   depends_on "gdk-pixbuf"
   depends_on "gettext"
   depends_on "glib"
+  depends_on "gsettings-desktop-schemas"
   depends_on "gtk+3"
   depends_on "intltool"
   depends_on "z80oolong/dep/dconf@0"
-  depends_on "z80oolong/dep/mate-desktop@1.27.1"
+  depends_on "z80oolong/dep/mate-desktop@1.28.0"
   depends_on "z80oolong/vte/libvte@2.91"
 
   def install
     ENV["LC_ALL"] = "C"
-    ENV["ACLOCAL_FLAGS"] = "-I #{Formula["z80oolong/dep/mate-common@1.28.0"].opt_share}/aclocal"
+    ENV["ACLOCAL_FLAGS"] = "-I #{Formula["z80oolong/dep/mate-desktop@1.28.0"].opt_share}/aclocal"
 
     args  = std_configure_args
     args << "--disable-schemas-compile"
-    args << "--prefix=#{prefix}"
     args << "--bindir=#{libexec}/bin"
 
     system "sh", "./autogen.sh", *args
     system "make"
     system "make", "install"
 
+    gschema_dirs = [share/"glib-2.0/schemas"]
+    gschema_dirs << (Formula["z80oolong/dep/mate-desktop@1.28.0"].opt_share/"glib-2.0/schemas")
+    gschema_dirs << (HOMEBREW_PREFIX/"share/glib-2.0/schemas")
+    gschema_dirs << "${GSETTINGS_SCHEMA_DIR}"
+
+    xdg_data_dirs = [share]
+    xdg_data_dirs << Formula["z80oolong/dep/mate-desktop@1.28.0"].opt_share
+    xdg_data_dirs << (HOMEBREW_PREFIX/"share")
+    xdg_data_dirs << "/usr/local/share"
+    xdg_data_dirs << "/usr/share"
+    xdg_data_dirs << "${XDG_DATA_DIRS}"
+
     script  = "#!/bin/sh\n"
-    script << 'export GSETTINGS_SCHEMA_DIR="'
-    script << "#{Formula["z80oolong/dep/mate-desktop@1.27.1"].opt_share}/glib-2.0/schemas:"
-    script << "#{HOMEBREW_PREFIX}/share/glib-2.0/schemas:"
-    script << '${GSETTINGS_SCHEMA_DIR}"'
-    script << "\n"
-    script << 'export XDG_DATA_DIRS="'
-    script << "#{Formula["z80oolong/dep/mate-desktop@1.27.1"].opt_share}:"
-    script << "#{HOMEBREW_PREFIX}/share:"
-    script << '${XDG_DATA_DIRS}"'
-    script << "\n"
+    script << "export GSETTINGS_SCHEMA_DIR=\"#{gschema_dirs.join(":")}\"\n"
+    script << "export XDG_DATA_DIRS=\"#{xdg_data_dirs.join(":")}\"\n"
     script << "exec #{libexec}/bin/mate-terminal $@\n"
 
     ohai "Create #{bin}/mate-terminal script."

@@ -1,8 +1,8 @@
-class GnomeTerminalAT3542 < Formula
+class GnomeTerminalAT3540 < Formula
   desc "GNOME common terminal Emulator"
   homepage "https://gitlab.gnome.org/GNOME/gnome-terminal"
-  url "https://github.com/GNOME/gnome-terminal/archive/refs/tags/3.54.2.tar.gz"
-  sha256 "101e69d2c4abec2789e01605588d09e43d8a65fdf327e13b74d78773c71f55b5"
+  url "https://github.com/GNOME/gnome-terminal/archive/refs/tags/3.54.0.tar.gz"
+  sha256 "77370b4a00d0cda9ef339ff3aa809d266f3b937f00875176904c5bbefb76ae79"
   license "GPL-3.0"
 
   keg_only :versioned_formula
@@ -40,7 +40,19 @@ class GnomeTerminalAT3542 < Formula
 
     (share/"glib-2.0/schemas/gschemas.compiled").unlink
 
+    gschema_dirs = [share/"glib-2.0/schemas"]
+    gschema_dirs << (HOMEBREW_PREFIX/"share/glib-2.0/schemas")
+    gschema_dirs << "${GSETTINGS_SCHEMA_DIR}"
+
+    xdg_data_dirs = [share]
+    xdg_data_dirs << (HOMEBREW_PREFIX/"share")
+    xdg_data_dirs << "/usr/local/share"
+    xdg_data_dirs << "/usr/share"
+    xdg_data_dirs << "${XDG_DATA_DIRS}"
+
     script  = "#!/bin/sh\n"
+    script << "export GSETTINGS_SCHEMA_DIR=\"#{gschema_dirs.join(":")}\"\n"
+    script << "export XDG_DATA_DIRS=\"#{xdg_data_dirs.join(":")}\"\n"
     script << "#{libexec}/gnome-terminal-server 2>&1 &\n"
     script << "sleep 1\n"
     script << "exec #{libexec}/bin/gnome-terminal $@\n"
@@ -51,9 +63,7 @@ class GnomeTerminalAT3542 < Formula
   end
 
   def post_install
-    Dir.chdir(HOMEBREW_PREFIX/"share/glib-2.0/schemas") do
-      system Formula["glib"].opt_bin/"glib-compile-schemas", "--targetdir=.", "."
-    end
+    system Formula["glib"].opt_bin/"glib-compile-schemas", HOMEBREW_PREFIX/"share/glib-2.0/schemas"
   end
 
   test do
