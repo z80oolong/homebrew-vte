@@ -38,13 +38,16 @@ class MateTerminalAT1271 < Formula
     system "make"
     system "make", "install"
 
-    gschema_dirs = [share/"glib-2.0/schemas"]
-    gschema_dirs << (Formula["z80oolong/dep/mate-desktop@1.28.0"].opt_share/"glib-2.0/schemas")
+    (pkgshare/"glib-2.0").mkpath
+    (pkgshare/"glib-2.0").install share/"glib-2.0/schemas"
+
+    gschema_dirs = [pkgshare/"glib-2.0/schemas"]
+    gschema_dirs << (Formula["z80oolong/dep/mate-desktop@1.28.0"].share/"glib-2.0/schemas")
     gschema_dirs << (HOMEBREW_PREFIX/"share/glib-2.0/schemas")
     gschema_dirs << "${GSETTINGS_SCHEMA_DIR}"
 
     xdg_data_dirs = [share]
-    xdg_data_dirs << Formula["z80oolong/dep/mate-desktop@1.28.0"].opt_share
+    xdg_data_dirs << Formula["z80oolong/dep/mate-desktop@1.28.0"].share
     xdg_data_dirs << (HOMEBREW_PREFIX/"share")
     xdg_data_dirs << "/usr/local/share"
     xdg_data_dirs << "/usr/share"
@@ -61,6 +64,7 @@ class MateTerminalAT1271 < Formula
   end
 
   def post_install
+    system Formula["glib"].opt_bin/"glib-compile-schemas", pkgshare/"glib-2.0/schemas"
     system Formula["glib"].opt_bin/"glib-compile-schemas", HOMEBREW_PREFIX/"share/glib-2.0/schemas"
   end
 

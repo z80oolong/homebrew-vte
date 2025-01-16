@@ -38,7 +38,8 @@ class GnomeTerminalAT3541 < Formula
     system "meson", "compile", "-C", "build", "--verbose"
     system "meson", "install", "-C", "build"
 
-    (share/"glib-2.0/schemas/gschemas.compiled").unlink
+    (pkgshare/"glib-2.0").mkpath
+    (pkgshare/"glib-2.0").install share/"glib-2.0/schemas"
 
     gschema_dirs = [share/"glib-2.0/schemas"]
     gschema_dirs << (HOMEBREW_PREFIX/"share/glib-2.0/schemas")
