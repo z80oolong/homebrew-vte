@@ -67,13 +67,6 @@
 
 また、この Formula によって導入された [mate-terminal][MTTM] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
 
-**なお、この Formula によって導入された mate-terminal を正常に起動させるには、以下のように環境変数 ```GSETTINGS_SCHEMA_DIR, XDG_DATA_DIRS``` を適切に設定する必要があることに留意して下さい。**
-
-```
-  export GSETTINGS_SCHEMA_DIR="/home/linuxbrew/.linuxbrew/opt/mate-terminal/share/glib-2.0/schemas:/home/linuxbrew/.linuxbrew/share/glib-2.0/schemas:${GSETTINGS_SCHEMA_DIR}"
-  export XDG_DATA_DIRS="/home/linuxbrew/.linuxbrew/opt/mate-terminal/share:/home/linuxbrew/.linuxbrew/share:${XDG_DATA_DIRS}"
-```
-
 ### z80oolong/vte/xfce4-terminal
 
 [libvte][LVTE] ベースの [xfce4][MATE] 用端末エミュレータである [xfce4-terminal][XFTM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
