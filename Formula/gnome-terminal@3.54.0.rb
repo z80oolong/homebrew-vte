@@ -41,31 +41,46 @@ class GnomeTerminalAT3540 < Formula
     (pkgshare/"glib-2.0").mkpath
     (pkgshare/"glib-2.0").install share/"glib-2.0/schemas"
 
-    gschema_dirs = [pkgshare/"glib-2.0/schemas"]
-    gschema_dirs << (HOMEBREW_PREFIX/"share/glib-2.0/schemas")
-    gschema_dirs << "${GSETTINGS_SCHEMA_DIR}"
-
-    xdg_data_dirs = [share]
-    xdg_data_dirs << (HOMEBREW_PREFIX/"share")
-    xdg_data_dirs << "/usr/local/share"
-    xdg_data_dirs << "/usr/share"
-    xdg_data_dirs << "${XDG_DATA_DIRS}"
-
-    script  = "#!/bin/sh\n"
-    script << "export GSETTINGS_SCHEMA_DIR=\"#{gschema_dirs.join(":")}\"\n"
-    script << "export XDG_DATA_DIRS=\"#{xdg_data_dirs.join(":")}\"\n"
-    script << "#{libexec}/gnome-terminal-server 2>&1 &\n"
-    script << "sleep 1\n"
-    script << "exec #{libexec}/bin/gnome-terminal $@\n"
-
     ohai "Create #{bin}/gnome-terminal script."
-    (bin/"gnome-terminal").write(script)
+    (bin/"gnome-terminal").write(wrapper_script)
     (bin/"gnome-terminal").chmod(0755)
   end
 
   def post_install
     system Formula["glib"].opt_bin/"glib-compile-schemas", HOMEBREW_PREFIX/"share/glib-2.0/schemas"
   end
+
+  def gschema_dirs
+    dirs = [share]
+    dirs << (HOMEBREW_PREFIX/"share")
+    dirs << "/usr/local/share"
+    dirs << "/usr/share"
+    dirs << "${GSETTINGS_SCHEMA_DIR}"
+    dirs
+  end
+  private :gschema_dirs
+
+  def xdg_data_dirs
+    dirs = [share]
+    dirs << (HOMEBREW_PREFIX/"share")
+    dirs << "/usr/local/share"
+    dirs << "/usr/share"
+    dirs << "${XDG_DATA_DIRS}"
+    dirs
+  end
+  private :xdg_data_dirs
+
+  def wrapper_script
+    <<~EOS
+      #!/bin/sh
+      export GSETTINGS_SCHEMA_DIR="#{gschema_dirs.join(":")}"
+      export XDG_DATA_DIRS="#{xdg_data_dirs.join(":")}"
+      #{libexec}/gnome-terminal-server 2>&1 &
+      sleep 1
+      exec #{libexec}/bin/gnome-terminal $@
+    EOS
+  end
+  private :wrapper_script
 
   test do
     system bin/"gnome-terminal", "--version"
