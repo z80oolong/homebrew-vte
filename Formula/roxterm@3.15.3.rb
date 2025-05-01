@@ -1,8 +1,8 @@
-class RoxtermAT3132 < Formula
+class RoxtermAT3153 < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
-  url "https://github.com/realh/roxterm/archive/refs/tags/3.13.2.tar.gz"
-  sha256 "3d3bea60178e30740c52594b59d5b1758f26ef0ae5a9fa8a41359c4c36c22d4a"
+  url "https://github.com/realh/roxterm/archive/refs/tags/3.15.3.tar.gz"
+  sha256 "ec3f7f8c6e088a8b73355da8bb70f6641a000ba681b4f49e25f74c97bad0367a"
 
   keg_only :versioned_formula
 
@@ -37,6 +37,9 @@ class RoxtermAT3132 < Formula
       s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
+    args  = std_cmake_args
+    args << "CMAKE_BUILD_TYPE=Debug"
+
     system "cmake", "-S", ".", "-B", "build", *args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
@@ -65,10 +68,10 @@ end
 
 __END__
 diff --git a/src/roxterm.c b/src/roxterm.c
-index a3567c1..9daa408 100644
+index 5895e3f..bafd6c6 100644
 --- a/src/roxterm.c
 +++ b/src/roxterm.c
-@@ -3233,6 +3233,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3303,6 +3303,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
      gboolean custom_tab_name = FALSE;
      MultiWin *template_win = roxterm_get_win(roxterm_template);
      GtkWidget *viewport = NULL;
@@ -78,7 +81,7 @@ index a3567c1..9daa408 100644
  
      roxterm_terms = g_list_append(roxterm_terms, roxterm);
  
-@@ -3259,6 +3262,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3329,6 +3332,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
              roxterm->columns, roxterm->rows);
      gtk_widget_grab_focus(roxterm->widget);
      vte = VTE_TERMINAL(roxterm->widget);

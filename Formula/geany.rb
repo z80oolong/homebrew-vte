@@ -96,6 +96,7 @@ class Geany < Formula
 end
 
 __END__
+warning: refname 'upstream' is ambiguous.
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
 index 000000000..71e70eb26
@@ -177,7 +178,7 @@ index 000000000..71e70eb26
 + 		dc_output_nl = console_output_nl;
 + 		g_signal_connect_after(debug_console, "realize", G_CALLBACK(on_vte_realize), NULL);
 diff --git a/src/plugins.c b/src/plugins.c
-index 3b1c1c8a8..a446d1b6b 100644
+index 6625ce45c..a3918d0fe 100644
 --- a/src/plugins.c
 +++ b/src/plugins.c
 @@ -1142,11 +1142,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)

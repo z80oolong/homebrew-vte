@@ -3,10 +3,10 @@ class Lxterminal < Formula
   homepage "https://wiki.lxde.org/en/LXTerminal"
 
   stable do
-    url "https://github.com/lxde/lxterminal/archive/refs/tags/0.4.0.tar.gz"
-    sha256 "1a179138ebca932ece6d70c033bc10f8125550183eb675675ee9b487c4a5a5cf"
+    url "https://github.com/lxde/lxterminal/archive/refs/tags/0.4.1.tar.gz"
+    sha256 "d5da0646e20ad2be44ef69a9d620be5f1ec43b156dc585ebe203dd7b05c31d88"
 
-    patch :p1, Formula["z80oolong/vte/lxterminal@0.4.0"].diff_data
+    patch :p1, Formula["z80oolong/vte/lxterminal@0.4.1"].diff_data
   end
 
   head do
@@ -60,10 +60,10 @@ end
 
 __END__
 diff --git a/configure.ac b/configure.ac
-index bf06726..d0676fe 100644
+index 638f8fb..171522d 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -92,11 +92,11 @@ if test x"$enable_man" = x"yes"; then
+@@ -95,11 +95,11 @@ if test x"$enable_man" = x"yes"; then
  		AC_MSG_ERROR([xsltproc is required to regenerate the pre-built man page; consider --disable-man])
  	fi
  
@@ -81,10 +81,10 @@ index bf06726..d0676fe 100644
  	rm -f $srcdir/man/lxterminal.1
  fi
 diff --git a/src/lxterminal.c b/src/lxterminal.c
-index 680e411..142867c 100644
+index 18ac81a..c05dfae 100644
 --- a/src/lxterminal.c
 +++ b/src/lxterminal.c
-@@ -1182,6 +1182,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
+@@ -1187,6 +1187,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
      /* Create and initialize Term structure for new terminal. */
      Term * term = g_slice_new0(Term);
      term->parent = terminal;
@@ -95,7 +95,7 @@ index 680e411..142867c 100644
  
      /* Create a VTE and a vertical scrollbar, and place them inside a horizontal box. */
      term->vte = vte_terminal_new();
-@@ -1222,6 +1226,14 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
+@@ -1227,6 +1231,14 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
  #endif
      vte_terminal_set_backspace_binding(VTE_TERMINAL(term->vte), VTE_ERASE_ASCII_DELETE);
      vte_terminal_set_delete_binding(VTE_TERMINAL(term->vte), VTE_ERASE_DELETE_SEQUENCE);

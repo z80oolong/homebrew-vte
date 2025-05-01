@@ -3,10 +3,10 @@ class Roxterm < Formula
   homepage "https://roxterm.sourceforge.io/"
 
   stable do
-    url "https://github.com/realh/roxterm/archive/refs/tags/3.14.3.tar.gz"
-    sha256 "4f801371113ff33d6a53dfa77aef6c3d09d29620fcf27e844c755904f9776e5b"
+    url "https://github.com/realh/roxterm/archive/refs/tags/3.15.3.tar.gz"
+    sha256 "ec3f7f8c6e088a8b73355da8bb70f6641a000ba681b4f49e25f74c97bad0367a"
 
-    patch :p1, Formula["z80oolong/vte/roxterm@3.14.3"].diff_data
+    patch :p1, Formula["z80oolong/vte/roxterm@3.15.3"].diff_data
   end
 
   head do
@@ -44,6 +44,9 @@ class Roxterm < Formula
       s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
+    args  = std_cmake_args
+    args << "CMAKE_BUILD_TYPE=Debug"
+
     system "cmake", "-S", ".", "-B", "build", *args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
@@ -72,10 +75,10 @@ end
 
 __END__
 diff --git a/src/roxterm.c b/src/roxterm.c
-index 74de25e..8ad791b 100644
+index 7b4da02..8e08906 100644
 --- a/src/roxterm.c
 +++ b/src/roxterm.c
-@@ -3123,6 +3123,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3459,6 +3459,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
      gboolean custom_tab_name = FALSE;
      MultiWin *template_win = roxterm_get_win(roxterm_template);
      GtkWidget *viewport = NULL;
@@ -85,7 +88,7 @@ index 74de25e..8ad791b 100644
  
      roxterm_terms = g_list_append(roxterm_terms, roxterm);
  
-@@ -3149,6 +3152,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3485,6 +3488,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
              roxterm->columns, roxterm->rows);
      gtk_widget_grab_focus(roxterm->widget);
      vte = VTE_TERMINAL(roxterm->widget);

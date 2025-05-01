@@ -1,10 +1,11 @@
-class Xfce4Terminal < Formula
+class Xfce4TerminalAT115 < Formula
   desc "Mirror repository, PRs are not watched, please use Xfce's GitLab"
   homepage "https://gitlab.xfce.org/apps/xfce4-terminal"
   url "https://github.com/xfce-mirror/xfce4-terminal/archive/refs/tags/xfce4-terminal-1.1.5.tar.gz"
   sha256 "cd916c31a31f1f07c062e70c8f0f5f00de0863f0a21594640668b648cc7db98e"
   license "GPL-2.0"
-  head "https://github.com/xfce-mirror/xfce4-terminal.git"
+
+  keg_only :versioned_formula
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -26,11 +27,7 @@ class Xfce4Terminal < Formula
       s.gsub!("MAINTAINER_MODE_FALSE=", "MAINTAINER_MODE_FALSE='#'")
     end
 
-    args  = std_configure_args
-    args << "--disable-silent-rules"
-    args << "--bindir=#{libexec}/bin"
-
-    system "./configure", *args
+    system "./configure", "--disable-silent-rules", "--bindir=#{libexec}/bin", *std_configure_args
     system "make"
     system "make", "install"
 

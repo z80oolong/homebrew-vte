@@ -1,8 +1,8 @@
-class Xfce4TerminalAT113 < Formula
+class Xfce4TerminalAT114 < Formula
   desc "Mirror repository, PRs are not watched, please use Xfce's GitLab"
   homepage "https://gitlab.xfce.org/apps/xfce4-terminal"
-  url "https://github.com/xfce-mirror/xfce4-terminal/archive/refs/tags/xfce4-terminal-1.1.3.tar.gz"
-  sha256 "2c0a9a88c44554eb2bae995a68f22ce348ee5b0f3054a767b3506843d69206a0"
+  url "https://github.com/xfce-mirror/xfce4-terminal/archive/refs/tags/xfce4-terminal-1.1.4.tar.gz"
+  sha256 "e3bfafdfb542073dfc920416418e65301ea9bb32f702b0f63a6764d29603c14d"
   license "GPL-2.0"
 
   keg_only :versioned_formula

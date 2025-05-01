@@ -4,10 +4,10 @@ class Sakura < Formula
   license "GPL-2.0"
 
   stable do
-    url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_8.tar.gz"
-    sha256 "b2b05e9e389dafe7bf41fd2fd4ca38a23afdd2e207bf0734d7f3aa3bb6346d50"
+    url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_9.tar.gz"
+    sha256 "46b792098a82ba4affc87a174ae96f32e730396e4f5ba9b699e8071253b085a2"
 
-    patch :p1, Formula["z80oolong/vte/sakura@3.8.8"].diff_data
+    patch :p1, Formula["z80oolong/vte/sakura@3.8.9"].diff_data
   end
 
   head do
@@ -46,10 +46,10 @@ end
 
 __END__
 diff --git a/src/sakura.c b/src/sakura.c
-index 72ec13f..8bfca37 100644
+index 9c49d55..c2c048b 100644
 --- a/src/sakura.c
 +++ b/src/sakura.c
-@@ -3001,6 +3001,9 @@ sakura_add_tab()
+@@ -3035,6 +3035,9 @@ sakura_add_tab()
  	GtkWidget *event_box;
  	gint index, page, npages;
  	gchar *cwd = NULL; gchar *default_label_text = NULL;
@@ -59,7 +59,7 @@ index 72ec13f..8bfca37 100644
  
  	sk_tab = g_new0(struct sakura_tab, 1);
  
-@@ -3278,6 +3281,14 @@ sakura_add_tab()
+@@ -3312,6 +3315,14 @@ sakura_add_tab()
  	vte_terminal_set_audible_bell (VTE_TERMINAL(sk_tab->vte), sakura.audible_bell ? TRUE : FALSE);
  	vte_terminal_set_cursor_blink_mode (VTE_TERMINAL(sk_tab->vte), sakura.blinking_cursor ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
  	vte_terminal_set_cursor_shape (VTE_TERMINAL(sk_tab->vte), sakura.cursor_type);

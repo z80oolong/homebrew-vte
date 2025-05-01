@@ -37,6 +37,9 @@ class RoxtermAT3143 < Formula
       s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
+    args  = std_cmake_args
+    args << "CMAKE_BUILD_TYPE=Debug"
+
     system "cmake", "-S", ".", "-B", "build", *args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"

@@ -1,8 +1,8 @@
-class SakuraAT387 < Formula
+class SakuraAT389 < Formula
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
-  url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_7.tar.gz"
-  sha256 "c50e1a383a1f0e803817642d017b77545c8e496daeea39ab5152b9bb6d4d171e"
+  url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_9.tar.gz"
+  sha256 "46b792098a82ba4affc87a174ae96f32e730396e4f5ba9b699e8071253b085a2"
   license "GPL-2.0"
 
   keg_only :versioned_formula
@@ -39,12 +39,12 @@ end
 
 __END__
 diff --git a/src/sakura.c b/src/sakura.c
-index 2b5b2a3..e3be05f 100644
+index f137879..2c4d1a5 100644
 --- a/src/sakura.c
 +++ b/src/sakura.c
-@@ -2949,6 +2949,9 @@ sakura_add_tab()
+@@ -3040,6 +3040,9 @@ sakura_add_tab()
  	GtkWidget *event_box;
- 	int index; int npages;
+ 	gint index, page, npages;
  	gchar *cwd = NULL; gchar *default_label_text = NULL;
 +#ifndef NO_UTF8_CJK
 +	gchar *vte_cjk_width = NULL;
@@ -52,7 +52,7 @@ index 2b5b2a3..e3be05f 100644
  
  	sk_tab = g_new0(struct sakura_tab, 1);
  
-@@ -3175,6 +3178,14 @@ sakura_add_tab()
+@@ -3317,6 +3320,14 @@ sakura_add_tab()
  	vte_terminal_set_audible_bell (VTE_TERMINAL(sk_tab->vte), sakura.audible_bell ? TRUE : FALSE);
  	vte_terminal_set_cursor_blink_mode (VTE_TERMINAL(sk_tab->vte), sakura.blinking_cursor ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
  	vte_terminal_set_cursor_shape (VTE_TERMINAL(sk_tab->vte), sakura.cursor_type);

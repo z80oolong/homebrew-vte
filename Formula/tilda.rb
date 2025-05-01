@@ -47,6 +47,7 @@ class Tilda < Formula
 end
 
 __END__
+warning: refname 'upstream' is ambiguous.
 diff --git a/po/LINGUAS b/po/LINGUAS
 index 38adefd..09ad7f5 100644
 --- a/po/LINGUAS
