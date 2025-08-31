@@ -1,8 +1,8 @@
-class RoxtermAT3143 < Formula
+class RoxtermAT3166 < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
-  url "https://github.com/realh/roxterm/archive/refs/tags/3.14.3.tar.gz"
-  sha256 "4f801371113ff33d6a53dfa77aef6c3d09d29620fcf27e844c755904f9776e5b"
+  url "https://github.com/realh/roxterm/archive/refs/tags/3.16.6.tar.gz"
+  sha256 "153fbb0746c3afa45bede7e3f6aa0e0ab0ce698d3bfe4ac1962f9da0a1a44145"
 
   keg_only :versioned_formula
 
@@ -68,10 +68,10 @@ end
 
 __END__
 diff --git a/src/roxterm.c b/src/roxterm.c
-index 1a8173f..5760e37 100644
+index 5895e3f..bafd6c6 100644
 --- a/src/roxterm.c
 +++ b/src/roxterm.c
-@@ -3233,6 +3233,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3303,6 +3303,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
      gboolean custom_tab_name = FALSE;
      MultiWin *template_win = roxterm_get_win(roxterm_template);
      GtkWidget *viewport = NULL;
@@ -81,7 +81,7 @@ index 1a8173f..5760e37 100644
  
      roxterm_terms = g_list_append(roxterm_terms, roxterm);
  
-@@ -3259,6 +3262,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3329,6 +3332,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
              roxterm->columns, roxterm->rows);
      gtk_widget_grab_focus(roxterm->widget);
      vte = VTE_TERMINAL(roxterm->widget);

@@ -1,8 +1,8 @@
 class LibvteAT291 < Formula
   desc "Terminal emulator widget used by GNOME terminal"
   homepage "https://wiki.gnome.org/Apps/Terminal/VTE"
-  url "https://github.com/GNOME/vte/archive/refs/tags/0.78.2.tar.gz"
-  sha256 "cbeb337d4158abe809200e64ea0d184002bc5cb74e7aa944737bdff6eb0b0a8a"
+  url "https://github.com/GNOME/vte/archive/refs/tags/0.81.90.tar.gz"
+  sha256 "97f9b2826a67adbd2ef41b23ae3c1b36d935da15f52dc7cf9b31876c78bb5f3b"
   license "LGPL-2.0-or-later"
 
   head do
@@ -24,6 +24,7 @@ class LibvteAT291 < Formula
   depends_on "cairo"
   depends_on "fast_float"
   depends_on "fribidi"
+  depends_on "simdutf"
   depends_on "gdk-pixbuf"
   depends_on "glib"
   depends_on "glibc"
@@ -75,6 +76,10 @@ class LibvteAT291 < Formula
     end
 
     ENV["XML_CATALOG_FILES"] = etc/"xml/catalog"
+
+    inreplace(buildpath/"src/app/vte.desktop.in") do |s|
+      s.gsub!(/^SingleMainWindow=false/, "X-SingleMainWindow=false")
+    end
 
     args  = std_meson_args
     args << "-Dsixel=true" if build.with?("libsixel")

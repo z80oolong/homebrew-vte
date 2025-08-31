@@ -1,19 +1,10 @@
-class Roxterm < Formula
+class RoxtermAT3165 < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
+  url "https://github.com/realh/roxterm/archive/refs/tags/3.16.5.tar.gz"
+  sha256 "615b9cb824099d6faa481afa98e9d9da6bba8b009c682a9721a30fac7f3b4bf8"
 
-  stable do
-    url "https://github.com/realh/roxterm/archive/refs/tags/3.15.3.tar.gz"
-    sha256 "ec3f7f8c6e088a8b73355da8bb70f6641a000ba681b4f49e25f74c97bad0367a"
-
-    patch :p1, Formula["z80oolong/vte/roxterm@3.16.6"].diff_data
-  end
-
-  head do
-    url "https://github.com/realh/roxterm.git"
-
-    patch :p1, :DATA
-  end
+  keg_only :versioned_formula
 
   depends_on "cmake" => :build
   depends_on "docbook-xsl" => :build
@@ -30,6 +21,8 @@ class Roxterm < Formula
         branch:   "main",
         revision: "72cd4d52211814ac3a8cecd2fc197447c3914c47"
   end
+
+  patch :p1, :DATA
 
   def install
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
