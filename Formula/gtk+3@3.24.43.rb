@@ -12,17 +12,6 @@ class Gtkx3AT32443 < Formula
 
   keg_only :versioned_formula
 
-  bottle do
-    sha256 arm64_sequoia:  "abbf588f64811f61c3e36cedabbc6d3cbe1187124e15c34362dd73b7fc9fb3ce"
-    sha256 arm64_sonoma:   "b3981b071d6b1214820c5be272256d1058a5f7db57fccb70da713516e2bad714"
-    sha256 arm64_ventura:  "b28221d07db5b16ce517acde4a9bdf2527f1c7f95e98a203278655f1149063d4"
-    sha256 arm64_monterey: "a026a7b6e8b6004a4090552abfb8eb458571773edcab0f3c71fd2cdb7eca0c3f"
-    sha256 sonoma:         "29584c089bc640848b755eabac8ece8cbc230e969423f612d87848e40e28d84e"
-    sha256 ventura:        "9bf9fe10db6c816825cc6e3f2a139201520f727755e539cf0a62907712571429"
-    sha256 monterey:       "3096c62e650b6807fbf37495da07f5113b91f82be3a627ae75c4684167c35d5e"
-    sha256 x86_64_linux:   "880cff997f0d940867b79dee4f87f22c8fa03adc377c2f793f85c72818a8cad6"
-  end
-
   depends_on "docbook" => :build
   depends_on "docbook-xsl" => :build
   depends_on "gettext" => :build
@@ -36,6 +25,7 @@ class Gtkx3AT32443 < Formula
   depends_on "fribidi"
   depends_on "gdk-pixbuf"
   depends_on "glib"
+  depends_on "glibc"
   depends_on "gsettings-desktop-schemas"
   depends_on "harfbuzz"
   depends_on "hicolor-icon-theme"
@@ -67,6 +57,9 @@ class Gtkx3AT32443 < Formula
   end
 
   def install
+    ENV['HOMEBREW_LD_LIBRARY_PATH']="#{Formula['glibc'].opt_lib}:#{ENV['HOMEBREW_RPATH_PATHS']}"
+    ENV.append "LDFLAGS", "-ldl"
+
     args = %w[
       -Dgtk_doc=false
       -Dman=true
@@ -76,6 +69,8 @@ class Gtkx3AT32443 < Formula
     if OS.mac?
       args << "-Dquartz_backend=true"
       args << "-Dx11_backend=false"
+    else
+      args << "-Dx11_backend=true"
     end
 
     # ensure that we don't run the meson post install script
@@ -84,7 +79,6 @@ class Gtkx3AT32443 < Formula
     # Find our docbook catalog
     ENV["XML_CATALOG_FILES"] = "#{etc}/xml/catalog"
 
-p "ENV['HOMEBREW_LD_LIBRARY_PATH']=#{ENV['HOMEBREW_LD_LIBRARY_PATH']}"
     system "meson", "setup", "build", *args, *std_meson_args
     system "meson", "compile", "-C", "build", "--verbose"
     system "meson", "install", "-C", "build"
