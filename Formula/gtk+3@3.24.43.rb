@@ -57,8 +57,8 @@ class Gtkx3AT32443 < Formula
   end
 
   def install
-    ENV['HOMEBREW_LD_LIBRARY_PATH']="#{Formula['glibc'].opt_lib}:#{ENV['HOMEBREW_RPATH_PATHS']}"
     ENV.append "LDFLAGS", "-ldl"
+    ENV.append "CXXFLAGS", "-fpermissive"
 
     args = %w[
       -Dgtk_doc=false

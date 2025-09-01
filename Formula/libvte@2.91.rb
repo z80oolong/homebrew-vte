@@ -1,3 +1,15 @@
+class << ENV
+  def replace_rpath(**replace_list)
+    replace_list = replace_list.each_with_object({}) do |(old, new), result|
+      result[Formula[old].opt_lib.to_s] = Formula[new].opt_lib.to_s
+      result[Formula[old].lib.to_s] = Formula[new].lib.to_s
+    end
+    rpaths = self["HOMEBREW_RPATH_PATHS"].split(":")
+    rpaths = rpaths.each_with_object([]) {|rpath, result| result << (replace_list.key?(rpath) ? replace_list[rpath] : rpath) }
+    self["HOMEBREW_RPATH_PATHS"] = rpaths.join(":")
+  end
+end
+
 class LibvteAT291 < Formula
   desc "Terminal emulator widget used by GNOME terminal"
   homepage "https://wiki.gnome.org/Apps/Terminal/VTE"
@@ -29,7 +41,10 @@ class LibvteAT291 < Formula
   depends_on "glib"
   depends_on "glibc"
   depends_on "gnutls"
-  depends_on "gtk+3"
+  depends_on "z80oolong/vte/gtk+3@3.24.43" => :optional
+  unless build.with? "z80oolong/vte/gtk+3@3.24.43"
+    depends_on "gtk+3"
+  end
   depends_on "gtk4"
   depends_on "icu4c@75"
   depends_on "lz4"
@@ -64,6 +79,12 @@ class LibvteAT291 < Formula
   patch :DATA
 
   def install
+    if build.with? "z80oolong/vte/gtk+3@3.24.43"
+      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
+    end
+    ENV.append "LDFLAGS", "-ldl"
+    ENV.append "CXXFLAGS", "-fpermissive"
+
     if OS.mac? && DevelopmentTools.clang_build_version <= 1500
       llvm = Formula["llvm"]
       ENV.llvm_clang
