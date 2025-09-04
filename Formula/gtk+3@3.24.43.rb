@@ -57,6 +57,8 @@ class Gtkx3AT32443 < Formula
   end
 
   def install
+    #ENV.append "HOMEBREW_LIBRARY_PATHS", Formula["glibc"].opt_lib
+    #ENV["HOMEBREW_LD_LIBRARY_PATHS"] = "#{Formula['glibc'].opt_lib}:#{ENV["HOMEBREW_RPATH_PATHS"]}"
     ENV.append "LDFLAGS", "-ldl"
     ENV.append "CXXFLAGS", "-fpermissive"
 
@@ -69,8 +71,6 @@ class Gtkx3AT32443 < Formula
     if OS.mac?
       args << "-Dquartz_backend=true"
       args << "-Dx11_backend=false"
-    else
-      args << "-Dx11_backend=true"
     end
 
     # ensure that we don't run the meson post install script
@@ -88,9 +88,9 @@ class Gtkx3AT32443 < Formula
   end
 
   def post_install
-    system "#{Formula["glib"].opt_bin}/glib-compile-schemas", "#{HOMEBREW_PREFIX}/share/glib-2.0/schemas"
-    system bin/"gtk3-update-icon-cache", "-f", "-t", "#{HOMEBREW_PREFIX}/share/icons/hicolor"
-    system bin/"gtk-query-immodules-3.0 > #{HOMEBREW_PREFIX}/lib/gtk-3.0/3.0.0/immodules.cache"
+    system "#{Formula["glib"].opt_bin}/glib-compile-schemas", share/"glib-2.0/schemas"
+    system bin/"gtk3-update-icon-cache", "-f", "-t", share/"icons/hicolor"
+    system bin/"gtk-query-immodules-3.0 > #{lib}/gtk-3.0/3.0.0/immodules.cache"
   end
 
   test do
