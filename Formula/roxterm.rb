@@ -59,7 +59,7 @@ class Roxterm < Formula
     end
 
     inreplace "./src/config.h.in" do |s|
-      s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
+      s.gsub!(/^#cmakedefine ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
     args  = std_cmake_args
