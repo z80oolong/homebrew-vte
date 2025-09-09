@@ -31,6 +31,7 @@ class Gtkx3AT32443 < Formula
   depends_on "hicolor-icon-theme"
   depends_on "libepoxy"
   depends_on "pango"
+  depends_on "z80oolong/im/im-fcitx@5.1.12" => :optional
 
   uses_from_macos "libxslt" => :build # for xsltproc
 
@@ -90,6 +91,10 @@ class Gtkx3AT32443 < Formula
   def post_install
     system "#{Formula["glib"].opt_bin}/glib-compile-schemas", share/"glib-2.0/schemas"
     system bin/"gtk3-update-icon-cache", "-f", "-t", share/"icons/hicolor"
+#    if build.with?("z80oolong/im/im-fcitx@5.1.12") then
+      (lib/"gtk-3.0/3.0.0/immodules").install_symlink Formula["z80oolong/im/im-fcitx@5.1.12"].opt_lib/"gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+      ohai "Symlink #{Formula['z80oolong/im/im-fcitx@5.1.12'].opt_lib}/gtk-3.0/3.0.0/immodules/im-fcitx5.so => #{lib}/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
+#    end
     system bin/"gtk-query-immodules-3.0 > #{lib}/gtk-3.0/3.0.0/immodules.cache"
   end
 
