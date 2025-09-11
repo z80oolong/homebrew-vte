@@ -32,14 +32,16 @@ class Sakura < Formula
   depends_on "pod2man" => :build
   depends_on "gettext"
   depends_on "systemd"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :optional
-  unless build.with? "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
+  if build.without? "z80oolong/vte/gtk+3@3.24.43"
     depends_on "gtk+3"
   end
   depends_on "z80oolong/vte/libvte@2.91"
 
   def install
-    if build.with? "z80oolong/vte/gtk+3@3.24.43"
+    if build.without? "z80oolong/vte/gtk+3@3.24.43"
+      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
+    else
       ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     end
 

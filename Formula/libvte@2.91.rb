@@ -41,8 +41,8 @@ class LibvteAT291 < Formula
   depends_on "glib"
   depends_on "glibc"
   depends_on "gnutls"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :optional
-  unless build.with? "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
+  if build.without? "z80oolong/vte/gtk+3@3.24.43"
     depends_on "gtk+3"
   end
   depends_on "gtk4"
@@ -79,7 +79,9 @@ class LibvteAT291 < Formula
   patch :DATA
 
   def install
-    if build.with? "z80oolong/vte/gtk+3@3.24.43"
+    if build.without? "z80oolong/vte/gtk+3@3.24.43"
+      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
+    else
       ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     end
     ENV.append "LDFLAGS", "-ldl"

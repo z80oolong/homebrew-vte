@@ -12,13 +12,19 @@ class Gtkx3AT32443 < Formula
 
   keg_only :versioned_formula
 
+
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "intltool" => :build
+  depends_on "libtool" => :build
+  depends_on "perl" => :build
   depends_on "docbook" => :build
   depends_on "docbook-xsl" => :build
   depends_on "gettext" => :build
   depends_on "gobject-introspection" => :build
   depends_on "meson" => :build
   depends_on "ninja" => :build
-  depends_on "pkg-config" => [:build, :test]
+  depends_on "pkgconf" => [:build, :test]
 
   depends_on "at-spi2-core"
   depends_on "cairo"
@@ -31,7 +37,6 @@ class Gtkx3AT32443 < Formula
   depends_on "hicolor-icon-theme"
   depends_on "libepoxy"
   depends_on "pango"
-  depends_on "z80oolong/im/im-fcitx@5.1.12" => :optional
 
   uses_from_macos "libxslt" => :build # for xsltproc
 
@@ -45,6 +50,8 @@ class Gtkx3AT32443 < Formula
     depends_on "fontconfig"
     depends_on "iso-codes"
     depends_on "libx11"
+    depends_on "libxau"
+    depends_on "libxcb"
     depends_on "libxdamage"
     depends_on "libxext"
     depends_on "libxfixes"
@@ -57,9 +64,22 @@ class Gtkx3AT32443 < Formula
     depends_on "xorgproto"
   end
 
+  resource("fcitx5-gclient") do
+    url "https://github.com/fcitx/fcitx5-gtk/archive/refs/tags/5.1.4.tar.gz"
+    sha256 "73f63d10078c62e5b6d82e6b16fcb03d2038cc204fc00052a34ab7962b0b7815"
+  end
+
+  resource("scim-frontend-gtk3") do
+    url "https://github.com/scim-im/scim/archive/refs/tags/1.4.18.tar.gz"
+    sha256 "072d79dc3c7277b8e8fcb1caf1a83225c3bf113d590f314b85ae38024427a228"
+
+    patch :p1 do
+      url "https://mirrors.sjtug.sjtu.edu.cn/gentoo/app-i18n/scim/files/scim-1.4.18-fix-for-gcc15.patch"
+      sha256 "1db8d4acc686895b5d3123e172fdf6a7542ae8f160d94399982fca770e6d6bf1"
+    end
+  end
+
   def install
-    #ENV.append "HOMEBREW_LIBRARY_PATHS", Formula["glibc"].opt_lib
-    #ENV["HOMEBREW_LD_LIBRARY_PATHS"] = "#{Formula['glibc'].opt_lib}:#{ENV["HOMEBREW_RPATH_PATHS"]}"
     ENV.append "LDFLAGS", "-ldl"
     ENV.append "CXXFLAGS", "-fpermissive"
 
@@ -84,6 +104,51 @@ class Gtkx3AT32443 < Formula
     system "meson", "compile", "-C", "build", "--verbose"
     system "meson", "install", "-C", "build"
 
+    resource("fcitx5-gclient").stage do
+      ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
+
+      args  = std_cmake_args.dup
+      args.map! { |arg| arg.match?(/^-DCMAKE_INSTALL_PREFIX/) ? "-DCMAKE_INSTALL_PREFIX=#{libexec}/fcitx5-gclient" : arg }
+      args.map! { |arg| arg.match?(/^-DCMAKE_INSTALL_LIBDIR/) ? "-DCMAKE_INSTALL_LIBDIR=#{libexec}/fcitx5-gclient/lib" : arg }
+      args << "-DENABLE_GIR=OFF"
+      args << "-DENABLE_GTK2_IM_MODULE=OFF"
+      args << "-DENABLE_GTK3_IM_MODULE=ON"
+      args << "-DENABLE_GTK4_IM_MODULE=OFF"
+      args << "-DENABLE_SNOOPER=OFF"
+      args << "-DGTK3_IM_MODULEDIR=#{lib}/gtk-3.0/3.0.0/immodules"
+
+      system "cmake", "-S", ".", "-B", "build", *args
+      system "cmake", "--build", "build"
+      system "cmake", "--install", "build"
+    end
+
+    resource("scim-frontend-gtk3").stage do
+      ENV["LC_ALL"] = "C"
+      ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
+
+      system "./bootstrap"
+
+      args  = std_configure_args
+      args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/scim-frontend-gtk" : arg }
+      args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/scim-frontend-gtk/lib" : arg }
+      args << "--disable-silent-rules"
+      args << "--disable-documents"
+      args << "--with-x"
+      args << "--without-doxygen"
+      args << "--disable-gtk2-immodule"
+      args << "--enable-gtk3-immodule"
+      args << "--enable-orig-gtk3-immodule"
+      args << "--with-gtk3-im-module-dir=#{lib}/gtk-3.0/3.0.0/immodules"
+      args << "--disable-qt3-immodule"
+      args << "--disable-qt4-immodule"
+      args << "--disable-panel-gtk"
+      args << "--disable-setup-ui"
+
+      system "./configure", *args
+      system "make"
+      system "make", "install"
+    end
+
     bin.install_symlink bin/"gtk-update-icon-cache" => "gtk3-update-icon-cache"
     man1.install_symlink man1/"gtk-update-icon-cache.1" => "gtk3-update-icon-cache.1"
   end
@@ -91,10 +156,6 @@ class Gtkx3AT32443 < Formula
   def post_install
     system "#{Formula["glib"].opt_bin}/glib-compile-schemas", share/"glib-2.0/schemas"
     system bin/"gtk3-update-icon-cache", "-f", "-t", share/"icons/hicolor"
-#    if build.with?("z80oolong/im/im-fcitx@5.1.12") then
-      (lib/"gtk-3.0/3.0.0/immodules").install_symlink Formula["z80oolong/im/im-fcitx@5.1.12"].opt_lib/"gtk-3.0/3.0.0/immodules/im-fcitx5.so"
-      ohai "Symlink #{Formula['z80oolong/im/im-fcitx@5.1.12'].opt_lib}/gtk-3.0/3.0.0/immodules/im-fcitx5.so => #{lib}/gtk-3.0/3.0.0/immodules/im-fcitx5.so"
-#    end
     system bin/"gtk-query-immodules-3.0 > #{lib}/gtk-3.0/3.0.0/immodules.cache"
   end
 

@@ -1,17 +1,29 @@
+class << ENV
+  def replace_rpath(**replace_list)
+    replace_list = replace_list.each_with_object({}) do |(old, new), result|
+      result[Formula[old].opt_lib.to_s] = Formula[new].opt_lib.to_s
+      result[Formula[old].lib.to_s] = Formula[new].lib.to_s
+    end
+    rpaths = self["HOMEBREW_RPATH_PATHS"].split(":")
+    rpaths = rpaths.each_with_object([]) {|rpath, result| result << (replace_list.key?(rpath) ? replace_list[rpath] : rpath) }
+    self["HOMEBREW_RPATH_PATHS"] = rpaths.join(":")
+  end
+end
+
 class Geany < Formula
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
 
   stable do
-    url "https://download.geany.org/geany-2.0.tar.gz"
-    sha256 "50d28a45ac9b9695e9529c73fe7ed149edb512093c119db109cea6424114847f"
+    url "https://download.geany.org/geany-2.1.tar.gz"
+    sha256 "8da944e82f78f3c4c6e6b054b7c562ab64ea37d4a3e7dc8576bed8a8160d3c2a"
 
     resource("geany-plugins") do
-      url "https://github.com/geany/geany-plugins/releases/download/2.0.0/geany-plugins-2.0.tar.bz2"
-      sha256 "9fc2ec5c99a74678fb9e8cdfbd245d3e2061a448d70fd110a6aefb62dd514705"
+      url "https://github.com/geany/geany-plugins/archive/refs/tags/2.1.0.tar.gz"
+      sha256 "9ca8412763c2f8a7141f6a1569166f4fabf95fc8aad5149a754265673ffce5bb"
     end
 
-    patch :p1, Formula["z80oolong/vte/geany@2.0"].diff_data
+    patch :p1, Formula["z80oolong/vte/geany@2.1"].diff_data
   end
 
   head do
@@ -37,7 +49,10 @@ class Geany < Formula
   depends_on "glibc"
   depends_on "gnupg"
   depends_on "gpgme"
-  depends_on "gtk+3"
+  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
+  if build.without? "z80oolong/vte/gtk+3@3.24.43"
+    depends_on "gtk+3"
+  end
   depends_on "hicolor-icon-theme"
   depends_on "libsoup@2"
   depends_on "libvterm"
@@ -51,6 +66,11 @@ class Geany < Formula
   depends_on "z80oolong/vte/libvte@2.91"
 
   def install
+    if build.without? "z80oolong/vte/gtk+3@3.24.43"
+      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
+    else
+      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
+    end
     ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
     ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
@@ -96,7 +116,6 @@ class Geany < Formula
 end
 
 __END__
-warning: refname 'upstream' is ambiguous.
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
 index 000000000..71e70eb26

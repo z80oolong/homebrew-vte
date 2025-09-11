@@ -25,8 +25,8 @@ class RoxtermAT3166 < Formula
   depends_on "pkg-config" => :build
   depends_on "dbus-glib"
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :optional
-  unless build.with? "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
+  if build.without? "z80oolong/vte/gtk+3@3.24.43"
     depends_on "gtk+3"
   end
   depends_on "z80oolong/vte/libvte@2.91"
@@ -40,7 +40,9 @@ class RoxtermAT3166 < Formula
   patch :p1, :DATA
 
   def install
-    if build.with? "z80oolong/vte/gtk+3@3.24.43"
+    if build.without? "z80oolong/vte/gtk+3@3.24.43"
+      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
+    else
       ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     end
     ENV.append "CFLAGS", "-D_GNU_SOURCE"

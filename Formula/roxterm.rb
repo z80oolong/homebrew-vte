@@ -15,8 +15,8 @@ class Roxterm < Formula
   homepage "https://roxterm.sourceforge.io/"
 
   stable do
-    url "https://github.com/realh/roxterm/archive/refs/tags/3.15.3.tar.gz"
-    sha256 "ec3f7f8c6e088a8b73355da8bb70f6641a000ba681b4f49e25f74c97bad0367a"
+    url "https://github.com/realh/roxterm/archive/refs/tags/3.16.6.tar.gz"
+    sha256 "153fbb0746c3afa45bede7e3f6aa0e0ab0ce698d3bfe4ac1962f9da0a1a44145"
 
     patch :p1, Formula["z80oolong/vte/roxterm@3.16.6"].diff_data
   end
@@ -34,8 +34,8 @@ class Roxterm < Formula
   depends_on "pkg-config" => :build
   depends_on "dbus-glib"
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :optional
-  unless build.with? "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
+  if build.without? "z80oolong/vte/gtk+3@3.24.43"
     depends_on "gtk+3"
   end
   depends_on "z80oolong/vte/libvte@2.91"
@@ -47,7 +47,9 @@ class Roxterm < Formula
   end
 
   def install
-    if build.with? "z80oolong/vte/gtk+3@3.24.43"
+    if build.without? "z80oolong/vte/gtk+3@3.24.43"
+      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
+    else
       ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     end
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
