@@ -105,17 +105,21 @@ class Gtkx3AT32443 < Formula
     system "meson", "install", "-C", "build"
 
     resource("fcitx5-gclient").stage do
+      ENV["LC_ALL"] = "C"
       ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
 
       args  = std_cmake_args.dup
-      args.map! { |arg| arg.match?(/^-DCMAKE_INSTALL_PREFIX/) ? "-DCMAKE_INSTALL_PREFIX=#{libexec}/fcitx5-gclient" : arg }
-      args.map! { |arg| arg.match?(/^-DCMAKE_INSTALL_LIBDIR/) ? "-DCMAKE_INSTALL_LIBDIR=#{libexec}/fcitx5-gclient/lib" : arg }
+      args.map! { |arg| arg.match?(/^-DCMAKE_INSTALL_PREFIX/) ? "-DCMAKE_INSTALL_PREFIX=#{libexec}/fcitx5" : arg }
+      args.map! { |arg| arg.match?(/^-DCMAKE_INSTALL_LIBDIR/) ? "-DCMAKE_INSTALL_LIBDIR=#{libexec}/fcitx5/lib" : arg }
       args << "-DENABLE_GIR=OFF"
       args << "-DENABLE_GTK2_IM_MODULE=OFF"
       args << "-DENABLE_GTK3_IM_MODULE=ON"
       args << "-DENABLE_GTK4_IM_MODULE=OFF"
       args << "-DENABLE_SNOOPER=OFF"
       args << "-DGTK3_IM_MODULEDIR=#{lib}/gtk-3.0/3.0.0/immodules"
+
+      # Using std::free may cause a compile error.
+      inreplace "./gtk3/utils.h", /std::free/, "free"
 
       system "cmake", "-S", ".", "-B", "build", *args
       system "cmake", "--build", "build"
@@ -128,21 +132,33 @@ class Gtkx3AT32443 < Formula
 
       system "./bootstrap"
 
-      args  = std_configure_args
-      args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/scim-frontend-gtk" : arg }
-      args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/scim-frontend-gtk/lib" : arg }
-      args << "--disable-silent-rules"
+      args  = std_configure_args.dup
+      args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/scim" : arg }
+      args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/scim/lib" : arg }
+      args << "--enable-silent-rules"
+      args << "--enable-shared"
+      args << "--disable-static"
+      args << "--disable-tests"
       args << "--disable-documents"
-      args << "--with-x"
-      args << "--without-doxygen"
+      args << "--disable-config-simple"
+      args << "--disable-config-socket"
+      args << "--disable-frontend-x11"
+      args << "--disable-frontend-socket"
+      args << "--disable-im-rawcode"
+      args << "--disable-im-socket"
+      args << "--disable-orig-gtk2-immodule"
+      args << "--disable-orig-gtk3-immodule"
       args << "--disable-gtk2-immodule"
       args << "--enable-gtk3-immodule"
-      args << "--enable-orig-gtk3-immodule"
       args << "--with-gtk3-im-module-dir=#{lib}/gtk-3.0/3.0.0/immodules"
       args << "--disable-qt3-immodule"
       args << "--disable-qt4-immodule"
+      args << "--disable-clutter-immodule"
       args << "--disable-panel-gtk"
       args << "--disable-setup-ui"
+      args << "--with-x"
+      args << "--without-doxygen"
+      args << "--with-gtk-version=3"
 
       system "./configure", *args
       system "make"

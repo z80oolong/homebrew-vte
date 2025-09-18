@@ -1,28 +1,31 @@
-class << ENV
-  def replace_rpath(**replace_list)
-    replace_list = replace_list.each_with_object({}) do |(old, new), result|
-      result[Formula[old].opt_lib.to_s] = Formula[new].opt_lib.to_s
-      result[Formula[old].lib.to_s] = Formula[new].lib.to_s
-    end
-    rpaths = self["HOMEBREW_RPATH_PATHS"].split(":")
-    rpaths = rpaths.each_with_object([]) {|rpath, result| result << (replace_list.key?(rpath) ? replace_list[rpath] : rpath) }
-    self["HOMEBREW_RPATH_PATHS"] = rpaths.join(":")
+def ENV.replace_rpath(**replace_list)
+  replace_list = replace_list.each_with_object({}) do |(old, new), result|
+    old_f = Formula[old]
+    new_f = Formula[new]
+    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
+    result[old_f.lib.to_s] = new_f.lib.to_s
+  end
+
+  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
+    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
+      replace_list.fetch(rpath, rpath)
+    end).join(":")
   end
 end
 
-class RoxtermAT3165 < Formula
+class RoxtermAT3180Dev < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
-  url "https://github.com/realh/roxterm/archive/refs/tags/3.16.5.tar.gz"
-  sha256 "615b9cb824099d6faa481afa98e9d9da6bba8b009c682a9721a30fac7f3b4bf8"
 
-  keg_only :versioned_formula
+  current_commit = "c5a983c570323a6e8d1f7c5767de67013a2f610e"
+  url "https://github.com/realh/roxterm.git",
+    branch:   "master",
+    revision: current_commit
+  version "dev-3.18.0-g#{current_commit[0..7]}"
 
   depends_on "cmake" => :build
-  depends_on "docbook-xsl" => :build
   depends_on "gettext" => :build
-  depends_on "libxslt" => :build
-  depends_on "pkg-config" => :build
+  depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
   depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
@@ -48,13 +51,8 @@ class RoxtermAT3165 < Formula
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
 
-    inreplace "CMakeLists.txt" do |s|
-      s.gsub! %r{http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl},
-        "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
-    end
-
     inreplace "./src/config.h.in" do |s|
-      s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
+      s.gsub!(/^#cmakedefine ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
     args  = std_cmake_args
@@ -74,11 +72,7 @@ class RoxtermAT3165 < Formula
   end
 
   def diff_data
-    lines = path.each_line.with_object([]) do |line, result|
-      result.push(line) if /^__END__/.match?(line) || result.first
-    end
-    lines.shift
-    lines.join
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

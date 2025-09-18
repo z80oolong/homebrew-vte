@@ -13,26 +13,18 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class Roxterm < Formula
+class RoxtermAT3172 < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
+  url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
+  sha256 "3da0ac499773002ccf0df9fd57918b3856cd5c5257f874715725ff3ef1266657"
 
-  stable do
-    url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
-    sha256 "3da0ac499773002ccf0df9fd57918b3856cd5c5257f874715725ff3ef1266657"
-
-    patch :p1, Formula["z80oolong/vte/roxterm@3.17.2"].diff_data
-  end
-
-  head do
-    url "https://github.com/realh/roxterm.git"
-
-    patch :p1, Formula["z80oolong/vte/roxterm@3.18.0-dev"].diff_data
-  end
+  keg_only :versioned_formula
 
   depends_on "cmake" => :build
+  depends_on "docbook-xsl" => :build
   depends_on "gettext" => :build
-  depends_on "pkg-config" => :build
+  depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
   depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
@@ -46,6 +38,8 @@ class Roxterm < Formula
         branch:   "main",
         revision: "72cd4d52211814ac3a8cecd2fc197447c3914c47"
   end
+
+  patch :p1, :DATA
 
   def install
     if build.without? "z80oolong/vte/gtk+3@3.24.43"
@@ -76,7 +70,46 @@ class Roxterm < Formula
     end
   end
 
+  def diff_data
+    lines = path.each_line.with_object([]) do |line, result|
+      result.push(line) if /^__END__/.match?(line) || result.first
+    end
+    lines.shift
+    lines.join
+  end
+
   test do
     assert_match version.to_s, shell_output("#{bin}/roxterm --version")
   end
 end
+
+__END__
+diff --git a/src/roxterm.c b/src/roxterm.c
+index 7d608d8..1b5fdca 100644
+--- a/src/roxterm.c
++++ b/src/roxterm.c
+@@ -3459,6 +3459,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+     gboolean custom_tab_name = FALSE;
+     MultiWin *template_win = roxterm_get_win(roxterm_template);
+     GtkWidget *viewport = NULL;
++#ifndef NO_UTF8_CJK
++    char *vte_cjk_width = NULL;
++#endif
+ 
+     roxterm_terms = g_list_append(roxterm_terms, roxterm);
+ 
+@@ -3485,6 +3488,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+             roxterm->columns, roxterm->rows);
+     gtk_widget_grab_focus(roxterm->widget);
+     vte = VTE_TERMINAL(roxterm->widget);
++#ifndef NO_UTF8_CJK
++    vte_cjk_width = g_getenv("VTE_CJK_WIDTH");
++    if ((vte_cjk_width != NULL) && (strncmp((const char *)vte_cjk_width, "1", (size_t)1) == 0)) {
++        if (vte_terminal_get_cjk_ambiguous_width(vte) != 2) {
++            vte_terminal_set_cjk_ambiguous_width(vte, 2);
++        }
++    }
++#endif
+     if (vte_widget)
+         *vte_widget = roxterm->widget;
+     if (adjustment)
