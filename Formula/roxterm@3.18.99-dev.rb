@@ -13,7 +13,7 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class RoxtermAT3180Dev < Formula
+class RoxtermAT31899Dev < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
 
@@ -21,7 +21,7 @@ class RoxtermAT3180Dev < Formula
   url "https://github.com/realh/roxterm.git",
     branch:   "master",
     revision: current_commit
-  version "dev-3.18.0-g#{current_commit[0..7]}"
+  version "dev-3.18.99-g#{current_commit[0..7]}"
 
   depends_on "cmake" => :build
   depends_on "gettext" => :build

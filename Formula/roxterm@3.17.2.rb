@@ -22,7 +22,6 @@ class RoxtermAT3172 < Formula
   keg_only :versioned_formula
 
   depends_on "cmake" => :build
-  depends_on "docbook-xsl" => :build
   depends_on "gettext" => :build
   depends_on "pkgconf" => :build
   depends_on "dbus-glib"
@@ -71,11 +70,7 @@ class RoxtermAT3172 < Formula
   end
 
   def diff_data
-    lines = path.each_line.with_object([]) do |line, result|
-      result.push(line) if /^__END__/.match?(line) || result.first
-    end
-    lines.shift
-    lines.join
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do
