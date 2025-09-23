@@ -1,30 +1,39 @@
-class << ENV
-  def replace_rpath(**replace_list)
-    replace_list = replace_list.each_with_object({}) do |(old, new), result|
-      result[Formula[old].opt_lib.to_s] = Formula[new].opt_lib.to_s
-      result[Formula[old].lib.to_s] = Formula[new].lib.to_s
-    end
-    rpaths = self["HOMEBREW_RPATH_PATHS"].split(":")
-    rpaths = rpaths.each_with_object([]) {|rpath, result| result << (replace_list.key?(rpath) ? replace_list[rpath] : rpath) }
-    self["HOMEBREW_RPATH_PATHS"] = rpaths.join(":")
+def ENV.replace_rpath(**replace_list)
+  replace_list = replace_list.each_with_object({}) do |(old, new), result|
+    old_f = Formula[old]
+    new_f = Formula[new]
+    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
+    result[old_f.lib.to_s] = new_f.lib.to_s
+  end
+
+  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
+    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
+      replace_list.fetch(rpath, rpath)
+    end).join(":")
   end
 end
 
-class GeanyAT138 < Formula
+class GeanyAT299Dev < Formula
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
-  url "https://download.geany.org/geany-1.38.tar.gz"
-  sha256 "e91e903924b993b79ef88f33708372dc7c79aee78e15a02e728338695e9dc155"
 
-  keg_only :versioned_formula
+  current_commit = "426e427030fe0118648efbec5e76b2b1ddca9e5c"
+  url "https://github.com/geany/geany.git",
+    branch:   "master",
+    revision: current_commit
+  version "git-#{current_commit[0..7]}"
+
+  resource("geany-plugins") do
+    url "https://github.com/geany/geany-plugins.git",
+      branch:   "master",
+      revision: "760aaf348385e32fc171cda0d16c56df3ab9319e"
+  end
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "docutils" => :build
   depends_on "intltool" => :build
   depends_on "libtool" => :build
-  depends_on "perl" => :build
-  depends_on "perl-xml-parser" => :build
   depends_on "pkg-config" => :build
   depends_on "ctags"
   depends_on "enchant"
@@ -32,10 +41,7 @@ class GeanyAT138 < Formula
   depends_on "glibc"
   depends_on "gnupg"
   depends_on "gpgme"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
-  if build.without? "z80oolong/vte/gtk+3@3.24.43"
-    depends_on "gtk+3"
-  end
+  depends_on "z80oolong/vte/gtk+3@3.24.43"
   depends_on "hicolor-icon-theme"
   depends_on "libsoup@2"
   depends_on "libvterm"
@@ -48,19 +54,10 @@ class GeanyAT138 < Formula
   depends_on "z80oolong/dep/scintilla@5.3.4"
   depends_on "z80oolong/vte/libvte@2.91"
 
-  resource("geany-plugins") do
-    url "https://github.com/geany/geany-plugins/archive/refs/tags/1.38.0.tar.gz"
-    sha256 "86d2fe05290136d020b0d22f849a1aaa74b83cb49b767ae2dc19aaedcdf3d469"
-  end
-
   patch :p1, :DATA
 
   def install
-    if build.without? "z80oolong/vte/gtk+3@3.24.43"
-      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
-    else
-      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-    end
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
     ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
@@ -71,6 +68,8 @@ class GeanyAT138 < Formula
     ENV["LC_ALL"]   = "ja_JP.UTF-8"
     ENV["LC_CTYPE"] = "ja_JP.UTF-8"
     ENV["LANG"]     = "ja"
+
+    system "sh", "./autogen.sh" if head?
 
     args  = std_configure_args
     args << "--enable-vte"
@@ -83,7 +82,8 @@ class GeanyAT138 < Formula
     resource("geany-plugins").stage do
       system "patch -p1 < #{buildpath}/geany-plugins.diff"
 
-      system "sh", "./autogen.sh"
+      system "sh", "./autogen.sh" if head?
+
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args  = std_configure_args
@@ -97,6 +97,10 @@ class GeanyAT138 < Formula
     end
   end
 
+  def diff_data
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
+  end
+
   test do
     system "#{bin}/geany", "--version"
   end
@@ -105,15 +109,15 @@ end
 __END__
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
-index 0000000..6eebf33
+index 000000000..71e70eb26
 --- /dev/null
 +++ b/geany-plugins.diff
-@@ -0,0 +1,90 @@
+@@ -0,0 +1,74 @@
 +diff --git a/debugger/src/debug.c b/debugger/src/debug.c
-+index 6a019c5..5498edb 100644
++index 23bde5c8..f5bd6ca6 100644
 +--- a/debugger/src/debug.c
 ++++ b/debugger/src/debug.c
-+@@ -1000,6 +1000,9 @@ void debug_init(void)
++@@ -1004,6 +1004,9 @@ void debug_init(void)
 + 	gchar *configfile;
 + 	gchar *font;
 + 	GtkTextBuffer *buffer;
@@ -123,7 +127,7 @@ index 0000000..6eebf33
 + 
 + #if GTK_CHECK_VERSION(3, 0, 0)
 + 	VtePty *pty;
-+@@ -1053,6 +1056,15 @@ void debug_init(void)
++@@ -1057,6 +1060,15 @@ void debug_init(void)
 + 	vte_terminal_set_pty(VTE_TERMINAL(terminal), pty_master);
 + 	scrollbar = gtk_vscrollbar_new(GTK_ADJUSTMENT(VTE_TERMINAL(terminal)->adjustment));
 + #endif
@@ -140,7 +144,7 @@ index 0000000..6eebf33
 + 	tab_terminal = gtk_frame_new(NULL);
 + 	gtk_frame_set_shadow_type (GTK_FRAME(tab_terminal), GTK_SHADOW_NONE);
 +diff --git a/scope/src/conterm.c b/scope/src/conterm.c
-+index b9f6a38..9ef76ec 100644
++index b9f6a388..9ef76ec7 100644
 +--- a/scope/src/conterm.c
 ++++ b/scope/src/conterm.c
 +@@ -472,6 +472,9 @@ void conterm_init(void)
@@ -183,27 +187,11 @@ index 0000000..6eebf33
 + 		dc_output = console_output;
 + 		dc_output_nl = console_output_nl;
 + 		g_signal_connect_after(debug_console, "realize", G_CALLBACK(on_vte_realize), NULL);
-+diff --git a/scope/src/stack.c b/scope/src/stack.c
-+index b03909f..40acda3 100644
-+--- a/scope/src/stack.c
-++++ b/scope/src/stack.c
-+@@ -165,7 +165,11 @@ void on_stack_follow(GArray *nodes)
-+ gboolean stack_entry(void)
-+ {
-+ 	GtkTreeIter iter;
-++#if NO_FIX_GBOOLEAN_BUG
-+ 	gboolean entry = NULL;
-++#else
-++	gboolean entry = FALSE;
-++#endif
-+ 
-+ 	if (gtk_tree_selection_get_selected(selection, NULL, &iter))
-+ 	{
 diff --git a/src/plugins.c b/src/plugins.c
-index cfc4efd..da18949 100644
+index 6625ce45c..a3918d0fe 100644
 --- a/src/plugins.c
 +++ b/src/plugins.c
-@@ -1192,11 +1192,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
+@@ -1142,11 +1142,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
  	}
  }
  
@@ -224,7 +212,7 @@ index cfc4efd..da18949 100644
  	gchar *plugin_path_system;
  	gchar *plugin_path_custom;
  
-@@ -1213,6 +1222,15 @@ static void load_all_plugins(void)
+@@ -1163,6 +1172,15 @@ static void load_all_plugins(void)
  		load_plugins_from_path(plugin_path_custom);
  		g_free(plugin_path_custom);
  	}
@@ -241,10 +229,10 @@ index cfc4efd..da18949 100644
  	/* finally load plugins from $prefix/lib/geany */
  	load_plugins_from_path(plugin_path_system);
 diff --git a/src/vte.c b/src/vte.c
-index 916e2c2..b8c8b2c 100644
+index 1fde0d749..c5c9e0a70 100644
 --- a/src/vte.c
 +++ b/src/vte.c
-@@ -136,6 +136,10 @@ struct VteFunctions
+@@ -135,6 +135,10 @@ struct VteFunctions
  	void (*vte_terminal_set_color_foreground_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
  	void (*vte_terminal_set_color_bold_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
  	void (*vte_terminal_set_color_background_rgba) (VteTerminal *terminal, const GdkRGBA *background);
@@ -263,7 +251,7 @@ index 916e2c2..b8c8b2c 100644
 +	char *vte_cjk_width = NULL;
 +#endif
  
- 	vc->vte = vte = vf->vte_terminal_new();
+ 	vte_config.vte = vte = vf->vte_terminal_new();
  	scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
 @@ -378,6 +385,14 @@ static void create_vte(void)
  	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, terminal_label, MSG_VTE);
@@ -280,7 +268,7 @@ index 916e2c2..b8c8b2c 100644
  }
  
  
-@@ -626,6 +641,10 @@ static gboolean vte_register_symbols(GModule *mod)
+@@ -624,6 +639,10 @@ static gboolean vte_register_symbols(GModule *mod)
  	if (! BIND_SYMBOL(vte_terminal_get_adjustment))
  		/* vte_terminal_get_adjustment() is available since 0.9 and removed in 0.38 */
  		vf->vte_terminal_get_adjustment = default_vte_terminal_get_adjustment;

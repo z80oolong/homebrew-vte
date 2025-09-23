@@ -21,7 +21,9 @@ class LxterminalAT041 < Formula
   patch :p1, :DATA
 
   def install
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
+    ENV["LC_ALL"] = "C"
 
     inreplace "man/Makefile.am" do |s|
       s.gsub! %r{http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl},
@@ -32,6 +34,7 @@ class LxterminalAT041 < Formula
 
     args  = std_configure_args
     args << "--enable-gtk3"
+    args << "--enable-man"
 
     system "./configure", *args
     system "make"
