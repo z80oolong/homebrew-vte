@@ -21,17 +21,17 @@ class RoxtermAT31899Dev < Formula
   url "https://github.com/realh/roxterm.git",
     branch:   "master",
     revision: current_commit
-  version "dev-3.18.99-g#{current_commit[0..7]}"
+  version "git-#{current_commit[0..7]}"
+  license ["GPL-2.0", "LGPL-3.0"]
+
+  keg_only :versioned_formula
 
   depends_on "cmake" => :build
   depends_on "gettext" => :build
   depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
-  if build.without? "z80oolong/vte/gtk+3@3.24.43"
-    depends_on "gtk+3"
-  end
+  depends_on "z80oolong/vte/gtk+3@3.24.43"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("roxterm-ja-po") do
@@ -43,11 +43,7 @@ class RoxtermAT31899Dev < Formula
   patch :p1, :DATA
 
   def install
-    if build.without? "z80oolong/vte/gtk+3@3.24.43"
-      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
-    else
-      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-    end
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
 

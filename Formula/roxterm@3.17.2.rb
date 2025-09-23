@@ -18,6 +18,7 @@ class RoxtermAT3172 < Formula
   homepage "https://roxterm.sourceforge.io/"
   url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
   sha256 "3da0ac499773002ccf0df9fd57918b3856cd5c5257f874715725ff3ef1266657"
+  license ["GPL-2.0", "LGPL-3.0"]
 
   keg_only :versioned_formula
 
@@ -26,10 +27,7 @@ class RoxtermAT3172 < Formula
   depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
-  if build.without? "z80oolong/vte/gtk+3@3.24.43"
-    depends_on "gtk+3"
-  end
+  depends_on "z80oolong/vte/gtk+3@3.24.43"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("roxterm-ja-po") do
@@ -41,11 +39,7 @@ class RoxtermAT3172 < Formula
   patch :p1, :DATA
 
   def install
-    if build.without? "z80oolong/vte/gtk+3@3.24.43"
-      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
-    else
-      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-    end
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
 

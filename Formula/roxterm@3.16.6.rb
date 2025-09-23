@@ -18,6 +18,7 @@ class RoxtermAT3166 < Formula
   homepage "https://roxterm.sourceforge.io/"
   url "https://github.com/realh/roxterm/archive/refs/tags/3.16.6.tar.gz"
   sha256 "153fbb0746c3afa45bede7e3f6aa0e0ab0ce698d3bfe4ac1962f9da0a1a44145"
+  license ["GPL-2.0", "LGPL-3.0"]
 
   keg_only :versioned_formula
 
@@ -28,10 +29,7 @@ class RoxtermAT3166 < Formula
   depends_on "pkg-config" => :build
   depends_on "dbus-glib"
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
-  if build.without? "z80oolong/vte/gtk+3@3.24.43"
-    depends_on "gtk+3"
-  end
+  depends_on "z80oolong/vte/gtk+3@3.24.43"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("roxterm-ja-po") do
@@ -43,11 +41,7 @@ class RoxtermAT3166 < Formula
   patch :p1, :DATA
 
   def install
-    if build.without? "z80oolong/vte/gtk+3@3.24.43"
-      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
-    else
-      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-    end
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
 
@@ -77,11 +71,7 @@ class RoxtermAT3166 < Formula
   end
 
   def diff_data
-    lines = path.each_line.with_object([]) do |line, result|
-      result.push(line) if /^__END__/.match?(line) || result.first
-    end
-    lines.shift
-    lines.join
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

@@ -13,7 +13,7 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class TildaAT200 < Formula
+class TildaAT2999Dev < Formula
   desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
   url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-2.0.0.tar.gz"

@@ -13,12 +13,16 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class SakuraAT388 < Formula
+class SakuraAT3999Dev < Formula
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
-  url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_8.tar.gz"
-  sha256 "b2b05e9e389dafe7bf41fd2fd4ca38a23afdd2e207bf0734d7f3aa3bb6346d50"
   license "GPL-2.0"
+
+  current_commit = "46f4582a7b9b2e4eb892909b3e29e5067fcbb2f7"
+  url "https://github.com/dabisu/sakura.git",
+    branch:   "master",
+    revision: current_commit
+  version "git-#{current_commit[0..7]}"
 
   keg_only :versioned_formula
 
@@ -42,6 +46,10 @@ class SakuraAT388 < Formula
     system "cmake", "--install", "build"
   end
 
+  def diff_data
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
+  end
+
   test do
     system bin/"sakura", "--version"
   end
@@ -49,10 +57,10 @@ end
 
 __END__
 diff --git a/src/sakura.c b/src/sakura.c
-index 18c55bd..94b22d0 100644
+index 9c49d55..c2c048b 100644
 --- a/src/sakura.c
 +++ b/src/sakura.c
-@@ -3000,6 +3000,9 @@ sakura_add_tab()
+@@ -3035,6 +3035,9 @@ sakura_add_tab()
  	GtkWidget *event_box;
  	gint index, page, npages;
  	gchar *cwd = NULL; gchar *default_label_text = NULL;
@@ -62,7 +70,7 @@ index 18c55bd..94b22d0 100644
  
  	sk_tab = g_new0(struct sakura_tab, 1);
  
-@@ -3273,6 +3276,14 @@ sakura_add_tab()
+@@ -3312,6 +3315,14 @@ sakura_add_tab()
  	vte_terminal_set_audible_bell (VTE_TERMINAL(sk_tab->vte), sakura.audible_bell ? TRUE : FALSE);
  	vte_terminal_set_cursor_blink_mode (VTE_TERMINAL(sk_tab->vte), sakura.blinking_cursor ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
  	vte_terminal_set_cursor_shape (VTE_TERMINAL(sk_tab->vte), sakura.cursor_type);
@@ -76,3 +84,4 @@ index 18c55bd..94b22d0 100644
 +#endif
  
  }
+ 

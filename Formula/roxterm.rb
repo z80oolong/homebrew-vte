@@ -16,6 +16,7 @@ end
 class Roxterm < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
+  license ["GPL-2.0", "LGPL-3.0"]
 
   stable do
     url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
@@ -27,7 +28,7 @@ class Roxterm < Formula
   head do
     url "https://github.com/realh/roxterm.git"
 
-    patch :p1, Formula["z80oolong/vte/roxterm@3.18.0-dev"].diff_data
+    patch :p1, Formula["z80oolong/vte/roxterm@3.18.99-dev"].diff_data
   end
 
   depends_on "cmake" => :build
@@ -35,10 +36,7 @@ class Roxterm < Formula
   depends_on "pkg-config" => :build
   depends_on "dbus-glib"
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
-  if build.without? "z80oolong/vte/gtk+3@3.24.43"
-    depends_on "gtk+3"
-  end
+  depends_on "z80oolong/vte/gtk+3@3.24.43"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("roxterm-ja-po") do
@@ -48,11 +46,7 @@ class Roxterm < Formula
   end
 
   def install
-    if build.without? "z80oolong/vte/gtk+3@3.24.43"
-      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
-    else
-      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-    end
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
 

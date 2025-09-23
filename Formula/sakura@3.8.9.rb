@@ -1,12 +1,15 @@
-class << ENV
-  def replace_rpath(**replace_list)
-    replace_list = replace_list.each_with_object({}) do |(old, new), result|
-      result[Formula[old].opt_lib.to_s] = Formula[new].opt_lib.to_s
-      result[Formula[old].lib.to_s] = Formula[new].lib.to_s
-    end
-    rpaths = self["HOMEBREW_RPATH_PATHS"].split(":")
-    rpaths = rpaths.each_with_object([]) {|rpath, result| result << (replace_list.key?(rpath) ? replace_list[rpath] : rpath) }
-    self["HOMEBREW_RPATH_PATHS"] = rpaths.join(":")
+def ENV.replace_rpath(**replace_list)
+  replace_list = replace_list.each_with_object({}) do |(old, new), result|
+    old_f = Formula[old]
+    new_f = Formula[new]
+    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
+    result[old_f.lib.to_s] = new_f.lib.to_s
+  end
+
+  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
+    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
+      replace_list.fetch(rpath, rpath)
+    end).join(":")
   end
 end
 
@@ -23,20 +26,13 @@ class SakuraAT389 < Formula
   depends_on "pod2man" => :build
   depends_on "gettext"
   depends_on "systemd"
-  depends_on "z80oolong/vte/gtk+3@3.24.43" => :recommended
-  if build.without? "z80oolong/vte/gtk+3@3.24.43"
-    depends_on "gtk+3"
-  end
+  depends_on "z80oolong/vte/gtk+3@3.24.43"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
 
   def install
-    if build.without? "z80oolong/vte/gtk+3@3.24.43"
-      ENV.replace_rpath "z80oolong/vte/gtk+3@3.24.43" => "gtk+3"
-    else
-      ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-    end
+    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
 
     args  = std_cmake_args
     args << "CMAKE_BUILD_TYPE=Debug"
@@ -47,11 +43,7 @@ class SakuraAT389 < Formula
   end
 
   def diff_data
-    lines = path.each_line.with_object([]) do |line, result|
-      result.push(line) if /^__END__/.match?(line) || result.first
-    end
-    lines.shift
-    lines.join
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do
