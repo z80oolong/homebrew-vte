@@ -22,7 +22,7 @@ class RoxtermAT31899Dev < Formula
     branch:   "master",
     revision: current_commit
   version "git-#{current_commit[0..7]}"
-  license ["GPL-2.0", "LGPL-3.0"]
+  license "LGPL-3.0"
 
   keg_only :versioned_formula
 

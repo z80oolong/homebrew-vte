@@ -1,4 +1,4 @@
-def ENV.replace_rpath(**replace_list)
+gef ENV.replace_rpath(**replace_list)
   replace_list = replace_list.each_with_object({}) do |(old, new), result|
     old_f = Formula[old]
     new_f = Formula[new]
@@ -16,7 +16,7 @@ end
 class Roxterm < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
-  license ["GPL-2.0", "LGPL-3.0"]
+  license "LGPL-3.0"
 
   stable do
     url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"

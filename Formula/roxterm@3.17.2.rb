@@ -18,7 +18,7 @@ class RoxtermAT3172 < Formula
   homepage "https://roxterm.sourceforge.io/"
   url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
   sha256 "3da0ac499773002ccf0df9fd57918b3856cd5c5257f874715725ff3ef1266657"
-  license ["GPL-2.0", "LGPL-3.0"]
+  license "LGPL-3.0"
 
   keg_only :versioned_formula
 

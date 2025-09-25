@@ -56,6 +56,10 @@ class LxterminalAT040 < Formula
     system "make", "install"
   end
 
+  def diff_data
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
+  end
+
   test do
     system bin/"lxterminal", "--version"
   end

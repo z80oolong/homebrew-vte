@@ -42,6 +42,10 @@ class SakuraAT388 < Formula
     system "cmake", "--install", "build"
   end
 
+  def diff_data
+    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
+  end
+
   test do
     system bin/"sakura", "--version"
   end
