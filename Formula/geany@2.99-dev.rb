@@ -23,6 +23,13 @@ class GeanyAT299Dev < Formula
     revision: current_commit
   version "git-#{current_commit[0..7]}"
 
+  keg_only :versioned_formula
+
+  resource("ctpl") do
+    url "https://github.com/b4n/ctpl/archive/refs/tags/v0.3.5.tar.gz"
+    sha256 "ae60c79316c6dc3a2935d906b8a911ce4188e8638b6e9b65fc6c04a5ca6bcdda"
+  end
+
   resource("geany-plugins") do
     url "https://github.com/geany/geany-plugins.git",
       branch:   "master",
@@ -34,10 +41,14 @@ class GeanyAT299Dev < Formula
   depends_on "docutils" => :build
   depends_on "intltool" => :build
   depends_on "libtool" => :build
-  depends_on "pkg-config" => :build
+  depends_on "perl" => :build
+  depends_on "perl-xml-parser" => :build
+  depends_on "gtk-doc" => :build
+  depends_on "pkgconf" => :build
   depends_on "ctags"
   depends_on "enchant"
   depends_on "gettext"
+  depends_on "glib"
   depends_on "glibc"
   depends_on "gnupg"
   depends_on "gpgme"
@@ -48,10 +59,7 @@ class GeanyAT299Dev < Formula
   depends_on "pcre"
   depends_on "source-highlight"
   depends_on "webkitgtk"
-  depends_on "z80oolong/dep/ctpl@0.3.5"
-  depends_on "z80oolong/dep/libgit2@1.3.2"
-  depends_on "z80oolong/dep/lua@5.1"
-  depends_on "z80oolong/dep/scintilla@5.3.4"
+  depends_on "libgit2"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
@@ -61,34 +69,39 @@ class GeanyAT299Dev < Formula
     ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
     ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
+    ENV.prepend_path "PKG_CONFIG_PATH", libexec/"ctpl/lib/pkgconfig"
+    ENV["LC_ALL"] = "C"
 
-    %w[ja_JP zh_CN zh_HK zh_SG zh_TW ko_KR en_US].each do |lang|
-      system Formula["glibc"].opt_bin/"localedef", "-i", lang, "-f", "UTF-8", "#{lang}.UTF-8"
+    resource("ctpl").stage do
+      args  = std_configure_args.dup
+      args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/ctpl" : arg }
+      args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/ctpl/lib" : arg }
+      args << "--disable-silent-rules"
+
+      system "sh", "./autogen.sh"
+      system "./configure", *args
+      system "make"
+      system "make", "install"
     end
-    ENV["LC_ALL"]   = "ja_JP.UTF-8"
-    ENV["LC_CTYPE"] = "ja_JP.UTF-8"
-    ENV["LANG"]     = "ja"
 
-    system "sh", "./autogen.sh" if head?
-
-    args  = std_configure_args
+    args  = std_configure_args.dup
     args << "--enable-vte"
     args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
 
+    system "sh", "./autogen.sh"
     system "./configure", *args
     system "make"
     system "make", "install"
 
     resource("geany-plugins").stage do
       system "patch -p1 < #{buildpath}/geany-plugins.diff"
-
-      system "sh", "./autogen.sh" if head?
-
+      system "sh", "./autogen.sh"
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args  = std_configure_args
       args << "--enable-markdown"
       args << "--disable-devhelp"
+      args << "--disable-geanylua"
       args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args

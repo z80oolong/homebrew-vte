@@ -1,15 +1,3 @@
-class << ENV
-  def replace_rpath(**replace_list)
-    replace_list = replace_list.each_with_object({}) do |(old, new), result|
-      result[Formula[old].opt_lib.to_s] = Formula[new].opt_lib.to_s
-      result[Formula[old].lib.to_s] = Formula[new].lib.to_s
-    end
-    rpaths = self["HOMEBREW_RPATH_PATHS"].split(":")
-    rpaths = rpaths.each_with_object([]) {|rpath, result| result << (replace_list.key?(rpath) ? replace_list[rpath] : rpath) }
-    self["HOMEBREW_RPATH_PATHS"] = rpaths.join(":")
-  end
-end
-
 def ENV.replace_rpath(**replace_list)
   replace_list = replace_list.each_with_object({}) do |(old, new), result|
     old_f = Formula[old]
@@ -40,10 +28,12 @@ class GeanyAT20 < Formula
   depends_on "libtool" => :build
   depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
-  depends_on "pkg-config" => :build
+  depends_on "gtk-doc" => :build
+  depends_on "pkgconf" => :build
   depends_on "ctags"
   depends_on "enchant"
   depends_on "gettext"
+  depends_on "glib"
   depends_on "glibc"
   depends_on "gnupg"
   depends_on "gpgme"
@@ -54,15 +44,17 @@ class GeanyAT20 < Formula
   depends_on "pcre"
   depends_on "source-highlight"
   depends_on "webkitgtk"
-  depends_on "z80oolong/dep/ctpl@0.3.5"
-  depends_on "z80oolong/dep/libgit2@1.3.2"
-  depends_on "z80oolong/dep/lua@5.1"
-  depends_on "z80oolong/dep/scintilla@5.3.4"
+  depends_on "libgit2"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("geany-plugins") do
     url "https://github.com/geany/geany-plugins/releases/download/2.0.0/geany-plugins-2.0.tar.bz2"
     sha256 "9fc2ec5c99a74678fb9e8cdfbd245d3e2061a448d70fd110a6aefb62dd514705"
+  end
+
+  resource("ctpl") do
+    url "https://github.com/b4n/ctpl/archive/refs/tags/v0.3.5.tar.gz"
+    sha256 "ae60c79316c6dc3a2935d906b8a911ce4188e8638b6e9b65fc6c04a5ca6bcdda"
   end
 
   patch :p1, :DATA
@@ -72,15 +64,27 @@ class GeanyAT20 < Formula
     ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
     ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
+    ENV.prepend_path "PKG_CONFIG_PATH", libexec/"ctpl/lib/pkgconfig"
+    ENV["LC_ALL"] = "C"
 
-    %w[ja_JP zh_CN zh_HK zh_SG zh_TW ko_KR en_US].each do |lang|
-      system Formula["glibc"].opt_bin/"localedef", "-i", lang, "-f", "UTF-8", "#{lang}.UTF-8"
+    resource("ctpl").stage do
+      args  = std_configure_args.dup
+      args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/ctpl" : arg }
+      args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/ctpl/lib" : arg }
+      args << "--disable-silent-rules"
+
+      system "sh", "./autogen.sh"
+      system "./configure", *args
+      system "make"
+      system "make", "install"
     end
-    ENV["LC_ALL"]   = "ja_JP.UTF-8"
-    ENV["LC_CTYPE"] = "ja_JP.UTF-8"
-    ENV["LANG"]     = "ja"
 
-    args  = std_configure_args
+    inreplace "./scintilla/include/ScintillaTypes.h",
+      /^#define SCINTILLATYPES_H/, "#define SCINTILLATYPES_H\n\n#include <cstdint>\n"
+    inreplace "./scintilla/src/Geometry.h",
+      /^#define GEOMETRY_H/, "#define GEOMETRY_H\n\n#include <cstdint>\n"
+
+    args  = std_configure_args.dup
     args << "--enable-vte"
     args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
 
@@ -90,12 +94,13 @@ class GeanyAT20 < Formula
 
     resource("geany-plugins").stage do
       system "patch -p1 < #{buildpath}/geany-plugins.diff"
-
+      inreplace "./git-changebar/src/gcb-plugin.c", /\*bool/, "*boolean"
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args  = std_configure_args
       args << "--enable-markdown"
       args << "--disable-devhelp"
+      args << "--disable-geanylua"
       args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args

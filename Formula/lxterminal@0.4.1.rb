@@ -31,7 +31,7 @@ class LxterminalAT041 < Formula
   depends_on "pkg-config" => :build
   depends_on "glib"
   depends_on "z80oolong/vte/gtk+3@3.24.43"
-  depends_on "z80oolong/mlterm/mlterm-libvte@3.9.4"
+  depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
 
