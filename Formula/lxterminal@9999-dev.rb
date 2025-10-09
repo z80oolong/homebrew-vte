@@ -13,15 +13,15 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class LxterminalAT0599Dev < Formula
+class LxterminalAT9999Dev < Formula
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
 
-  current_commit = "ac5e36f496b2bf95eae790181e65c9eb54bb9c13"
+  @@current_commit = "ac5e36f496b2bf95eae790181e65c9eb54bb9c13"
   url "https://github.com/lxde/lxterminal.git",
     branch:   "master",
-    revision: current_commit
-  version "git-#{current_commit[0..7]}"
+    revision: @@current_commit
+  version "git-#{@@current_commit[0..7]}"
 
   keg_only :versioned_formula
 
@@ -49,15 +49,21 @@ class LxterminalAT0599Dev < Formula
         "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
     end
 
-    system "sh", "./autogen.sh"
-
     args  = std_configure_args
     args << "--enable-gtk3"
     args << "--enable-man"
 
+    system "sh", "./autogen.sh"
     system "./configure", *args
     system "make"
     system "make", "install"
+  end
+
+  def caveats
+    <<~EOS
+      #{full_name} is a Formula for installing the development version of
+      `lxterminal` based on the HEAD version (commit #{@@current_commit[0..7]}) from its Github repository.
+    EOS
   end
 
   def diff_data

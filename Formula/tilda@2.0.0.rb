@@ -53,7 +53,7 @@ class TildaAT200 < Formula
       system "make", "install"
     end
 
-    system "./autogen.sh"
+    system "sh", "./autogen.sh"
     system "./configure", "--disable-silent-rules", *std_configure_args
     system "make"
     system "make", "install"

@@ -36,7 +36,7 @@ class Geany < Formula
       url "https://github.com/geany/geany-plugins.git"
     end
 
-    patch :p1, Formula["z80oolong/vte/geany@2.99-dev"].diff_data
+    patch :p1, Formula["z80oolong/vte/geany@9999-dev"].diff_data
   end
 
   resource("ctpl") do
@@ -68,6 +68,7 @@ class Geany < Formula
   depends_on "source-highlight"
   depends_on "webkitgtk"
   depends_on "libgit2"
+  depends_on "z80oolong/vte/lua@5.1"
   depends_on "z80oolong/vte/libvte@2.91"
 
   def install
@@ -90,6 +91,10 @@ class Geany < Formula
       system "make", "install"
     end
 
+    args  = std_configure_args
+    args << "--enable-vte"
+    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
+
     if build.head?
       system "sh", "./autogen.sh"
     else
@@ -99,19 +104,14 @@ class Geany < Formula
         /^#define GEOMETRY_H/, "#define GEOMETRY_H\n\n#include <cstdint>\n"
     end
 
-    args  = std_configure_args
-    args << "--enable-vte"
-    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
-
     system "./configure", *args
     system "make"
     system "make", "install"
 
     resource("geany-plugins").stage do
+      system "sh", "./autogen.sh"
       system "patch -p1 < #{buildpath}/geany-plugins.diff"
-      if build.head?
-        system "sh", "./autogen.sh"
-      else
+      unless build.head?
         inreplace "./git-changebar/src/gcb-plugin.c", /\*bool/, "*boolean"
       end
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
@@ -119,7 +119,7 @@ class Geany < Formula
       args  = std_configure_args
       args << "--enable-markdown"
       args << "--disable-devhelp"
-      args << "--disable-geanylua"
+      args << "--with-lua-pkg=lua5.1"
       args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args

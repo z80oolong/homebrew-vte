@@ -13,16 +13,16 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class SakuraAT3999Dev < Formula
+class SakuraAT9999Dev < Formula
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
   license "GPL-2.0"
 
-  current_commit = "46f4582a7b9b2e4eb892909b3e29e5067fcbb2f7"
+  @@current_commit = "46f4582a7b9b2e4eb892909b3e29e5067fcbb2f7"
   url "https://github.com/dabisu/sakura.git",
     branch:   "master",
-    revision: current_commit
-  version "git-#{current_commit[0..7]}"
+    revision: @@current_commit
+  version "git-#{@@current_commit[0..7]}"
 
   keg_only :versioned_formula
 
@@ -44,6 +44,13 @@ class SakuraAT3999Dev < Formula
     system "cmake", "-S", ".", "-B", "build", *args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
+  end
+
+  def caveats
+    <<~EOS
+      #{full_name} is a Formula for installing the development version of
+      `sakura` based on the HEAD version (commit #{@@current_commit[0..7]}) from its Github repository.
+    EOS
   end
 
   def diff_data

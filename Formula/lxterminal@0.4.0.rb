@@ -45,12 +45,11 @@ class LxterminalAT040 < Formula
         "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
     end
 
-    system "sh", "./autogen.sh"
-
     args  = std_configure_args
     args << "--enable-gtk3"
     args << "--enable-man"
 
+    system "sh", "./autogen.sh"
     system "./configure", *args
     system "make"
     system "make", "install"

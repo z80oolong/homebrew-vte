@@ -45,6 +45,7 @@ class GeanyAT20 < Formula
   depends_on "source-highlight"
   depends_on "webkitgtk"
   depends_on "libgit2"
+  depends_on "z80oolong/vte/lua@5.1"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("geany-plugins") do
@@ -100,7 +101,7 @@ class GeanyAT20 < Formula
       args  = std_configure_args
       args << "--enable-markdown"
       args << "--disable-devhelp"
-      args << "--disable-geanylua"
+      args << "--with-lua-pkg=lua5.1"
       args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args

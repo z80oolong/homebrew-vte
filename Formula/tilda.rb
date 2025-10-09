@@ -27,7 +27,7 @@ class Tilda < Formula
   head do
     url "https://github.com/lanoxx/tilda.git"
 
-    patch :p1, Formula["z80oolong/vte/tilda@2.9.99-dev"].diff_data
+    patch :p1, Formula["z80oolong/vte/tilda@9999-dev"].diff_data
   end
 
   depends_on "autoconf" => :build
@@ -59,7 +59,7 @@ class Tilda < Formula
       system "make", "install"
     end
 
-    system "./autogen.sh"
+    system "sh", "./autogen.sh"
     system "./configure", "--disable-silent-rules", *std_configure_args.dup
     system "make"
     system "make", "install"

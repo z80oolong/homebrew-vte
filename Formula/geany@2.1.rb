@@ -45,6 +45,7 @@ class GeanyAT21 < Formula
   depends_on "source-highlight"
   depends_on "webkitgtk"
   depends_on "libgit2"
+  depends_on "z80oolong/vte/lua@5.1"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("geany-plugins") do
@@ -93,15 +94,15 @@ class GeanyAT21 < Formula
     system "make", "install"
 
     resource("geany-plugins").stage do
-      system "patch -p1 < #{buildpath}/geany-plugins.diff"
       system "sh", "./autogen.sh"
+      system "patch -p1 < #{buildpath}/geany-plugins.diff"
       inreplace "./git-changebar/src/gcb-plugin.c", /\*bool/, "*boolean"
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args  = std_configure_args
       args << "--enable-markdown"
       args << "--disable-devhelp"
-      args << "--disable-geanylua"
+      args << "--with-lua-pkg=lua5.1"
       args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args

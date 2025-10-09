@@ -1,4 +1,4 @@
-gef ENV.replace_rpath(**replace_list)
+def ENV.replace_rpath(**replace_list)
   replace_list = replace_list.each_with_object({}) do |(old, new), result|
     old_f = Formula[old]
     new_f = Formula[new]
@@ -28,7 +28,7 @@ class Roxterm < Formula
   head do
     url "https://github.com/realh/roxterm.git"
 
-    patch :p1, Formula["z80oolong/vte/roxterm@3.18.99-dev"].diff_data
+    patch :p1, Formula["z80oolong/vte/roxterm@9999-dev"].diff_data
   end
 
   depends_on "cmake" => :build

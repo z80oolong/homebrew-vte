@@ -28,7 +28,7 @@ class Sakura < Formula
   head do
     url "https://github.com/dabisu/sakura.git"
 
-    patch :p1, Formula["z80oolong/vte/sakura@3.9.99-dev"].diff_data
+    patch :p1, Formula["z80oolong/vte/sakura@9999-dev"].diff_data
   end
 
   depends_on "cmake" => :build

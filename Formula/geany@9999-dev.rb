@@ -13,15 +13,15 @@ def ENV.replace_rpath(**replace_list)
   end
 end
 
-class GeanyAT299Dev < Formula
+class GeanyAT9999Dev < Formula
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
 
-  current_commit = "426e427030fe0118648efbec5e76b2b1ddca9e5c"
+  @@current_commit = "426e427030fe0118648efbec5e76b2b1ddca9e5c"
   url "https://github.com/geany/geany.git",
     branch:   "master",
-    revision: current_commit
-  version "git-#{current_commit[0..7]}"
+    revision: @@current_commit
+  version "git-#{@@current_commit[0..7]}"
 
   keg_only :versioned_formula
 
@@ -60,6 +60,7 @@ class GeanyAT299Dev < Formula
   depends_on "source-highlight"
   depends_on "webkitgtk"
   depends_on "libgit2"
+  depends_on "z80oolong/vte/lua@5.1"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
@@ -94,20 +95,27 @@ class GeanyAT299Dev < Formula
     system "make", "install"
 
     resource("geany-plugins").stage do
-      system "patch -p1 < #{buildpath}/geany-plugins.diff"
       system "sh", "./autogen.sh"
+      system "patch -p1 < #{buildpath}/geany-plugins.diff"
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args  = std_configure_args
       args << "--enable-markdown"
       args << "--disable-devhelp"
-      args << "--disable-geanylua"
+      args << "--with-lua-pkg=lua5.1"
       args << "--with-geany-libdir=#{lib}"
 
       system "./configure", *args
       system "make"
       system "make", "install"
     end
+  end
+
+  def caveats
+    <<~EOS
+      #{full_name} is a Formula for installing the development version of
+      `geany` based on the HEAD version (commit #{@@current_commit[0..7]}) from its Github repository.
+    EOS
   end
 
   def diff_data
