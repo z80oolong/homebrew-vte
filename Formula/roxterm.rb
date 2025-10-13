@@ -33,7 +33,7 @@ class Roxterm < Formula
 
   depends_on "cmake" => :build
   depends_on "gettext" => :build
-  depends_on "pkg-config" => :build
+  depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
   depends_on "z80oolong/vte/gtk+3@3.24.43"

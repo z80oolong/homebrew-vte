@@ -32,6 +32,7 @@ class Tilda < Formula
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
+  depends_on "pkgconf" => :build
   depends_on "perl" => :build
   depends_on "gettext"
   depends_on "z80oolong/vte/gtk+3@3.24.43"
