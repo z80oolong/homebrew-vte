@@ -1,23 +1,9 @@
-def ENV.replace_rpath(**replace_list)
-  replace_list = replace_list.each_with_object({}) do |(old, new), result|
-    old_f = Formula[old]
-    new_f = Formula[new]
-    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
-    result[old_f.lib.to_s] = new_f.lib.to_s
-  end
-
-  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
-    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
-      replace_list.fetch(rpath, rpath)
-    end).join(":")
-  end
-end
-
 class TildaAT150 < Formula
   desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
   url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-1.5.0.tar.gz"
   sha256 "f664c17daca2a2900f49de9eb65746ced03c867b02144149ef21260cbcd61039"
+  revision 1
   license "GPL-2.0"
 
   keg_only :versioned_formula
@@ -27,7 +13,7 @@ class TildaAT150 < Formula
   depends_on "pkgconf" => :build
   depends_on "perl" => :build
   depends_on "gettext"
-  depends_on "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
 
   resource("libconfuse") do
@@ -39,7 +25,6 @@ class TildaAT150 < Formula
 
   def install
     ENV["LC_ALL"] = "C"
-    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.prepend_path "PKG_CONFIG_PATH", libexec/"libconfuse/lib/pkgconfig"
     ENV.prepend_path "HOMEBREW_RPATH_PATHS", libexec/"libconfuse/lib"
 

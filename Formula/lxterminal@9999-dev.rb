@@ -1,18 +1,3 @@
-def ENV.replace_rpath(**replace_list)
-  replace_list = replace_list.each_with_object({}) do |(old, new), result|
-    old_f = Formula[old]
-    new_f = Formula[new]
-    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
-    result[old_f.lib.to_s] = new_f.lib.to_s
-  end
-
-  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
-    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
-      replace_list.fetch(rpath, rpath)
-    end).join(":")
-  end
-end
-
 class LxterminalAT9999Dev < Formula
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
@@ -22,6 +7,7 @@ class LxterminalAT9999Dev < Formula
     branch:   "master",
     revision: @@current_commit
   version "git-#{@@current_commit[0..7]}"
+  revision 1
 
   keg_only :versioned_formula
 
@@ -34,13 +20,12 @@ class LxterminalAT9999Dev < Formula
   depends_on "perl-xml-parser" => :build
   depends_on "pkgconf" => :build
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
 
   def install
-    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
     ENV["LC_ALL"] = "C"
 
@@ -62,7 +47,7 @@ class LxterminalAT9999Dev < Formula
   def caveats
     <<~EOS
       #{full_name} is a Formula for installing the development version of
-      `lxterminal` based on the HEAD version (commit #{@@current_commit[0..7]}) from its Github repository.
+      `lxterminal` based on the HEAD version (commit #{@@current_commit[0..7]}) from its git repository.
     EOS
   end
 

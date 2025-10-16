@@ -1,23 +1,9 @@
-def ENV.replace_rpath(**replace_list)
-  replace_list = replace_list.each_with_object({}) do |(old, new), result|
-    old_f = Formula[old]
-    new_f = Formula[new]
-    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
-    result[old_f.lib.to_s] = new_f.lib.to_s
-  end
-
-  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
-    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
-      replace_list.fetch(rpath, rpath)
-    end).join(":")
-  end
-end
-
 class LxterminalAT041 < Formula
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
   url "https://github.com/lxde/lxterminal/archive/refs/tags/0.4.1.tar.gz"
   sha256 "d5da0646e20ad2be44ef69a9d620be5f1ec43b156dc585ebe203dd7b05c31d88"
+  revision 1
 
   keg_only :versioned_formula
 
@@ -30,13 +16,12 @@ class LxterminalAT041 < Formula
   depends_on "perl-xml-parser" => :build
   depends_on "pkgconf" => :build
   depends_on "glib"
-  depends_on "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
 
   def install
-    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
     ENV["LC_ALL"] = "C"
 

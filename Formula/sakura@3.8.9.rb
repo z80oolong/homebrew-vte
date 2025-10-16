@@ -1,23 +1,9 @@
-def ENV.replace_rpath(**replace_list)
-  replace_list = replace_list.each_with_object({}) do |(old, new), result|
-    old_f = Formula[old]
-    new_f = Formula[new]
-    result[old_f.opt_lib.to_s] = new_f.opt_lib.to_s
-    result[old_f.lib.to_s] = new_f.lib.to_s
-  end
-
-  if (rpaths = fetch("HOMEBREW_RPATH_PATHS", false))
-    self["HOMEBREW_RPATH_PATHS"] = (rpaths.split(":").map do |rpath|
-      replace_list.fetch(rpath, rpath)
-    end).join(":")
-  end
-end
-
 class SakuraAT389 < Formula
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
   url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_9.tar.gz"
   sha256 "46b792098a82ba4affc87a174ae96f32e730396e4f5ba9b699e8071253b085a2"
+  revision 1
   license "GPL-2.0"
 
   keg_only :versioned_formula
@@ -26,14 +12,12 @@ class SakuraAT389 < Formula
   depends_on "pod2man" => :build
   depends_on "gettext"
   depends_on "systemd"
-  depends_on "z80oolong/vte/gtk+3@3.24.43"
+  depends_on "gtk+3"
   depends_on "z80oolong/vte/libvte@2.91"
 
   patch :p1, :DATA
 
   def install
-    ENV.replace_rpath "gtk+3" => "z80oolong/vte/gtk+3@3.24.43"
-
     args  = std_cmake_args
     args << "CMAKE_BUILD_TYPE=Debug"
 
