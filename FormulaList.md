@@ -2,186 +2,166 @@
 
 ## 概要
 
-本文書では、 [Homebrew for Linux][BREW] 向け Tap リポジトリ z80oolong/vte に含まれる Formula 一覧を示します。各 Formula の詳細等については ```brew info <formula>``` コマンドも参照して下さい。
+本書では、[Homebrew for Linux][BREW] 向け Tap リポジトリ ```z80oolong/vte``` に含まれる Formula を紹介します。各 Formula の詳細は、```brew info <formula>``` コマンドで確認してください。
 
 ## Formula 一覧
 
 ### z80oolong/vte/libvte@2.91
 
-[GTK][DGTK] の端末エミュレータウィジェットを提供するライブラリである [libvte][LVTE] の安定版及び HEAD 版を導入するための Formula です。これ以降に述べる [libvte][LVTE] ベースの端末エミュレータを持つアプリケーションがこのライブラリに依存します。
+[GTK][DGTK] の端末エミュレータウィジェットを提供するライブラリ [libvte][LVTE] を導入する Formula です。このライブラリは、以下で紹介する [libvte][LVTE] ベースの端末エミュレータアプリケーションに依存します。
 
-**この Formula は、 versioned formula であるため、この Formula によって導入される [libvte][LVTE] は、 keg only で導入されることに留意して下さい。**
+**本 Formula は versioned formula のため、[libvte][LVTE] は keg-only でインストールされることに留意してください。**
 
 ### z80oolong/vte/sakura
 
-[GTK][DGTK] と [libvte][LVTE] ベースの端末エミュレータである [sakura][SAKU] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+[GTK][DGTK] および [libvte][LVTE] ベースの端末エミュレータ [sakura][SAKU] の最新安定版および HEAD 版を導入する Formula です。
 
-この Formula によって導入された [sakura][SAKU] では、**Unicode の規格における東アジア圏の各種文字のうち、いわゆる "◎" や "★" 等の記号文字及び罫線文字等、 [East_Asian_Width 特性の値が A (Ambiguous) となる文字][EAWA] (以下、 [East Asian Ambiguous Character][EAWA]) が、日本語環境で文字幅を適切に扱うことが出来ずに表示が乱れる問題 （以下、 [East Asian Ambiguous Character][EAWA] 問題）が修正されます。**
+本 Formula で導入された [sakura][SAKU] は、Unicode の [East_Asian_Width 特性が A (Ambiguous)][EAWA] である文字（以下、EAA 文字）の日本語環境での表示乱れ問題（以下、EAA 問題）を修正します。
 
-また、この Formula によって導入された [sakura][SAKU] では、以下の環境変数が拡張されます。
+**また、環境変数 ```VTE_CJK_WIDTH``` を拡張します。EAA 文字を全角幅で表示するには、以下のように設定して起動します：**
 
-- ```VTE_CJK_WIDTH``` … **[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 とします。** [sakura][SAKU] において、[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、以下のようにして ```sakura``` を起動します。
-
-  ```
-  ...
-   $ export VTE_CJK_WIDTH=1
-   $ sakura
-   (若しくは)
-   $ env VTE_CJK_WIDTH=1 sakura
-  ...
-  ```
+```
+  export VTE_CJK_WIDTH=1
+  sakura
+  # または
+  env VTE_CJK_WIDTH=1 sakura
+```
 
 ### z80oolong/vte/roxterm
 
-[libvte][LVTE] ベースであり、場所をとらないタブ式端末エミュレータである [roxterm][ROXT] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+[libvte][LVTE] ベースのタブ式端末エミュレータ [roxterm][ROXT] の最新安定版および HEAD 版を導入する Formula です。
 
-この Formula によって導入された [roxterm][ROXT] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
+本 Formula で導入された [roxterm][ROXT] は、EAA 問題を修正し、一部のメニューおよび設定画面を除き、機械翻訳による簡易な日本語化を行っています。
 
-また、この Formula によって導入された [roxterm][ROXT] では**一部のメニュー及び設定画面の表示を除き、メニュー及び設定画面等の表示について機械翻訳による簡易な日本語翻訳に基づく日本語化を行っています。**
-
-そして、この Formula によって導入された [roxterm][ROXT] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
+**また、環境変数 ```VTE_CJK_WIDTH``` を拡張します。EAA 文字を全角幅で表示するには、```VTE_CJK_WIDTH=1``` に設定してください。**
 
 ### z80oolong/vte/tilda
 
-[libvte][LVTE] ベースであり、設定可能なドロップダウン端末エミュレータである [tilda][TILD] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+[libvte][LVTE] ベースのドロップダウン端末エミュレータ [tilda][TILD] の最新安定版および HEAD 版を導入する Formula です。
 
-この Formula によって導入された [tilda][TILD] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
+本 Formula で導入された [tilda][TILD] は、EAA 問題を修正し、設定画面等の日本語化を行っています。
 
-また、この Formula によって導入された [tilda][TILD] では**一部のメニュー及び設定画面の表示を除き、メニュー及び設定画面等の表示について機械翻訳による簡易な日本語翻訳に基づく日本語化を行っています。**
-
-そして、この Formula によって導入された [tilda][TILD] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
+**また、環境変数 ```VTE_CJK_WIDTH``` を拡張します。EAA 文字を全角幅で表示するには、```VTE_CJK_WIDTH=1``` に設定してください。**
 
 ### z80oolong/vte/lxterminal
 
-[libvte][LVTE] ベースの [LXDE][LXDE] 用端末エミュレータである [lxterminal][LXTM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+[libvte][LVTE] ベースの [LXDE][LXDE] 用端末エミュレータ [lxterminal][LXTM] の最新安定版および HEAD 版を導入する Formula です。
 
-この Formula によって導入された [lxterminal][LXTM] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
+本 Formula で導入された [lxterminal][LXTM] は、EAA 問題を修正します。
 
-また、この Formula によって導入された [lxterminal][LXTM] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
-
-### z80oolong/vte/mate-terminal
-
-[libvte][LVTE] ベースの [MATE][MATE] 用端末エミュレータである [mate-terminal][MTTM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
-
-この Formula によって導入された [mate-terminal][MTTM] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
-
-また、この Formula によって導入された [mate-terminal][MTTM] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
-
-### z80oolong/vte/xfce4-terminal
-
-[libvte][LVTE] ベースの [xfce4][MATE] 用端末エミュレータである [xfce4-terminal][XFTM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
-
-なお、 Formula によって導入された [xfce4-terminal][XFTM] において、**[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、 [xfce4-terminal][XFTM] の設定画面より設定を行う必要があることに留意して下さい。**
-
-### z80oolong/vte/gnome-terminal
-
-[libvte][LVTE] ベースの [GNOME][GNME] 標準の端末エミュレータである [gnome-terminal][GTRM] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
-
-なお、 Formula によって導入された [gnome-terminal][GTRM] において、**[East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、 [gnome-terminal][GTRM] の設定画面より設定を行う必要があることに留意して下さい。**
+**また、環境変数 ```VTE_CJK_WIDTH``` を拡張します。EAA 文字を全角幅で表示するには、```VTE_CJK_WIDTH=1``` に設定してください。**
 
 ### z80oolong/vte/geany
 
-[libvte][LVTE] ベースの軽量 IDE である [geany][GEAN] のうち、最新の安定版及び HEAD 版を導入するための Formula です。
+[libvte][LVTE] ベースの軽量 IDE [geany][GEAN] の最新安定版および HEAD 版を導入する Formula です。
 
-この Formula によって導入された [geany][GEAN] では、**前述の [East Asian Ambiguous Character][EAWA] 問題が修正されます。**
+本 Formula で導入された [geany][GEAN] は、EAA 問題を修正します。
 
-また、この Formula によって導入された [geany][GEAN] では、前述の ```z80oolong/vte/sakura``` と同様に、**環境変数 ```VTE_CJK_WIDTH``` が拡張されます。 [geany][GEAN] の端末機能において、 [East Asian Ambiguous Character][EAWA] を全角文字幅として表示する場合は、この環境変数の値を 1 に設定して下さい。**
+**また、環境変数 ```VTE_CJK_WIDTH``` を拡張します。EAA 文字を全角幅で表示するには、```VTE_CJK_WIDTH=1``` に設定してください。**
 
 ### z80oolong/vte/sakura@{version}
 
-(注：上記 ```{version}``` には、 [sakura][SAKU] の各バージョン番号が入ります。以下同様。)
+（注: ```{version}``` は [sakura][SAKU] のバージョン番号を表します。）
 
-この Formula は、 ```z80oolong/vte/sakura``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータである [sakura][SAKU] の安定版 [sakura {version}][SAKU] を導入します。
+[sakura][SAKU] の安定版を導入する Formula です。本 Formula で導入された [sakura][SAKU] は、EAA 問題を修正します。
 
-この Formula で導入した [sakura][SAKU] の使用法については、前述の ```z80oolong/vte/sakura``` の Formula についての記述を参照して下さい。
+使用法は ```z80oolong/vte/sakura``` の記述を参照してください。
 
-**この Formula は、 versioned formula であるため、この Formula によって導入される [sakura][SAKU] は、 keg only で導入されることに留意して下さい。**
+**本 Formula は versioned formula のため、keg-only でインストールされることに留意してください。使用するには ```brew link --force z80oolong/vte/sakura@{version}``` を実行してください。**
 
-この Formula によって導入される [sakura][SAKU] を使用するには、 ```brew link --force z80oolong/vte/sakura@{version}``` コマンドを実行する必要があります。
+### z80oolong/vte/sakura@9999-dev
+
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [sakura][SAKU] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [sakura][SAKU] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/sakura@9999-dev``` で確認してください。**
+
+使用法は ```z80oolong/vte/sakura``` の記述を参照してください。
+
+**本 Formula は versioned formula のため、keg-only でインストールされることに留意してください。使用するには ```brew link --force z80oolong/vte/sakura@9999-dev``` を実行してください。**
+
+**また、本 Formula は ```z80oolong/vte/sakura``` の HEAD 版でパッチ適用に問題が生じた場合の暫定用です。通常は ```z80oolong/vte/sakura``` を使用してください。**
 
 ### z80oolong/vte/roxterm@{version}
 
-(注：上記 ```{version}``` には、 [roxterm][ROXT] の各バージョン番号が入ります。以下同様。)
+（注: ```{version}``` は [roxterm][ROXT] のバージョン番号を表します。）
 
-この Formula は、 ```z80oolong/vte/roxterm``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータである [roxterm][ROXT] の安定版 [roxterm {version}][ROXT] を導入します。
+[roxterm][ROXT] の安定版を導入する Formula です。本 Formula で導入された [roxterm][ROXT] は、EAA 問題を修正し、設定画面等の日本語化を行っています。
 
-この Formula で導入した [roxterm][ROXT] の使用法については、前述の ```z80oolong/vte/roxterm``` の Formula についての記述を参照して下さい。
+使用法は ```z80oolong/vte/roxterm``` の記述を参照してください。
 
-**この Formula は、 versioned formula であるため、この Formula によって導入される [roxterm][ROXT] は、 keg only で導入されることに留意して下さい。**
+**本 Formula は versioned formula のため、keg-only でインストールされることに留意してください。使用するには ```brew link --force z80oolong/vte/roxterm@{version}``` を実行してください。**
 
-この Formula によって導入される [roxterm][ROXT] を使用するには、 ```brew link --force z80oolong/vte/roxterm@{version}``` コマンドを実行する必要があります。
+### z80oolong/vte/roxterm@9999-dev
+
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [roxterm][ROXT] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [roxterm][ROXT] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/roxterm@9999-dev``` で確認してください。**
+
+使用法は ```z80oolong/vte/roxterm``` の記述を参照してください。
+
+**本 Formula は versioned formula のため、keg-only でインストールされることに留意してください。使用するには ```brew link --force z80oolong/vte/roxterm@9999-dev``` を実行してください。**
+
+**また、本 Formula は ```z80oolong/vte/roxterm``` の HEAD 版でパッチ適用に問題が生じた場合の暫定用です。通常は ```z80oolong/vte/roxterm``` を使用してください。**
 
 ### z80oolong/vte/tilda@{version}
 
-(注：上記 ```{version}``` には、 [tilda][TILD] の各バージョン番号が入ります。以下同様。)
+（注: ```{version}``` は [tilda][TILD] のバージョン番号を表します。）
 
-この Formula は、 ```z80oolong/vte/tilda``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータである [tilda][TILD] の安定版 [tilda {version}][ROXT] を導入します。
+[tilda][TILD] の安定版を導入する Formula です。本 Formula で導入された [tilda][TILD] は、EAA 問題を修正し、設定画面等の日本語化を行っています。
 
-なお、この Formula で導入した [tilda][TILD] の使用法については、前述の ```z80oolong/vte/tilda``` の Formula についての記述を参照して下さい。
+使用法は ```z80oolong/vte/tilda``` の記述を参照してください。
 
-**この Formula は、 versioned formula であるため、この Formula によって導入される [tilda][TILD] は、 keg only で導入されることに留意して下さい。**
+**本 Formula は versioned formula のため、keg-only でインストールされることに留意してください。使用するには ```brew link --force z80oolong/vte/tilda@{version}``` を実行してください。**
 
-この Formula によって導入される [tilda][TILD] を使用するには、 ```brew link --force z80oolong/vte/tilda@{version}``` コマンドを実行する必要があります。
+### z80oolong/vte/tilda@9999-dev
+
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [tilda][TILD] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [tilda][TILD] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/tilda@9999-dev``` で確認してください。**
+
+使用法は ```z80oolong/vte/tilda``` の記述を参照してください。
+
+**本 Formula は versioned formula のため、keg-only でインストールされることに留意してください。使用するには ```brew link --force z80oolong/vte/tilda@9999-dev``` を実行してください。**
+
+**また、本 Formula は ```z80oolong/vte/tilda``` の HEAD 版でパッチ適用に問題が生じた場合の暫定用です。通常は ```z80oolong/vte/tilda``` を使用してください。**
 
 ### z80oolong/vte/lxterminal@{version}
 
-(注：上記 ```{version}``` には、 [lxterminal][LXTM] の各バージョン番号が入ります。以下同様。)
+（注: ```{version}``` は [lxterminal][LXTM] のバージョン番号を表します。）
 
-この Formula は、 ```z80oolong/vte/lxterminal``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 [lxterminal {version}][LXTM] を導入します。
+[lxterminal][LXTM] の安定版を導入する Formula です。本 Formula で導入された [lxterminal][LXTM] は、EAA 問題を修正します。
 
-なお、この Formula で導入した [lxterminal][LXTM] の使用法については、前述の ```z80oolong/vte/lxterminal``` の Formula についての記述を参照して下さい。
+使用法は ```z80oolong/vte/lxterminal``` の記述を参照してください。
 
-**この Formula は、 versioned formula であるため、この Formula によって導入される [lxterminal][LXTM] は、 keg only で導入されることに留意して下さい。**
+**注: 本 Formula は versioned formula のため、keg-only でインストールされます。使用するには ```brew link --force z80oolong/vte/lxterminal@{version}``` を実行してください。**
 
-この Formula によって導入される [lxterminal][LXTM] を使用するには、 ```brew link --force z80oolong/vte/lxterminal@{version}``` コマンドを実行する必要があります。
+### z80oolong/vte/lxterminal@9999-dev
 
-### z80oolong/vte/mate-terminal@{version}
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [lxterminal][LXTM] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [lxterminal][LXTM] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/lxterminal@9999-dev``` で確認してください。**
 
-(注：上記 ```{version}``` には、 [mate-terminal][MTTM] の各バージョン番号が入ります。以下同様。)
+使用法は ```z80oolong/vte/lxterminal``` の記述を参照してください。
 
-この Formula は、 ```z80oolong/vte/mate-terminal``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 [mate-terminal {version}][MTTM] を導入するための Formula です。
+**注: 本 Formula は versioned formula のため、keg-only でインストールされます。使用するには ```brew link --force z80oolong/vte/lxterminal@9999-dev``` を実行してください。**
 
-なお、この Formula で導入した [mate-terminal][MTTM] の使用法については、前述の ```z80oolong/vte/mate-terminal``` の Formula についての記述を参照して下さい。
-
-**この Formula は、 versioned formula であるため、この Formula によって導入される [mate-terminal][MTTM] は、 keg only で導入されることに留意して下さい。**
-
-この Formula によって導入される [mate-terminal][MTTM] を使用するには、 ```brew link --force z80oolong/vte/mate-terminal@{version}``` コマンドを実行する必要があります。
-
-### z80oolong/vte/xfce4-terminal@{version}
-
-(注：上記 ```{version}``` には、 [xfce4-terminal][XFTM] の各バージョン番号が入ります。以下同様。)
-
-この Formula は、 ```z80oolong/vte/xfce4-terminal``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 [xfce4-terminal {version}][MTTM] を導入するための Formula です。
-
-なお、この Formula で導入した [xfce4-terminal][XFTM] の使用法については、前述の ```z80oolong/vte/xfce4-terminal``` の Formula についての記述を参照して下さい。
-
-**この Formula は、 versioned formula であるため、この Formula によって導入される [xfce4-terminal][MTTM] は、 keg only で導入されることに留意して下さい。**
-
-この Formula によって導入される [xfce4-terminal][XFTM] を使用するには、 ```brew link --force z80oolong/vte/xfce4-terminal@{version}``` コマンドを実行する必要があります。
-
-### z80oolong/vte/gnome-terminal@{version}
-
-(注：上記 ```{version}``` には、 [gnome-terminal][GTRM] の各バージョン番号が入ります。以下同様。)
-
-この Formula は、 ```z80oolong/vte/gnome-terminal``` において述べた問題を修正した [libvte][LVTE] ベースの端末エミュレータの安定版 [gnome-terminal {version}][GTRM] を導入するための Formula です。
-
-なお、この Formula で導入した [gnome-terminal][GTRM] の使用法については、前述の ```z80oolong/vte/gnome-terminal``` の Formula についての記述を参照して下さい。
-
-**この Formula は、 versioned formula であるため、この Formula によって導入される [gnome-terminal][GTRM] は、 keg only で導入されることに留意して下さい。**
-
-この Formula によって導入される [gnome-terminal][GTRM] を使用するには、 ```brew link --force z80oolong/vte/gnome-terminal@{version}``` コマンドを実行する必要があります。
+**本 Formula は、```z80oolong/vte/lxterminal``` の HEAD 版でパッチ適用に問題が生じた場合の暫定用です。通常は ```z80oolong/vte/lxterminal``` を使用してください。**
 
 ### z80oolong/vte/geany@{version}
 
-(注：上記 ```{version}``` には、 [geany][GEAN] の各バージョン番号が入ります。以下同様。)
+（注: ```{version}``` は [geany][GEAN] のバージョン番号を表します。）
 
-この Formula は、 ```z80oolong/vte/geany``` において述べた問題を修正した [libvte][LVTE] ベースの軽量 IDE である [geany][GEAN] の安定版 [geany {version}][GEAN] を導入します。
+[geany][GEAN] の安定版を導入する Formula です。本 Formula で導入された [geany][GEAN] は、EAA 問題を修正します。
 
-なお、この Formula で導入した [geany][GEAN] の使用法については、前述の ```z80oolong/vte/geany``` の Formula についての記述を参照して下さい。
+使用法は ```z80oolong/vte/geany``` の記述を参照してください。
 
-**この Formula は、 versioned formula であるため、この Formula によって導入される [geany][GEAN] は、 keg only で導入されることに留意して下さい。**
+**注: 本 Formula は versioned formula のため、keg-only でインストールされます。使用するには ```brew link --force z80oolong/vte/geany@{version}``` を実行してください。**
 
-この Formula によって導入される [geany][GEAN] を使用するには、 ```brew link --force z80oolong/vte/geany@{version}``` コマンドを実行する必要があります。
+### z80oolong/vte/geany@9999-dev
+
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [geany][GEAN] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [geany][GEAN] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/geany@9999-dev``` で確認してください。**
+
+使用法は ```z80oolong/vte/geany``` の記述を参照してください。
+
+**注: 本 Formula は versioned formula のため、keg-only でインストールされます。使用するには ```brew link --force z80oolong/vte/geany@9999-dev``` を実行してください。**
+
+**本 Formula は、```z80oolong/vte/geany``` の HEAD 版でパッチ適用に問題が生じた場合の暫定用です。通常は ```z80oolong/vte/geany``` を使用してください。**
+
+### z80oolong/vte/lua@5.1
+
+```z80oolong/vte/geany```, ```z80oolong/vte/geany@{version}```, ```z80oolong/vte/geany@9999-dev``` のプラグインに依存する Lua 5.1 処理系を導入する Formula です。
 
 <!-- 外部リンク一覧 -->
 
