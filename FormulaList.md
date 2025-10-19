@@ -71,7 +71,7 @@
 
 ### z80oolong/vte/sakura@9999-dev
 
-本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [sakura][SAKU] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [sakura][SAKU] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/sakura@9999-dev``` で確認してください。**
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [sakura][SAKU] の HEAD 版のコミットに適用したものを導入する Formula です。**導入される具体的な commit ID は ```brew info z80oolong/vte/sakura@9999-dev``` で確認してください。**
 
 使用法は ```z80oolong/vte/sakura``` の記述を参照してください。
 
@@ -91,7 +91,7 @@
 
 ### z80oolong/vte/roxterm@9999-dev
 
-本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [roxterm][ROXT] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [roxterm][ROXT] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/roxterm@9999-dev``` で確認してください。**
+本 Formula に同梱された EAA 問題の修正及び日本語化差分ファイルを、対応する [roxterm][ROXT] の HEAD 版のコミットに適用したものを導入する Formula です。**導入される具体的な commit ID は ```brew info z80oolong/vte/roxterm@9999-dev``` で確認してください。**
 
 使用法は ```z80oolong/vte/roxterm``` の記述を参照してください。
 
@@ -111,7 +111,7 @@
 
 ### z80oolong/vte/tilda@9999-dev
 
-本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [tilda][TILD] の HEAD 版のコミットに適用したものを導入する Formula です。**たとえば、本 Formula に同梱された差分ファイルが [tilda][TILD] の HEAD 版のコミット ```xxxxxxxx``` に対応している場合、コミット ID ```xxxxxxxx``` のバージョンが導入されます。導入される具体的な commit ID は ```brew info z80oolong/vte/tilda@9999-dev``` で確認してください。**
+本 Formula に同梱された EAA 問題の修正および日本語化差分ファイルを、対応する [tilda][TILD] の HEAD 版のコミットに適用したものを導入する Formula です。**導入される具体的な commit ID は ```brew info z80oolong/vte/tilda@9999-dev``` で確認してください。**
 
 使用法は ```z80oolong/vte/tilda``` の記述を参照してください。
 
