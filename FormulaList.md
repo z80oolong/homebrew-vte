@@ -71,7 +71,11 @@
 
 ### z80oolong/vte/sakura@9999-dev
 
-本 Formula に同梱された EAA 問題を修正する差分ファイルを、対応する [sakura][SAKU] の HEAD 版のコミットに適用したものを導入する Formula です。**導入される具体的な commit ID は ```brew info z80oolong/vte/sakura@9999-dev``` で確認してください。**
+本 Formula に同梱された EAA 問題を修正する差分ファイルを、その差分ファイルに対応する [sakura][SAKU] の HEAD 版のコミットに適用したものを導入する Formula です。
+
+例えば、本 Formula が HEAD 版のコミット ID deadbeef に対応する差分ファイルを同梱している場合は、本 Formula によって HEAD 版の deadbeef のコミットが導入されます。
+
+**導入される具体的な commit ID は ```brew info z80oolong/vte/sakura@9999-dev``` で確認してください。**
 
 使用法は ```z80oolong/vte/sakura``` の記述を参照してください。
 
