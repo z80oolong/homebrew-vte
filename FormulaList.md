@@ -11,7 +11,7 @@
 [GTK][DGTK] の端末エミュレータウィジェットを提供するライブラリである [libvte][LVTE] の安定版および HEAD 版をインストールするための Formula です。これ以降に述べる [libvte][LVTE] ベースの端末エミュレータを持つアプリケーションがこのライブラリに依存します。
 
 - **注意**: 
-    - **この Formula は、versioned formula であるため、この Formula によりインストールされる [libvte][LVTE] は、keg-only でインストールされます。** この Formula によりインストールされる [libvte][LVTE] を使用するには、```brew link --force z80oolong/vte/libvte@2.91``` コマンドを実行する必要があります。
+    - **この Formula は、versioned formula であるため、この Formula によりインストールされる [libvte][LVTE] は、keg-only でインストールされます。**
 
 ### z80oolong/vte/sakura
 
@@ -206,7 +206,7 @@
 ```z80oolong/vte/geany```、```z80oolong/vte/geany@{version}```、```z80oolong/vte/geany@9999-dev``` のプラグインに依存する Lua 5.1 処理系をインストールするための Formula です。
 
 - **注意**: 
-    - **この Formula は、versioned formula であるため、この Formula によりインストールされる Lua 5.1 は、keg-only でインストールされます。** この Formula によりインストールされる Lua 5.1 を使用するには、```brew link --force z80oolong/vte/lua@5.1``` コマンドを実行する必要があります。
+    - **この Formula は、versioned formula であるため、この Formula によりインストールされる Lua 5.1 は、keg-only でインストールされます。**
 
 <!-- 外部リンク一覧 -->
 
