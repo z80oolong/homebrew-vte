@@ -61,7 +61,7 @@
 
 [GTK][DGTK] と [libvte][LVTE] ベースのタブ式端末エミュレータ [roxterm][ROXT] の最新安定版および HEAD 版をインストールする Formula です。
 
-この Formula でインストールされた [roxterm][ROXT] では、**[EAWA] 問題が修正され、メニューや設定画面の一部を除き、機械翻訳による簡易な日本語化が行われています。**
+この Formula でインストールされた [roxterm][ROXT] では、**[EAWA] 問題が修正され、メニューや設定画面の一部を除き、機械翻訳による簡易な日本語化が行われます。**
 
 なお、この Formula でインストールされた [roxterm][ROXT] は、以下の環境変数を参照します。
 
@@ -94,7 +94,7 @@
 
 [GTK][DGTK] と [libvte][LVTE] ベースのドロップダウン端末エミュレータ [tilda][TILD] の最新安定版および HEAD 版をインストールする Formula です。
 
-この Formula でインストールされた [tilda][TILD] では、**[EAWA] 問題が修正され、メニューや設定画面の一部を除き、機械翻訳による簡易な日本語化が行われています。**
+この Formula でインストールされた [tilda][TILD] では、**[EAWA] 問題が修正され、メニューや設定画面の一部を除き、機械翻訳による簡易な日本語化が行われます。**
 
 なお、この Formula でインストールされた [tilda][TILD] は、以下の環境変数を参照します。
 
@@ -191,7 +191,7 @@
 
 ### z80oolong/vte/lua@5.1
 
-```z80oolong/vte/geany```、```z80oolong/vte/geany@{version}```、```z80oolong/vte/geany@9999-dev``` のプラグインに依存する Lua 5.1 処理系をインストールする Formula です。
+```z80oolong/vte/geany```, ```z80oolong/vte/geany@{version}```, ```z80oolong/vte/geany@9999-dev``` のプラグインに依存する Lua 5.1 処理系をインストールする Formula です。
 
 - **注意**:
     - **この Formula は versioned formula のため、keg-only でインストールされます。**
