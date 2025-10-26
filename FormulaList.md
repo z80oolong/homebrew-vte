@@ -41,7 +41,8 @@
 これは、[EAWA] 問題を修正した [GTK][DGTK] と [libvte][LVTE] ベースの端末エミュレータ [sakura][SAKU] の安定版をインストールする Formula です。使用法は ```z80oolong/vte/sakura``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [sakura][SAKU] を使用するには ```brew link --force z80oolong/vte/sakura@{version}``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [sakura][SAKU] を使用するには ```brew link --force z80oolong/vte/sakura@{version}``` を実行してください。**
 
 ### z80oolong/vte/sakura@9999-dev
 
@@ -52,7 +53,8 @@
 具体的なコミットについては、```brew info z80oolong/vte/sakura@9999-dev``` で確認できます。使用法は ```z80oolong/vte/sakura``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [sakura][SAKU] を使用するには ```brew link --force z80oolong/vte/sakura@9999-dev``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [sakura][SAKU] を使用するには ```brew link --force z80oolong/vte/sakura@9999-dev``` を実行してください。**
     - **この Formula は、```z80oolong/vte/sakura``` の HEAD 版で差分ファイル適用に不具合が発生する場合に暫定的に使用するものです。** 通常は ```z80oolong/vte/sakura``` をご使用ください。
 
 ### z80oolong/vte/roxterm
@@ -74,7 +76,8 @@
 これは、[EAWA] 問題の修正及び機械翻訳による簡易な日本語化を行った [GTK][DGTK] と [libvte][LVTE] ベースのタブ式端末エミュレータ [roxterm][ROXT] の安定版をインストールする Formula です。使用法は ```z80oolong/vte/roxterm``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [roxterm][ROXT] を使用するには ```brew link --force z80oolong/vte/roxterm@{version}``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [roxterm][ROXT] を使用するには ```brew link --force z80oolong/vte/roxterm@{version}``` を実行してください。**
 
 ### z80oolong/vte/roxterm@9999-dev
 
@@ -85,7 +88,8 @@
 具体的なコミットについては、```brew info z80oolong/vte/roxterm@9999-dev``` で確認できます。使用法は ```z80oolong/vte/roxterm``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [roxterm][ROXT] を使用するには ```brew link --force z80oolong/vte/roxterm@9999-dev``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [roxterm][ROXT] を使用するには ```brew link --force z80oolong/vte/roxterm@9999-dev``` を実行してください。**
     - **この Formula は、```z80oolong/vte/roxterm``` の HEAD 版で差分ファイル適用に不具合が発生する場合に暫定的に使用するものです。** 通常は ```z80oolong/vte/roxterm``` をご使用ください。
 
 ### z80oolong/vte/tilda
@@ -107,7 +111,8 @@
 これは、[EAWA] 問題の修正及び機械翻訳による簡易な日本語化を行った [GTK][DGTK] と [libvte][LVTE] ベースのドロップダウン端末エミュレータ [tilda][TILD] の安定版をインストールする Formula です。使用法は ```z80oolong/vte/tilda``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [tilda][TILD] を使用するには ```brew link --force z80oolong/vte/tilda@{version}``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [tilda][TILD] を使用するには ```brew link --force z80oolong/vte/tilda@{version}``` を実行してください。**
 
 ### z80oolong/vte/tilda@9999-dev
 
@@ -118,7 +123,8 @@
 具体的なコミットについては、```brew info z80oolong/vte/tilda@9999-dev``` で確認できます。使用法は ```z80oolong/vte/tilda``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [tilda][TILD] を使用するには ```brew link --force z80oolong/vte/tilda@9999-dev``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [tilda][TILD] を使用するには ```brew link --force z80oolong/vte/tilda@9999-dev``` を実行してください。**
     - **この Formula は、```z80oolong/vte/tilda``` の HEAD 版で差分ファイル適用に不具合が発生する場合に暫定的に使用するものです。** 通常は ```z80oolong/vte/tilda``` をご使用ください。
 
 ### z80oolong/vte/lxterminal
@@ -140,7 +146,8 @@
 これは、[EAWA] 問題を修正した [GTK][DGTK] と [libvte][LVTE] ベースの [LXDE][LXDE] 用端末エミュレータ [lxterminal][LXTM] の安定版をインストールする Formula です。使用法は ```z80oolong/vte/lxterminal``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [lxterminal][LXTM] を使用するには ```brew link --force z80oolong/vte/lxterminal@{version}``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [lxterminal][LXTM] を使用するには ```brew link --force z80oolong/vte/lxterminal@{version}``` を実行してください。**
 
 ### z80oolong/vte/lxterminal@9999-dev
 
@@ -151,7 +158,8 @@
 具体的なコミットについては、```brew info z80oolong/vte/lxterminal@9999-dev``` で確認できます。使用法は ```z80oolong/vte/lxterminal``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [lxterminal][LXTM] を使用するには ```brew link --force z80oolong/vte/lxterminal@9999-dev``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [lxterminal][LXTM] を使用するには ```brew link --force z80oolong/vte/lxterminal@9999-dev``` を実行してください。**
     - **この Formula は、```z80oolong/vte/lxterminal``` の HEAD 版で差分ファイル適用に不具合が発生する場合に暫定的に使用するものです。** 通常は ```z80oolong/vte/lxterminal``` をご使用ください。
 
 ### z80oolong/vte/geany
@@ -173,7 +181,8 @@
 これは、[EAWA] 問題を修正した [GTK][DGTK] と [libvte][LVTE] ベースの軽量 IDE [geany][GEAN] の安定版をインストールする Formula です。使用法は ```z80oolong/vte/geany``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [geany][GEAN] を使用するには ```brew link --force z80oolong/vte/geany@{version}``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [geany][GEAN] を使用するには ```brew link --force z80oolong/vte/geany@{version}``` を実行してください。**
 
 ### z80oolong/vte/geany@9999-dev
 
@@ -184,7 +193,8 @@
 具体的なコミットについては、```brew info z80oolong/vte/geany@9999-dev``` で確認できます。使用法は ```z80oolong/vte/geany``` の記述をご覧ください。
 
 - **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。この Formula によってインストールされた [geany][GEAN] を使用するには ```brew link --force z80oolong/vte/geany@9999-dev``` を実行してください。**
+    - **この Formula は versioned formula のため、keg-only でインストールされます。**
+    - **この Formula によってインストールされた [geany][GEAN] を使用するには ```brew link --force z80oolong/vte/geany@9999-dev``` を実行してください。**
     - **この Formula は、```z80oolong/vte/geany``` の HEAD 版で差分ファイル適用に不具合が発生する場合に暫定的に使用するものです。** 通常は ```z80oolong/vte/geany``` をご使用ください。
 
 ### z80oolong/vte/lua@5.1
