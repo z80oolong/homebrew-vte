@@ -15,9 +15,11 @@
 
 ### z80oolong/vte/sakura
 
-[GTK][DGTK] と [libvte][LVTE] ベースの端末エミュレータ [sakura][SAKU] の最新安定版および HEAD 版をインストールする Formula です。
+[GTK][DGTK] と [libvte][LVTE] ベースの端末エミュレータ [sakura][SAKU] の最新安定版および HEAD 版をインストールする Formula です。 [HEAD 版の最新コミットの sakura][SAKU] をインストールする場合は、```--HEAD``` オプションを指定してください。
 
 この Formula でインストールされた [sakura][SAKU] では、**Unicode の [East Asian Ambiguous Character][EAWA]（例: "◎" や "★" 等の記号文字や罫線文字）が日本語環境で適切な文字幅で表示されない問題（[EAWA] 問題）が修正されます。**
+
+なお、この Formula でインストールされた [sakura][SAKU] は、以下の環境変数を参照します。
 
 - **環境変数**: ```VTE_CJK_WIDTH```
     - **```VTE_CJK_WIDTH=1``` の場合**: [EAWA] を全角文字幅で表示します。
@@ -25,11 +27,11 @@
 
   [EAWA] を全角文字幅で表示する場合、以下のように ```sakura``` を起動します。
 
-  ```bash
-  $ export VTE_CJK_WIDTH=1  # 環境変数を設定
-  $ sakura
-  # または
-  $ env VTE_CJK_WIDTH=1 sakura
+  ```
+    $ export VTE_CJK_WIDTH=1  # 環境変数を設定
+    $ sakura
+    # (または)
+    $ env VTE_CJK_WIDTH=1 sakura
   ```
 
 ### z80oolong/vte/sakura@{version}
@@ -55,9 +57,11 @@
 
 ### z80oolong/vte/roxterm
 
-[GTK][DGTK] と [libvte][LVTE] ベースのタブ式端末エミュレータ [roxterm][ROXT] の最新安定版および HEAD 版をインストールする Formula です。
+[GTK][DGTK] と [libvte][LVTE] ベースのタブ式端末エミュレータ [roxterm][ROXT] の最新安定版および HEAD 版をインストールする Formula です。 [HEAD 版の最新コミットの roxterm][ROXT] をインストールする場合は、```--HEAD``` オプションを指定してください。
 
 この Formula でインストールされた [roxterm][ROXT] では、**[EAWA] 問題が修正され、メニューや設定画面の一部を除き、機械翻訳による簡易な日本語化が行われています。**
+
+なお、この Formula でインストールされた [roxterm][ROXT] は、以下の環境変数を参照します。
 
 - **環境変数**: ```VTE_CJK_WIDTH```
     - **```VTE_CJK_WIDTH=1``` の場合**: [EAWA] を全角文字幅で表示します。
@@ -86,9 +90,11 @@
 
 ### z80oolong/vte/tilda
 
-[GTK][DGTK] と [libvte][LVTE] ベースのドロップダウン端末エミュレータ [tilda][TILD] の最新安定版および HEAD 版をインストールする Formula です。
+[GTK][DGTK] と [libvte][LVTE] ベースのドロップダウン端末エミュレータ [tilda][TILD] の最新安定版および HEAD 版をインストールする Formula です。 [HEAD 版の最新コミットの tilda][TILD] をインストールする場合は、```--HEAD``` オプションを指定してください。
 
 この Formula でインストールされた [tilda][TILD] では、**[EAWA] 問題が修正され、メニューや設定画面の一部を除き、機械翻訳による簡易な日本語化が行われています。**
+
+なお、この Formula でインストールされた [tilda][TILD] は、以下の環境変数を参照します。
 
 - **環境変数**: ```VTE_CJK_WIDTH```
     - **```VTE_CJK_WIDTH=1``` の場合**: [EAWA] を全角文字幅で表示します。
@@ -117,9 +123,11 @@
 
 ### z80oolong/vte/lxterminal
 
-[GTK][DGTK] と [libvte][LVTE] ベースの [LXDE][LXDE] 用端末エミュレータ [lxterminal][LXTM] の最新安定版および HEAD 版をインストールする Formula です。
+[GTK][DGTK] と [libvte][LVTE] ベースの [LXDE][LXDE] 用端末エミュレータ [lxterminal][LXTM] の最新安定版および HEAD 版をインストールする Formula です。 [HEAD 版の最新コミットの lxterminal][LXTM] をインストールする場合は、```--HEAD``` オプションを指定してください。
 
 この Formula でインストールされた [lxterminal][LXTM] では、**[EAWA] 問題が修正されます。**
+
+なお、この Formula でインストールされた [lxterminal][LXTM]  は、以下の環境変数を参照します。
 
 - **環境変数**: ```VTE_CJK_WIDTH```
     - **```VTE_CJK_WIDTH=1``` の場合**: [EAWA] を全角文字幅で表示します。
@@ -148,9 +156,11 @@
 
 ### z80oolong/vte/geany
 
-[GTK][DGTK] と [libvte][LVTE] ベースの軽量 IDE [geany][GEAN] の最新安定版および HEAD 版をインストールする Formula です。
+[GTK][DGTK] と [libvte][LVTE] ベースの軽量 IDE [geany][GEAN] の最新安定版および HEAD 版をインストールする Formula です。 [HEAD 版の最新コミットの geany][GEAN] をインストールする場合は、```--HEAD``` オプションを指定してください。
 
 この Formula でインストールされた [geany][GEAN] では、**[EAWA] 問題が修正されます。**
+
+なお、この Formula でインストールされた [geany][GEAN] は、以下の環境変数を参照します。
 
 - **環境変数**: ```VTE_CJK_WIDTH```
     - **```VTE_CJK_WIDTH=1``` の場合**: [geany][GEAN] の端末機能で [EAWA] を全角文字幅で表示します。
@@ -183,11 +193,6 @@
 
 - **注意**:
     - **この Formula は versioned formula のため、keg-only でインストールされます。**
-
-## 詳細情報
-
-- Homebrew の使用方法: ```brew help``` または ```man brew``` を実行してください。
-- Homebrew for Linux: [Homebrew for Linux][BREW]
 
 <!-- 外部リンク一覧 -->
 
