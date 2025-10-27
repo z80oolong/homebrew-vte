@@ -2,7 +2,11 @@
 
 ## 概要
 
-本文書では、[Homebrew for Linux][BREW] 向け Tap リポジトリ ```z80oolong/vte``` に含まれる Formula 一覧を示します。また、[libvte][LVTE] は、[GTK][DGTK] の端末エミュレータウィジェットを提供するライブラリです。さらに、このリポジトリは、東アジア圏の文字表示に関する問題（[East Asian Ambiguous Character][EAWA] 問題）を修正した端末エミュレータを提供します。各 Formula の詳細については、```brew info <formula>``` コマンドをご覧ください。
+本文書では、[Homebrew for Linux][BREW] 向け Tap リポジトリ ```z80oolong/vte``` に含まれる Formula 一覧を示します。
+
+また、[libvte][LVTE] は、[GTK][DGTK] の端末エミュレータウィジェットを提供するライブラリです。さらに、このリポジトリは、東アジア圏の文字表示に関する問題（[East Asian Ambiguous Character][EAWA] 問題）を修正した端末エミュレータを提供します。
+
+各 Formula の詳細については、```brew info <formula>``` コマンドをご覧ください。
 
 ## Formula 一覧
 
