@@ -4,6 +4,7 @@ class LibvteAT291 < Formula
   url "https://github.com/GNOME/vte/archive/refs/tags/0.81.90.tar.gz"
   sha256 "97f9b2826a67adbd2ef41b23ae3c1b36d935da15f52dc7cf9b31876c78bb5f3b"
   license "LGPL-2.0-or-later"
+  revision 2
   head "https://github.com/GNOME/vte.git"
 
   keg_only :versioned_formula
@@ -28,7 +29,6 @@ class LibvteAT291 < Formula
   depends_on "gtk4"
   depends_on "icu4c@75"
   depends_on "lz4"
-  depends_on macos: :mojave
   depends_on "pango"
   depends_on "pcre2"
 
@@ -80,12 +80,14 @@ class LibvteAT291 < Formula
     end
 
     args  = std_meson_args
-    args << "-Dsixel=true" if build.with?("libsixel")
     args << "-Dgir=true"
     args << "-Dgtk3=true"
     args << "-Dgnutls=true"
     args << "-Dvapi=true"
     args << "-D_b_symbolic_functions=false"
+    if build.head?
+      args << "-Dsixel"
+    end
     system "meson", "setup", "build", *args
     system "meson", "compile", "-C", "build", "--verbose"
     system "meson", "install", "-C", "build"
