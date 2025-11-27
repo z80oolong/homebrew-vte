@@ -2,14 +2,41 @@ class GeanyAT9999Dev < Formula
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
 
-  @@current_commit = "426e427030fe0118648efbec5e76b2b1ddca9e5c"
+  CURRENT_COMMIT = "426e427030fe0118648efbec5e76b2b1ddca9e5c".freeze
   url "https://github.com/geany/geany.git",
     branch:   "master",
-    revision: @@current_commit
-  version "git-#{@@current_commit[0..7]}"
+    revision: CURRENT_COMMIT
+  version "git-#{CURRENT_COMMIT[0..7]}"
   revision 1
 
   keg_only :versioned_formula
+
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "docutils" => :build
+  depends_on "gtk-doc" => :build
+  depends_on "intltool" => :build
+  depends_on "libtool" => :build
+  depends_on "perl" => :build
+  depends_on "perl-xml-parser" => :build
+  depends_on "pkgconf" => :build
+  depends_on "ctags"
+  depends_on "enchant"
+  depends_on "gettext"
+  depends_on "glib"
+  depends_on "glibc"
+  depends_on "gnupg"
+  depends_on "gpgme"
+  depends_on "gtk+3"
+  depends_on "hicolor-icon-theme"
+  depends_on "libgit2"
+  depends_on "libsoup@2"
+  depends_on "libvterm"
+  depends_on "pcre"
+  depends_on "source-highlight"
+  depends_on "webkitgtk"
+  depends_on "vte3"
+  depends_on "z80oolong/vte/lua@5.1"
 
   resource("ctpl") do
     url "https://github.com/b4n/ctpl/archive/refs/tags/v0.3.5.tar.gz"
@@ -22,33 +49,6 @@ class GeanyAT9999Dev < Formula
       revision: "760aaf348385e32fc171cda0d16c56df3ab9319e"
   end
 
-  depends_on "autoconf" => :build
-  depends_on "automake" => :build
-  depends_on "docutils" => :build
-  depends_on "intltool" => :build
-  depends_on "libtool" => :build
-  depends_on "perl" => :build
-  depends_on "perl-xml-parser" => :build
-  depends_on "gtk-doc" => :build
-  depends_on "pkgconf" => :build
-  depends_on "ctags"
-  depends_on "enchant"
-  depends_on "gettext"
-  depends_on "glib"
-  depends_on "glibc"
-  depends_on "gnupg"
-  depends_on "gpgme"
-  depends_on "gtk+3"
-  depends_on "hicolor-icon-theme"
-  depends_on "libsoup@2"
-  depends_on "libvterm"
-  depends_on "pcre"
-  depends_on "source-highlight"
-  depends_on "webkitgtk"
-  depends_on "libgit2"
-  depends_on "z80oolong/vte/lua@5.1"
-  depends_on "z80oolong/vte/libvte@2.91"
-
   patch :p1, :DATA
 
   def install
@@ -59,7 +59,7 @@ class GeanyAT9999Dev < Formula
     ENV["LC_ALL"] = "C"
 
     resource("ctpl").stage do
-      args  = std_configure_args.dup
+      args = std_configure_args.dup
       args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/ctpl" : arg }
       args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/ctpl/lib" : arg }
       args << "--disable-silent-rules"
@@ -72,7 +72,7 @@ class GeanyAT9999Dev < Formula
 
     args  = std_configure_args.dup
     args << "--enable-vte"
-    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
+    args << "--with-vte-module-path=#{Formula["vte3"].opt_prefix}"
 
     system "sh", "./autogen.sh"
     system "./configure", *args
@@ -99,7 +99,7 @@ class GeanyAT9999Dev < Formula
   def caveats
     <<~EOS
       #{full_name} is a Formula for installing the development version of
-      `geany` based on the HEAD version (commit #{@@current_commit[0..7]}) from its git repository.
+      `geany` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
   end
 

@@ -22,8 +22,9 @@ class Roxterm < Formula
   depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
+  depends_on "glibc"
   depends_on "gtk+3"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "vte3"
 
   resource("roxterm-ja-po") do
     url "https://gist.github.com/731fd4e4d0adb4178ce69885bf061523.git",

@@ -10,13 +10,6 @@
 
 ## Formula 一覧
 
-### z80oolong/vte/libvte@2.91
-
-[libvte][LVTE] の安定版および HEAD 版をインストールする Formula です。このライブラリは、以下に述べる [libvte][LVTE] ベースの端末エミュレータに依存します。
-
-- **注意**:
-    - **この Formula は versioned formula のため、keg-only でインストールされます。**
-
 ### z80oolong/vte/sakura
 
 [GTK][DGTK] と [libvte][LVTE] ベースの端末エミュレータ [sakura][SAKU] の最新安定版および HEAD 版をインストールする Formula です。 [HEAD 版の最新コミットの sakura][SAKU] をインストールする場合は、```--HEAD``` オプションを指定してください。
@@ -210,13 +203,13 @@
 
 <!-- 外部リンク一覧 -->
 
-[BREW]: https://linuxbrew.sh/  
-[EAWA]: http://www.unicode.org/reports/tr11/#Ambiguous  
-[LXDE]: http://www.lxde.org/  
-[LXTM]: https://github.com/lxde/lxterminal  
-[DGTK]: https://gtk.org/  
-[LVTE]: https://github.com/GNOME/vte  
-[SAKU]: https://github.com/dabisu/sakura  
-[ROXT]: https://github.com/realh/roxterm  
-[TILD]: https://github.com/lanoxx/tilda/  
+[BREW]: https://linuxbrew.sh/
+[EAWA]: http://www.unicode.org/reports/tr11/#Ambiguous
+[LXDE]: http://www.lxde.org/
+[LXTM]: https://github.com/lxde/lxterminal
+[DGTK]: https://gtk.org/
+[LVTE]: https://github.com/GNOME/vte
+[SAKU]: https://github.com/dabisu/sakura
+[ROXT]: https://github.com/realh/roxterm
+[TILD]: https://github.com/lanoxx/tilda/
 [GEAN]: https://www.geany.org/

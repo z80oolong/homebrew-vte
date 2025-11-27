@@ -10,11 +10,11 @@ class GeanyAT20 < Formula
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "docutils" => :build
+  depends_on "gtk-doc" => :build
   depends_on "intltool" => :build
   depends_on "libtool" => :build
   depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
-  depends_on "gtk-doc" => :build
   depends_on "pkgconf" => :build
   depends_on "ctags"
   depends_on "enchant"
@@ -25,14 +25,14 @@ class GeanyAT20 < Formula
   depends_on "gpgme"
   depends_on "gtk+3"
   depends_on "hicolor-icon-theme"
+  depends_on "libgit2"
   depends_on "libsoup@2"
   depends_on "libvterm"
   depends_on "pcre"
   depends_on "source-highlight"
   depends_on "webkitgtk"
-  depends_on "libgit2"
+  depends_on "vte3"
   depends_on "z80oolong/vte/lua@5.1"
-  depends_on "z80oolong/vte/libvte@2.91"
 
   resource("geany-plugins") do
     url "https://github.com/geany/geany-plugins/releases/download/2.0.0/geany-plugins-2.0.tar.bz2"
@@ -54,7 +54,7 @@ class GeanyAT20 < Formula
     ENV["LC_ALL"] = "C"
 
     resource("ctpl").stage do
-      args  = std_configure_args.dup
+      args = std_configure_args.dup
       args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/ctpl" : arg }
       args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/ctpl/lib" : arg }
       args << "--disable-silent-rules"
@@ -72,7 +72,7 @@ class GeanyAT20 < Formula
 
     args  = std_configure_args.dup
     args << "--enable-vte"
-    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
+    args << "--with-vte-module-path=#{Formula["vte3"].opt_prefix}"
 
     system "./configure", *args
     system "make"

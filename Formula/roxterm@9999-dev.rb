@@ -7,7 +7,7 @@ class RoxtermAT9999Dev < Formula
     branch:   "master",
     revision: @@current_commit
   version "git-#{@@current_commit[0..7]}"
-  revision 1
+  revision 2
   license "LGPL-3.0"
 
   keg_only :versioned_formula
@@ -18,7 +18,7 @@ class RoxtermAT9999Dev < Formula
   depends_on "dbus-glib"
   depends_on "glib"
   depends_on "gtk+3"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "vte3"
 
   resource("roxterm-ja-po") do
     url "https://gist.github.com/731fd4e4d0adb4178ce69885bf061523.git",

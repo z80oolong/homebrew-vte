@@ -25,19 +25,14 @@ class Geany < Formula
     patch :p1, Formula["z80oolong/vte/geany@9999-dev"].diff_data
   end
 
-  resource("ctpl") do
-    url "https://github.com/b4n/ctpl/archive/refs/tags/v0.3.5.tar.gz"
-    sha256 "ae60c79316c6dc3a2935d906b8a911ce4188e8638b6e9b65fc6c04a5ca6bcdda"
-  end
-
   depends_on "autoconf" => :build
   depends_on "automake" => :build
   depends_on "docutils" => :build
+  depends_on "gtk-doc" => :build
   depends_on "intltool" => :build
   depends_on "libtool" => :build
   depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
-  depends_on "gtk-doc" => :build
   depends_on "pkgconf" => :build
   depends_on "ctags"
   depends_on "enchant"
@@ -48,14 +43,19 @@ class Geany < Formula
   depends_on "gpgme"
   depends_on "gtk+3"
   depends_on "hicolor-icon-theme"
+  depends_on "libgit2"
   depends_on "libsoup@2"
   depends_on "libvterm"
   depends_on "pcre"
   depends_on "source-highlight"
   depends_on "webkitgtk"
-  depends_on "libgit2"
+  depends_on "vte3"
   depends_on "z80oolong/vte/lua@5.1"
-  depends_on "z80oolong/vte/libvte@2.91"
+
+  resource("ctpl") do
+    url "https://github.com/b4n/ctpl/archive/refs/tags/v0.3.5.tar.gz"
+    sha256 "ae60c79316c6dc3a2935d906b8a911ce4188e8638b6e9b65fc6c04a5ca6bcdda"
+  end
 
   def install
     ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
@@ -65,7 +65,7 @@ class Geany < Formula
     ENV["LC_ALL"] = "C"
 
     resource("ctpl").stage do
-      args  = std_configure_args.dup
+      args = std_configure_args.dup
       args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/ctpl" : arg }
       args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/ctpl/lib" : arg }
       args << "--disable-silent-rules"
@@ -78,7 +78,7 @@ class Geany < Formula
 
     args  = std_configure_args
     args << "--enable-vte"
-    args << "--with-vte-module-path=#{Formula["z80oolong/vte/libvte@2.91"].opt_prefix}"
+    args << "--with-vte-module-path=#{Formula["vte3"].opt_prefix}"
 
     if build.head?
       system "sh", "./autogen.sh"
@@ -96,9 +96,7 @@ class Geany < Formula
     resource("geany-plugins").stage do
       system "sh", "./autogen.sh"
       system "patch -p1 < #{buildpath}/geany-plugins.diff"
-      unless build.head?
-        inreplace "./git-changebar/src/gcb-plugin.c", /\*bool/, "*boolean"
-      end
+      inreplace "./git-changebar/src/gcb-plugin.c", /\*bool/, "*boolean" unless build.head?
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
       args  = std_configure_args
@@ -114,6 +112,11 @@ class Geany < Formula
   end
 
   test do
-    system "#{bin}/geany", "--version"
+    output = shell_output("#{bin}/geany --version").strip
+    if build.head?
+      assert_match Regexp.new("^geany 2.2.0 (git >= [0-9a-f]{9})"), output
+    else
+      assert_match Regexp.new("^geany #{version}"), output
+    end
   end
 end

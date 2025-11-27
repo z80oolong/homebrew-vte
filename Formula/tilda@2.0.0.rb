@@ -14,7 +14,7 @@ class TildaAT200 < Formula
   depends_on "perl" => :build
   depends_on "gettext"
   depends_on "gtk+3"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "vte3"
 
   resource("libconfuse") do
     url "https://github.com/libconfuse/libconfuse/releases/download/v3.3/confuse-3.3.tar.xz"

@@ -26,7 +26,7 @@ class Lxterminal < Formula
   depends_on "pkgconf" => :build
   depends_on "glib"
   depends_on "gtk+3"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "vte3"
 
   def install
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"

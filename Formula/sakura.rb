@@ -22,7 +22,7 @@ class Sakura < Formula
   depends_on "gettext"
   depends_on "systemd"
   depends_on "gtk+3"
-  depends_on "z80oolong/vte/libvte@2.91"
+  depends_on "vte3"
 
   def install
     args  = std_cmake_args
