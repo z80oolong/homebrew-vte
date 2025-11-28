@@ -48,8 +48,8 @@ class Geany < Formula
   depends_on "libvterm"
   depends_on "pcre"
   depends_on "source-highlight"
-  depends_on "webkitgtk"
   depends_on "vte3"
+  depends_on "webkitgtk"
   depends_on "z80oolong/vte/lua@5.1"
 
   resource("ctpl") do
@@ -113,10 +113,7 @@ class Geany < Formula
 
   test do
     output = shell_output("#{bin}/geany --version").strip
-    if build.head?
-      assert_match Regexp.new("^geany 2.2.0 (git >= [0-9a-f]{9})"), output
-    else
-      assert_match Regexp.new("^geany #{version}"), output
-    end
+    ver = build.head? ? "2.2.0 \\(git >= [0-9a-f]{9}\\)" : version
+    assert_match Regexp.new("^geany #{ver}"), output
   end
 end

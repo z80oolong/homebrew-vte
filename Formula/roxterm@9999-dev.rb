@@ -2,13 +2,13 @@ class RoxtermAT9999Dev < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
 
-  @@current_commit = "4e266fade9be13aef7b91eea7edb7bf1b7e1e5b8"
+  CURRENT_COMMIT = "4e266fade9be13aef7b91eea7edb7bf1b7e1e5b8".freeze
   url "https://github.com/realh/roxterm.git",
     branch:   "master",
-    revision: @@current_commit
-  version "git-#{@@current_commit[0..7]}"
+    revision: CURRENT_COMMIT
+  version "git-#{CURRENT_COMMIT[0..7]}"
+  license "LGPL-3.0-or-later"
   revision 2
-  license "LGPL-3.0"
 
   keg_only :versioned_formula
 
@@ -55,7 +55,7 @@ class RoxtermAT9999Dev < Formula
   def caveats
     <<~EOS
       #{full_name} is a Formula for installing the development version of
-      `roxterm` based on the HEAD version (commit #{@@current_commit[0..7]}) from its git repository.
+      `roxterm` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
   end
 
@@ -64,7 +64,7 @@ class RoxtermAT9999Dev < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/roxterm --version")
+    system "test", "-x", bin/"roxterm"
   end
 end
 

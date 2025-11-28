@@ -107,7 +107,8 @@ class LuaAT51 < Formula
   end
 
   test do
-    system bin/"lua5.1", "-e", "print ('Ducks are cool')"
+    output = shell_output(%Q{#{bin}/lua5.1 -e "print ('Ducks are cool')"}).strip
+    assert_equal "Ducks are cool", output
   end
 end
 

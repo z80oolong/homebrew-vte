@@ -1,13 +1,13 @@
 class SakuraAT9999Dev < Formula
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
-  license "GPL-2.0"
 
-  @@current_commit = "46f4582a7b9b2e4eb892909b3e29e5067fcbb2f7"
+  CURRENT_COMMIT = "46f4582a7b9b2e4eb892909b3e29e5067fcbb2f7".freeze
   url "https://github.com/dabisu/sakura.git",
     branch:   "master",
-    revision: @@current_commit
-  version "git-#{@@current_commit[0..7]}"
+    revision: CURRENT_COMMIT
+  version "git-#{CURRENT_COMMIT[0..7]}"
+  license "GPL-2.0-or-later"
   revision 1
 
   keg_only :versioned_formula
@@ -15,8 +15,8 @@ class SakuraAT9999Dev < Formula
   depends_on "cmake" => :build
   depends_on "pod2man" => :build
   depends_on "gettext"
-  depends_on "systemd"
   depends_on "gtk+3"
+  depends_on "systemd"
   depends_on "vte3"
 
   patch :p1, :DATA
@@ -33,7 +33,7 @@ class SakuraAT9999Dev < Formula
   def caveats
     <<~EOS
       #{full_name} is a Formula for installing the development version of
-      `sakura` based on the HEAD version (commit #{@@current_commit[0..7]}) from its git repository.
+      `sakura` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
   end
 
@@ -42,7 +42,9 @@ class SakuraAT9999Dev < Formula
   end
 
   test do
-    system bin/"sakura", "--version"
+    ENV["LC_ALL"] = "C"
+    output = shell_output("#{bin}/sakura --version 2>&1 || true").strip
+    assert_equal "sakura version is 3.8.9", output
   end
 end
 

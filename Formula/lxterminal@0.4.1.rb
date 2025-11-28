@@ -45,7 +45,10 @@ class LxterminalAT041 < Formula
   end
 
   test do
-    system bin/"lxterminal", "--version"
+    ENV["LC_ALL"] = "ja_JP.UTF-8"
+
+    output = shell_output("#{bin}/lxterminal --version").strip
+    assert_equal "lxterminal #{version}", output
   end
 end
 

@@ -30,8 +30,8 @@ class GeanyAT21 < Formula
   depends_on "libvterm"
   depends_on "pcre"
   depends_on "source-highlight"
-  depends_on "webkitgtk"
   depends_on "vte3"
+  depends_on "webkitgtk"
   depends_on "z80oolong/vte/lua@5.1"
 
   resource("geany-plugins") do
@@ -101,7 +101,8 @@ class GeanyAT21 < Formula
   end
 
   test do
-    system "#{bin}/geany", "--version"
+    output = shell_output("#{bin}/geany --version").strip
+    assert_match Regexp.new("^geany #{version}"), output
   end
 end
 

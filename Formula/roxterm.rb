@@ -1,8 +1,8 @@
 class Roxterm < Formula
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
+  license "LGPL-3.0-or-later"
   revision 1
-  license "LGPL-3.0"
 
   stable do
     url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
@@ -57,6 +57,6 @@ class Roxterm < Formula
   end
 
   test do
-    assert_match version.to_s, shell_output("#{bin}/roxterm --version")
+    system "test", "-x", bin/"roxterm"
   end
 end

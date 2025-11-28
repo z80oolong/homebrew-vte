@@ -3,15 +3,15 @@ class TildaAT200 < Formula
   homepage "https://github.com/lanoxx/tilda"
   url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-2.0.0.tar.gz"
   sha256 "ff9364244c58507cd4073ac22e580a4cded048d416c682496c1b1788ee8a30df"
+  license "GPL-2.0-or-later"
   revision 1
-  license "GPL-2.0"
 
   keg_only :versioned_formula
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
-  depends_on "pkgconf" => :build
   depends_on "perl" => :build
+  depends_on "pkgconf" => :build
   depends_on "gettext"
   depends_on "gtk+3"
   depends_on "vte3"
@@ -29,7 +29,7 @@ class TildaAT200 < Formula
     ENV.prepend_path "HOMEBREW_RPATH_PATHS", libexec/"libconfuse/lib"
 
     resource("libconfuse").stage do
-      args  = std_configure_args.dup
+      args = std_configure_args.dup
       args.map! { |arg| arg.match?(/^--prefix/) ? "--prefix=#{libexec}/libconfuse" : arg }
       args.map! { |arg| arg.match?(/^--libdir/) ? "--libdir=#{libexec}/libconfuse/lib" : arg }
       args << "--disable-silent-rules"
@@ -50,7 +50,9 @@ class TildaAT200 < Formula
   end
 
   test do
-    system bin/"tilda", "--version"
+    ENV["LC_ALL"] = "C"
+    output = shell_output("#{bin}/tilda --version")
+    assert_match Regexp.new("Tilda #{version}", Regexp::MULTILINE), output
   end
 end
 

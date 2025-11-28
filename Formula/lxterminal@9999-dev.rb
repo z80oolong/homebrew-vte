@@ -2,11 +2,11 @@ class LxterminalAT9999Dev < Formula
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
 
-  @@current_commit = "ac5e36f496b2bf95eae790181e65c9eb54bb9c13"
+  CURRENT_COMMIT = "ac5e36f496b2bf95eae790181e65c9eb54bb9c13".freeze
   url "https://github.com/lxde/lxterminal.git",
     branch:   "master",
-    revision: @@current_commit
-  version "git-#{@@current_commit[0..7]}"
+    revision: CURRENT_COMMIT
+  version "git-#{CURRENT_COMMIT[0..7]}"
   revision 1
 
   keg_only :versioned_formula
@@ -47,7 +47,7 @@ class LxterminalAT9999Dev < Formula
   def caveats
     <<~EOS
       #{full_name} is a Formula for installing the development version of
-      `lxterminal` based on the HEAD version (commit #{@@current_commit[0..7]}) from its git repository.
+      `lxterminal` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
   end
 
@@ -56,7 +56,10 @@ class LxterminalAT9999Dev < Formula
   end
 
   test do
-    system bin/"lxterminal", "--version"
+    ENV["LC_ALL"] = "ja_JP.UTF-8"
+
+    output = shell_output("#{bin}/lxterminal --version").strip
+    assert_equal "lxterminal 0.4.1", output
   end
 end
 
