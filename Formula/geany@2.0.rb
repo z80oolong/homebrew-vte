@@ -30,7 +30,7 @@ class GeanyAT20 < Formula
   depends_on "libvterm"
   depends_on "pcre"
   depends_on "source-highlight"
-  Tepends_on "vte3"
+  depends_on "vte3"
   depends_on "webkitgtk"
   depends_on "z80oolong/vte/lua@5.1"
 
