@@ -109,7 +109,7 @@ class GeanyAT9999Dev < Formula
 
   test do
     output = shell_output("#{bin}/geany --version").strip
-    assert_match Regexp.new("^geany 2.2.0 (git >= [0-9a-f]{9})"), output
+    assert_match Regexp.new("^geany 2.2.0 \\(git >= [0-9a-f]{9}\\)"), output
   end
 end
 
