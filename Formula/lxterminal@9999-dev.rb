@@ -17,6 +17,7 @@ class LxterminalAT9999Dev < Formula
   depends_on "intltool" => :build
   depends_on "libxml2" => :build
   depends_on "libxslt" => :build
+  depends_on "perl" => :build
   depends_on "perl-xml-parser" => :build
   depends_on "pkgconf" => :build
   depends_on "glib"
@@ -57,7 +58,6 @@ class LxterminalAT9999Dev < Formula
 
   test do
     ENV["LC_ALL"] = "ja_JP.UTF-8"
-
     output = shell_output("#{bin}/lxterminal --version").strip
     assert_equal "lxterminal 0.4.1", output
   end
