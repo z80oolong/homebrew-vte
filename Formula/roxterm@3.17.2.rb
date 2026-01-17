@@ -9,7 +9,9 @@ class RoxtermAT3172 < Formula
   keg_only :versioned_formula
 
   depends_on "cmake" => :build
+  depends_on "docbook-xsl" => :build
   depends_on "gettext" => :build
+  depends_on "libxslt" => :build
   depends_on "pkgconf" => :build
   depends_on "dbus-glib"
   depends_on "glib"
@@ -27,6 +29,11 @@ class RoxtermAT3172 < Formula
   def install
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
+
+    inreplace "./man/CMakeLists.txt" do |s|
+      s.gsub! %r{http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl},
+        "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
+    end
 
     inreplace "./src/config.h.in" do |s|
       s.gsub!(/^#cmakedefine ENABLE_NLS/, "#define ENABLE_NLS 1")
