@@ -2,7 +2,7 @@ class TildaAT9999Dev < Formula
   desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
 
-  CURRENT_COMMIT = "51bfe3c7cb755499fa22d00134d68b86a9fdaafd".freeze
+  CURRENT_COMMIT = "b6a2ca205a958f09632599655b97e3d81a58ee2b".freeze
   url "https://github.com/lanoxx/tilda.git",
     branch:   "master",
     revision: CURRENT_COMMIT
@@ -68,6 +68,7 @@ class TildaAT9999Dev < Formula
 end
 
 __END__
+warning: refname 'upstream' is ambiguous.
 diff --git a/po/LINGUAS b/po/LINGUAS
 index 38adefd..09ad7f5 100644
 --- a/po/LINGUAS
@@ -768,10 +769,10 @@ index 0000000..c2ed824
 +msgid "_Regex"
 +msgstr "正規表現(_R)"
 diff --git a/src/tilda_terminal.c b/src/tilda_terminal.c
-index ed6a30c..86eaa5b 100644
+index 51d1c07..8872f5e 100644
 --- a/src/tilda_terminal.c
 +++ b/src/tilda_terminal.c
-@@ -137,6 +137,9 @@ register_match (VteRegex * regex,
+@@ -138,6 +138,9 @@ register_match (VteRegex * regex,
  
  struct tilda_term_ *tilda_term_init (struct tilda_window_ *tw, gint index)
  {
@@ -781,7 +782,7 @@ index ed6a30c..86eaa5b 100644
      DEBUG_FUNCTION ("tilda_term_init");
      DEBUG_ASSERT (tw != NULL);
  
-@@ -228,6 +231,15 @@ struct tilda_term_ *tilda_term_init (struct tilda_window_ *tw, gint index)
+@@ -231,6 +234,15 @@ struct tilda_term_ *tilda_term_init (struct tilda_window_ *tw, gint index)
      gtk_widget_show (term->vte_term);
      gtk_widget_show (term->hbox);
  

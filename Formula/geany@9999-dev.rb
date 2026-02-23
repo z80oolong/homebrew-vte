@@ -2,7 +2,7 @@ class GeanyAT9999Dev < Formula
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
 
-  CURRENT_COMMIT = "426e427030fe0118648efbec5e76b2b1ddca9e5c".freeze
+  CURRENT_COMMIT = "d563d0487548edaaeeaa4d0d33ce431d349397d9".freeze
   url "https://github.com/geany/geany.git",
     branch:   "master",
     revision: CURRENT_COMMIT
@@ -46,7 +46,7 @@ class GeanyAT9999Dev < Formula
   resource("geany-plugins") do
     url "https://github.com/geany/geany-plugins.git",
       branch:   "master",
-      revision: "760aaf348385e32fc171cda0d16c56df3ab9319e"
+      revision: "ecb9e1cd5987cce03e9152188f716283aded1da2"
   end
 
   patch :p1, :DATA
@@ -114,6 +114,7 @@ class GeanyAT9999Dev < Formula
 end
 
 __END__
+warning: refname 'upstream' is ambiguous.
 diff --git a/geany-plugins.diff b/geany-plugins.diff
 new file mode 100644
 index 000000000..71e70eb26
