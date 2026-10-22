@@ -1,4 +1,9 @@
+
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class LxterminalAT9999Dev < Formula
+  include DiffDataMixin
+
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
 
@@ -50,10 +55,6 @@ class LxterminalAT9999Dev < Formula
       #{full_name} is a Formula for installing the development version of
       `lxterminal` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

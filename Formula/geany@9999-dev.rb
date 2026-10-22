@@ -1,8 +1,12 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class GeanyAT9999Dev < Formula
+  include DiffDataMixin
+
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
 
-  CURRENT_COMMIT = "d563d0487548edaaeeaa4d0d33ce431d349397d9".freeze
+  CURRENT_COMMIT = "2010df99c7a0a754d686cf3c50e0dc4b3e9b5c14".freeze
   url "https://github.com/geany/geany.git",
     branch:   "master",
     revision: CURRENT_COMMIT
@@ -56,6 +60,9 @@ class GeanyAT9999Dev < Formula
     ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
     ENV.prepend_path "PKG_CONFIG_PATH", libexec/"ctpl/lib/pkgconfig"
+    ENV.prepend "CPPFLAGS", "-I#{Formula["glibc"].opt_include}"
+    ENV.prepend "CFLAGS", "-I#{Formula["glibc"].opt_include}"
+    ENV.prepend "CXXFLAGS", "-I#{Formula["glibc"].opt_include}"
     ENV["LC_ALL"] = "C"
 
     resource("ctpl").stage do
@@ -101,10 +108,6 @@ class GeanyAT9999Dev < Formula
       #{full_name} is a Formula for installing the development version of
       `geany` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

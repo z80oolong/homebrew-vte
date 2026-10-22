@@ -1,8 +1,12 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class RoxtermAT9999Dev < Formula
+  include DiffDataMixin
+
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
 
-  CURRENT_COMMIT = "4e266fade9be13aef7b91eea7edb7bf1b7e1e5b8".freeze
+  CURRENT_COMMIT = "00fcf32619ea0b4c1d5afeb5b590a3565d82c4f7".freeze
   url "https://github.com/realh/roxterm.git",
     branch:   "master",
     revision: CURRENT_COMMIT
@@ -66,10 +70,6 @@ class RoxtermAT9999Dev < Formula
     EOS
   end
 
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
-  end
-
   test do
     system "test", "-x", bin/"roxterm"
   end
@@ -77,7 +77,7 @@ end
 
 __END__
 diff --git a/src/roxterm.c b/src/roxterm.c
-index e2baa40..a3bb174 100644
+index 53a69a8..8d55b57 100644
 --- a/src/roxterm.c
 +++ b/src/roxterm.c
 @@ -3462,6 +3462,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,

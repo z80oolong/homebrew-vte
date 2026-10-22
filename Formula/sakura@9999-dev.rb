@@ -1,8 +1,12 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class SakuraAT9999Dev < Formula
+  include DiffDataMixin
+
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
 
-  CURRENT_COMMIT = "46f4582a7b9b2e4eb892909b3e29e5067fcbb2f7".freeze
+  CURRENT_COMMIT = "2db313dc2155f03155d84e09e4dda43e049eb9e9".freeze
   url "https://github.com/dabisu/sakura.git",
     branch:   "master",
     revision: CURRENT_COMMIT
@@ -37,10 +41,6 @@ class SakuraAT9999Dev < Formula
     EOS
   end
 
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
-  end
-
   test do
     ENV["LC_ALL"] = "C"
     output = shell_output("#{bin}/sakura --version 2>&1 || true").strip
@@ -50,10 +50,10 @@ end
 
 __END__
 diff --git a/src/sakura.c b/src/sakura.c
-index 9c49d55..c2c048b 100644
+index 83c513f..0e484ea 100644
 --- a/src/sakura.c
 +++ b/src/sakura.c
-@@ -3035,6 +3035,9 @@ sakura_add_tab()
+@@ -3033,6 +3033,9 @@ sakura_add_tab()
  	GtkWidget *event_box;
  	gint index, page, npages;
  	gchar *cwd = NULL; gchar *default_label_text = NULL;
@@ -63,7 +63,7 @@ index 9c49d55..c2c048b 100644
  
  	sk_tab = g_new0(struct sakura_tab, 1);
  
-@@ -3312,6 +3315,14 @@ sakura_add_tab()
+@@ -3310,6 +3313,14 @@ sakura_add_tab()
  	vte_terminal_set_audible_bell (VTE_TERMINAL(sk_tab->vte), sakura.audible_bell ? TRUE : FALSE);
  	vte_terminal_set_cursor_blink_mode (VTE_TERMINAL(sk_tab->vte), sakura.blinking_cursor ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
  	vte_terminal_set_cursor_shape (VTE_TERMINAL(sk_tab->vte), sakura.cursor_type);

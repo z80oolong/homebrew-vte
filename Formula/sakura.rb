@@ -1,4 +1,8 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class Sakura < Formula
+  include DiffDataMixin
+
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
   license "GPL-2.0-or-later"

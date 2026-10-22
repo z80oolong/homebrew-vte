@@ -1,4 +1,8 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class Roxterm < Formula
+  include DiffDataMixin
+
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
   license "LGPL-3.0-or-later"

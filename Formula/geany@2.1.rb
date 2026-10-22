@@ -1,4 +1,8 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class GeanyAT21 < Formula
+  include DiffDataMixin
+
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
   url "https://download.geany.org/geany-2.1.tar.gz"
@@ -51,6 +55,9 @@ class GeanyAT21 < Formula
     ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
     ENV.prepend_path "PKG_CONFIG_PATH", libexec/"ctpl/lib/pkgconfig"
+    ENV.prepend "CPPFLAGS", "-I#{Formula["glibc"].opt_include}"
+    ENV.prepend "CFLAGS", "-I#{Formula["glibc"].opt_include}"
+    ENV.prepend "CXXFLAGS", "-I#{Formula["glibc"].opt_include}"
     ENV["LC_ALL"] = "C"
 
     resource("ctpl").stage do
@@ -94,10 +101,6 @@ class GeanyAT21 < Formula
       system "make"
       system "make", "install"
     end
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

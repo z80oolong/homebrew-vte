@@ -1,4 +1,8 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class TildaAT9999Dev < Formula
+  include DiffDataMixin
+
   desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
 
@@ -54,10 +58,6 @@ class TildaAT9999Dev < Formula
       #{full_name} is a Formula for installing the development version of
       `tilda` based on the HEAD version (commit #{CURRENT_COMMIT[0..7]}) from its git repository.
     EOS
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

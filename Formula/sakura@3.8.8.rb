@@ -1,4 +1,8 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class SakuraAT388 < Formula
+  include DiffDataMixin
+
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
   url "https://github.com/dabisu/sakura/archive/refs/tags/SAKURA_3_8_8.tar.gz"
@@ -24,10 +28,6 @@ class SakuraAT388 < Formula
     system "cmake", "-S", ".", "-B", "build", *args
     system "cmake", "--build", "build"
     system "cmake", "--install", "build"
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

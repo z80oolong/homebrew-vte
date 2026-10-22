@@ -1,4 +1,9 @@
+
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class LxterminalAT041 < Formula
+  include DiffDataMixin
+
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
   url "https://github.com/lxde/lxterminal/archive/refs/tags/0.4.1.tar.gz"
@@ -39,10 +44,6 @@ class LxterminalAT041 < Formula
     system "./configure", *args
     system "make"
     system "make", "install"
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

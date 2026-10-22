@@ -1,4 +1,8 @@
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
 class TildaAT150 < Formula
+  include DiffDataMixin
+
   desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
   url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-1.5.0.tar.gz"
@@ -43,10 +47,6 @@ class TildaAT150 < Formula
     system "./configure", "--disable-silent-rules", *std_configure_args
     system "make"
     system "make", "install"
-  end
-
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
   end
 
   test do

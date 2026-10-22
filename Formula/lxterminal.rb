@@ -1,4 +1,10 @@
+
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
+
 class Lxterminal < Formula
+  include DiffDataMixin
+
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
   revision 1

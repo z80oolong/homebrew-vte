@@ -1,8 +1,12 @@
-class RoxtermAT3166 < Formula
+require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
+
+class RoxtermAT3182 < Formula
+  include DiffDataMixin
+
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
-  url "https://github.com/realh/roxterm/archive/refs/tags/3.16.6.tar.gz"
-  sha256 "153fbb0746c3afa45bede7e3f6aa0e0ab0ce698d3bfe4ac1962f9da0a1a44145"
+  url "https://github.com/realh/roxterm/archive/refs/tags/3.18.2.tar.gz"
+  sha256 "d20a19abe03798bfc6c9404eb7ce4fbecabf2e1ab527b587aab76d06635a92e7"
   license "LGPL-3.0-or-later"
   revision 1
 
@@ -30,13 +34,13 @@ class RoxtermAT3166 < Formula
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
     ENV.append "CFLAGS", "-DENABLE_NLS=1"
 
-    inreplace "CMakeLists.txt" do |s|
+    inreplace "./man/CMakeLists.txt" do |s|
       s.gsub! %r{http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl},
         "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
     end
 
     inreplace "./src/config.h.in" do |s|
-      s.gsub!(/^#undef ENABLE_NLS/, "#define ENABLE_NLS 1")
+      s.gsub!(/^#cmakedefine ENABLE_NLS/, "#define ENABLE_NLS 1")
     end
 
     args  = std_cmake_args
@@ -55,10 +59,6 @@ class RoxtermAT3166 < Formula
     end
   end
 
-  def diff_data
-    path.readlines(nil).first.gsub(/^.*\n__END__\n/m, "")
-  end
-
   test do
     system "test", "-x", bin/"roxterm"
   end
@@ -66,10 +66,10 @@ end
 
 __END__
 diff --git a/src/roxterm.c b/src/roxterm.c
-index 5895e3f..bafd6c6 100644
+index 53a69a8..8d55b57 100644
 --- a/src/roxterm.c
 +++ b/src/roxterm.c
-@@ -3303,6 +3303,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3462,6 +3462,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
      gboolean custom_tab_name = FALSE;
      MultiWin *template_win = roxterm_get_win(roxterm_template);
      GtkWidget *viewport = NULL;
@@ -79,7 +79,7 @@ index 5895e3f..bafd6c6 100644
  
      roxterm_terms = g_list_append(roxterm_terms, roxterm);
  
-@@ -3329,6 +3332,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
+@@ -3488,6 +3491,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
              roxterm->columns, roxterm->rows);
      gtk_widget_grab_focus(roxterm->widget);
      vte = VTE_TERMINAL(roxterm->widget);
