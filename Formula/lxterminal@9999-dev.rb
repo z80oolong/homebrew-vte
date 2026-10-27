@@ -30,12 +30,12 @@ class LxterminalAT9999Dev < Formula
   end
 
   def install
-    ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
+    ENV.prepend_path "PERL5LIB", "#{formula_opt_libexec("perl-xml-parser")}/lib/perl5"
     ENV["LC_ALL"] = "C"
 
     inreplace "man/Makefile.am" do |s|
       s.gsub! %r{http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl},
-        "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
+        "#{formula_opt_prefix("docbook-xsl")}/docbook-xsl-ns/manpages/docbook.xsl"
     end
 
     args  = std_configure_args

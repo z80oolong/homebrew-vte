@@ -56,12 +56,12 @@ class GeanyAT21 < Formula
 
   def install
     ENV.append "CFLAGS", "-DNO_USE_HOMEBREW_GEANY_PLUGINS"
-    ENV.prepend_path "PERL5LIB", Formula["perl-xml-parser"].opt_libexec/"lib/perl5"
+    ENV.prepend_path "PERL5LIB", formula_opt_libexec("perl-xml-parser")/"lib/perl5"
     ENV.prepend_path "PKG_CONFIG_PATH", lib/"pkgconfig"
     ENV.prepend_path "PKG_CONFIG_PATH", libexec/"ctpl/lib/pkgconfig"
-    ENV.prepend "CPPFLAGS", "-I#{Formula["glibc"].opt_include}"
-    ENV.prepend "CFLAGS", "-I#{Formula["glibc"].opt_include}"
-    ENV.prepend "CXXFLAGS", "-I#{Formula["glibc"].opt_include}"
+    ENV.prepend "CPPFLAGS", "-I#{formula_opt_include("glibc")}"
+    ENV.prepend "CFLAGS", "-I#{formula_opt_include("glibc")}"
+    ENV.prepend "CXXFLAGS", "-I#{formula_opt_include("glibc")}"
     ENV["LC_ALL"] = "C"
 
     resource("ctpl").stage do
@@ -78,7 +78,7 @@ class GeanyAT21 < Formula
 
     args  = std_configure_args.dup
     args << "--enable-vte"
-    args << "--with-vte-module-path=#{Formula["vte3"].opt_prefix}"
+    args << "--with-vte-module-path=#{formula_opt_prefix("vte3")}"
 
     inreplace "./scintilla/include/ScintillaTypes.h",
       /^#define SCINTILLATYPES_H/, "#define SCINTILLATYPES_H\n\n#include <cstdint>\n"

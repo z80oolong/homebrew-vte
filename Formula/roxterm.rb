@@ -21,7 +21,7 @@ class Roxterm < Formula
     url "https://github.com/realh/roxterm.git"
 
     patch :p1 do
-      file "Patches/roxterm/roxterm-#{CURRENT_COMMIT[0..7]}-fix.diff"
+      file "Patches/roxterm/roxterm-HEAD-#{CURRENT_COMMIT[0..7]}-fix.diff"
       type :unofficial
     end
   end
@@ -49,7 +49,7 @@ class Roxterm < Formula
 
     inreplace "./man/CMakeLists.txt" do |s|
       s.gsub! %r{http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl},
-        "#{Formula["docbook-xsl"].opt_prefix}/docbook-xsl-ns/manpages/docbook.xsl"
+        "#{formula_opt_prefix("docbook-xsl")}/docbook-xsl-ns/manpages/docbook.xsl"
     end
 
     inreplace "./src/config.h.in" do |s|
@@ -67,8 +67,8 @@ class Roxterm < Formula
       (share/"locale/ja/LC_MESSAGES").mkpath
       (share/"locale/en_US/LC_MESSAGES").mkpath
 
-      system Formula["gettext"].opt_bin/"msgfmt", "-o", share/"locale/ja/LC_MESSAGES/roxterm.mo", "./ja.po"
-      system Formula["gettext"].opt_bin/"msgfmt", "-o", share/"locale/en_US/LC_MESSAGES/roxterm.mo", "./en_US.po"
+      system formula_opt_bin("gettext")/"msgfmt", "-o", share/"locale/ja/LC_MESSAGES/roxterm.mo", "./ja.po"
+      system formula_opt_bin("gettext")/"msgfmt", "-o", share/"locale/en_US/LC_MESSAGES/roxterm.mo", "./en_US.po"
     end
   end
 
