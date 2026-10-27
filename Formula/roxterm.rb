@@ -1,24 +1,29 @@
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
 class Roxterm < Formula
-  include DiffDataMixin
-
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
   license "LGPL-3.0-or-later"
   revision 1
 
-  stable do
-    url "https://github.com/realh/roxterm/archive/refs/tags/3.17.2.tar.gz"
-    sha256 "3da0ac499773002ccf0df9fd57918b3856cd5c5257f874715725ff3ef1266657"
+  CURRENT_VERSION = "3.18.2".freeze
+  CURRENT_COMMIT  = "00fcf32619ea0b4c1d5afeb5b590a3565d82c4f7".freeze
 
-    patch :p1, Formula["z80oolong/vte/roxterm@3.17.2"].diff_data
+  stable do
+    url "https://github.com/realh/roxterm/archive/refs/tags/#{CURRENT_VERSION}.tar.gz"
+    sha256 "d20a19abe03798bfc6c9404eb7ce4fbecabf2e1ab527b587aab76d06635a92e7"
+
+    patch :p1 do
+      file "Patches/roxterm/roxterm-#{CURRENT_VERSION}-fix.diff"
+      type :unofficial
+    end
   end
 
   head do
     url "https://github.com/realh/roxterm.git"
 
-    patch :p1, Formula["z80oolong/vte/roxterm@9999-dev"].diff_data
+    patch :p1 do
+      file "Patches/roxterm/roxterm-#{CURRENT_COMMIT[0..7]}-fix.diff"
+      type :unofficial
+    end
   end
 
   depends_on "cmake" => :build

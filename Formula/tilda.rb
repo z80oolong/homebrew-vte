@@ -1,24 +1,29 @@
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
 class Tilda < Formula
-  include DiffDataMixin
-
   desc "Gtk-based drop down terminal for Linux and Unix"
   homepage "https://github.com/lanoxx/tilda"
   license "GPL-2.0-or-later"
-  revision 1
+  revision 2
+
+  CURRENT_VERSION = "2.0.0".freeze
+  CURRENT_COMMIT  = "b6a2ca205a958f09632599655b97e3d81a58ee2b".freeze
 
   stable do
-    url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-2.0.0.tar.gz"
+    url "https://github.com/lanoxx/tilda/archive/refs/tags/tilda-#{CURRENT_VERSION}.tar.gz"
     sha256 "ff9364244c58507cd4073ac22e580a4cded048d416c682496c1b1788ee8a30df"
 
-    patch :p1, Formula["z80oolong/vte/tilda@2.0.0"].diff_data
+    patch :p1 do
+      file "Patches/tilda/tilda-#{CURRENT_VERSION}-fix.diff"
+      type :unofficial
+    end
   end
 
   head do
     url "https://github.com/lanoxx/tilda.git"
 
-    patch :p1, Formula["z80oolong/vte/tilda@9999-dev"].diff_data
+    patch :p1 do
+      file "Patches/tilda/tilda-HEAD-#{CURRENT_COMMIT[0..7]}-fix.diff"
+      type :unofficial
+    end
   end
 
   depends_on "autoconf" => :build

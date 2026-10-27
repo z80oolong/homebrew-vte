@@ -1,0 +1,92 @@
+diff --git a/src/plugins.c b/src/plugins.c
+index 8545b18..8afe5aa 100644
+--- a/src/plugins.c
++++ b/src/plugins.c
+@@ -1143,11 +1143,20 @@ static gint cmp_plugin_by_proxy(gconstpointer a, gconstpointer b)
+ 	}
+ }
+ 
++#ifndef NO_USE_HOMEBREW_GEANY_PLUGINS
++#ifndef DEFAULT_HOMEBREW_PATH
++#define DEFAULT_HOMEBREW_PATH "/home/linuxbrew/.linuxbrew"
++#endif
++#endif
+ 
+ /* Load (but don't initialize) all plugins for the Plugin Manager dialog */
+ static void load_all_plugins(void)
+ {
+ 	gchar *plugin_path_config;
++#ifndef NO_USE_HOMEBREW_GEANY_PLUGINS
++	gchar *homebrew_prefix;
++	gchar *plugin_path_homebrew;
++#endif
+ 	gchar *plugin_path_system;
+ 	gchar *plugin_path_custom;
+ 
+@@ -1164,6 +1173,15 @@ static void load_all_plugins(void)
+ 		load_plugins_from_path(plugin_path_custom);
+ 		g_free(plugin_path_custom);
+ 	}
++#ifndef NO_USE_HOMEBREW_GEANY_PLUGINS
++	homebrew_prefix = g_getenv("HOMEBREW_PREFIX");
++	if (homebrew_prefix == NULL)
++		homebrew_prefix = DEFAULT_HOMEBREW_PATH;
++	plugin_path_homebrew = g_build_filename(homebrew_prefix, "lib", "geany", NULL);
++	/* load plugins from $HOMEBREW_PREFIX/lib/geany */
++	load_plugins_from_path(plugin_path_homebrew);
++	g_free(plugin_path_homebrew);
++#endif
+ 
+ 	/* finally load plugins from $prefix/lib/geany */
+ 	load_plugins_from_path(plugin_path_system);
+diff --git a/src/vte.c b/src/vte.c
+index be600b3..1aedd03 100644
+--- a/src/vte.c
++++ b/src/vte.c
+@@ -136,6 +136,10 @@ struct VteFunctions
+ 	void (*vte_terminal_set_color_foreground_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
+ 	void (*vte_terminal_set_color_bold_rgba) (VteTerminal *terminal, const GdkRGBA *foreground);
+ 	void (*vte_terminal_set_color_background_rgba) (VteTerminal *terminal, const GdkRGBA *background);
++#ifndef NO_UTF8_CJK
++	void (*vte_terminal_set_cjk_ambiguous_width) (VteTerminal *terminal, int width);
++	int  (*vte_terminal_get_cjk_ambiguous_width) (VteTerminal *terminal);
++#endif
+ };
+ 
+ 
+@@ -339,6 +343,9 @@ static gboolean vte_start_idle(G_GNUC_UNUSED gpointer user_data)
+ static void create_vte(void)
+ {
+ 	GtkWidget *vte, *scrollbar, *hbox;
++#ifndef NO_UTF8_CJK
++	char *vte_cjk_width = NULL;
++#endif
+ 
+ 	vte_config.vte = vte = vf->vte_terminal_new();
+ 	scrollbar = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, vf->vte_terminal_get_adjustment(VTE_TERMINAL(vte)));
+@@ -382,6 +389,14 @@ static void create_vte(void)
+ 	gtk_notebook_insert_page(GTK_NOTEBOOK(msgwindow.notebook), hbox, terminal_label, MSG_VTE);
+ 
+ 	g_signal_connect_after(vte, "realize", G_CALLBACK(on_vte_realize), NULL);
++#ifndef NO_UTF8_CJK
++    vte_cjk_width = g_getenv("VTE_CJK_WIDTH");
++    if ((vte_cjk_width != NULL) && (strncmp((const char *)vte_cjk_width, "1", (size_t)1) == 0)) {
++        if (vf->vte_terminal_get_cjk_ambiguous_width(VTE_TERMINAL(vte)) != 2) {
++            vf->vte_terminal_set_cjk_ambiguous_width(VTE_TERMINAL(vte), 2);
++        }
++    }
++#endif
+ }
+ 
+ 
+@@ -629,6 +644,10 @@ static gboolean vte_register_symbols(GModule *mod)
+ 	if (! BIND_SYMBOL(vte_terminal_get_adjustment))
+ 		/* vte_terminal_get_adjustment() is available since 0.9 and removed in 0.38 */
+ 		vf->vte_terminal_get_adjustment = default_vte_terminal_get_adjustment;
++#ifndef NO_UTF8_CJK
++	BIND_REQUIRED_SYMBOL(vte_terminal_set_cjk_ambiguous_width);
++	BIND_REQUIRED_SYMBOL(vte_terminal_get_cjk_ambiguous_width);
++#endif
+ 
+ 	#undef BIND_REQUIRED_SYMBOL_RGBA_WRAPPED
+ 	#undef BIND_REQUIRED_SYMBOL

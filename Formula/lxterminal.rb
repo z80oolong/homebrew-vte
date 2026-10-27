@@ -1,25 +1,28 @@
-
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
-
 class Lxterminal < Formula
-  include DiffDataMixin
-
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
-  revision 1
+  revision 2
+
+  CURRENT_VERSION = "0.4.1".freeze
+  CURRENT_COMMIT  = "ac5e36f496b2bf95eae790181e65c9eb54bb9c13".freeze
 
   stable do
-    url "https://github.com/lxde/lxterminal/archive/refs/tags/0.4.1.tar.gz"
+    url "https://github.com/lxde/lxterminal/archive/refs/tags/#{CURRENT_VERSION}.tar.gz"
     sha256 "d5da0646e20ad2be44ef69a9d620be5f1ec43b156dc585ebe203dd7b05c31d88"
 
-    patch :p1, Formula["z80oolong/vte/lxterminal@0.4.1"].diff_data
+    patch :p1 do
+      file "Patches/lxterminal/lxterminal-#{CURRENT_VERSION}-fix.diff"
+      type :unofficial
+    end
   end
 
   head do
     url "https://github.com/lxde/lxterminal.git"
 
-    patch :p1, Formula["z80oolong/vte/lxterminal@9999-dev"].diff_data
+    patch :p1 do
+      file "Patches/lxterminal/lxterminal-HEAD-#{CURRENT_COMMIT[0..7]}-fix.diff"
+      type :unofficial
+    end
   end
 
   depends_on "autoconf" => :build

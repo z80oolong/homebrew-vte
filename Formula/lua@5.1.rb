@@ -8,6 +8,8 @@ class LuaAT51 < Formula
   license "MIT"
   revision 8
 
+  keg_only "this is an alternate version of another formula"
+
   uses_from_macos "unzip"
 
   on_macos do

@@ -1,8 +1,4 @@
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
 class SakuraAT9999Dev < Formula
-  include DiffDataMixin
-
   desc "GTK/VTE based terminal emulator"
   homepage "https://launchpad.net/sakura"
 
@@ -14,7 +10,7 @@ class SakuraAT9999Dev < Formula
   license "GPL-2.0-or-later"
   revision 1
 
-  keg_only :versioned_formula
+  keg_only "this is an alternate version of another formula"
 
   depends_on "cmake" => :build
   depends_on "pod2man" => :build
@@ -23,7 +19,10 @@ class SakuraAT9999Dev < Formula
   depends_on "systemd"
   depends_on "vte3"
 
-  patch :p1, :DATA
+  patch :p1 do
+    file "Patches/sakura/sakura-HEAD-#{CURRENT_COMMIT[0..7]}-fix.diff"
+    type :unofficial
+  end
 
   def install
     args  = std_cmake_args
@@ -47,34 +46,3 @@ class SakuraAT9999Dev < Formula
     assert_equal "sakura version is 3.8.9", output
   end
 end
-
-__END__
-diff --git a/src/sakura.c b/src/sakura.c
-index 83c513f..0e484ea 100644
---- a/src/sakura.c
-+++ b/src/sakura.c
-@@ -3033,6 +3033,9 @@ sakura_add_tab()
- 	GtkWidget *event_box;
- 	gint index, page, npages;
- 	gchar *cwd = NULL; gchar *default_label_text = NULL;
-+#ifndef NO_UTF8_CJK
-+	gchar *vte_cjk_width = NULL;
-+#endif
- 
- 	sk_tab = g_new0(struct sakura_tab, 1);
- 
-@@ -3310,6 +3313,14 @@ sakura_add_tab()
- 	vte_terminal_set_audible_bell (VTE_TERMINAL(sk_tab->vte), sakura.audible_bell ? TRUE : FALSE);
- 	vte_terminal_set_cursor_blink_mode (VTE_TERMINAL(sk_tab->vte), sakura.blinking_cursor ? VTE_CURSOR_BLINK_ON : VTE_CURSOR_BLINK_OFF);
- 	vte_terminal_set_cursor_shape (VTE_TERMINAL(sk_tab->vte), sakura.cursor_type);
-+#ifndef NO_UTF8_CJK
-+	vte_cjk_width = g_getenv("VTE_CJK_WIDTH");
-+	if ((vte_cjk_width != NULL) && (strncmp((const char *)vte_cjk_width, "1", (size_t)1) == 0)) {
-+		if (vte_terminal_get_cjk_ambiguous_width(VTE_TERMINAL(sk_tab->vte)) != 2) {
-+			vte_terminal_set_cjk_ambiguous_width(VTE_TERMINAL(sk_tab->vte), 2);
-+		}
-+	}
-+#endif
- 
- }
- 

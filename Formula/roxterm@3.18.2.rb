@@ -1,16 +1,12 @@
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
 class RoxtermAT3182 < Formula
-  include DiffDataMixin
-
   desc "Highly configurable terminal emulator based on VTE"
   homepage "https://roxterm.sourceforge.io/"
   url "https://github.com/realh/roxterm/archive/refs/tags/3.18.2.tar.gz"
   sha256 "d20a19abe03798bfc6c9404eb7ce4fbecabf2e1ab527b587aab76d06635a92e7"
   license "LGPL-3.0-or-later"
-  revision 1
+  revision 2
 
-  keg_only :versioned_formula
+  keg_only "this is an alternate version of another formula"
 
   depends_on "cmake" => :build
   depends_on "docbook-xsl" => :build
@@ -28,7 +24,10 @@ class RoxtermAT3182 < Formula
         revision: "72cd4d52211814ac3a8cecd2fc197447c3914c47"
   end
 
-  patch :p1, :DATA
+  patch :p1 do
+    file "Patches/roxterm/roxterm-3.18.2-fix.diff"
+    type :unofficial
+  end
 
   def install
     ENV.append "CFLAGS", "-D_GNU_SOURCE"
@@ -63,34 +62,3 @@ class RoxtermAT3182 < Formula
     system "test", "-x", bin/"roxterm"
   end
 end
-
-__END__
-diff --git a/src/roxterm.c b/src/roxterm.c
-index 53a69a8..8d55b57 100644
---- a/src/roxterm.c
-+++ b/src/roxterm.c
-@@ -3462,6 +3462,9 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
-     gboolean custom_tab_name = FALSE;
-     MultiWin *template_win = roxterm_get_win(roxterm_template);
-     GtkWidget *viewport = NULL;
-+#ifndef NO_UTF8_CJK
-+    char *vte_cjk_width = NULL;
-+#endif
- 
-     roxterm_terms = g_list_append(roxterm_terms, roxterm);
- 
-@@ -3488,6 +3491,14 @@ static GtkWidget *roxterm_multi_tab_filler(MultiWin * win, MultiTab * tab,
-             roxterm->columns, roxterm->rows);
-     gtk_widget_grab_focus(roxterm->widget);
-     vte = VTE_TERMINAL(roxterm->widget);
-+#ifndef NO_UTF8_CJK
-+    vte_cjk_width = g_getenv("VTE_CJK_WIDTH");
-+    if ((vte_cjk_width != NULL) && (strncmp((const char *)vte_cjk_width, "1", (size_t)1) == 0)) {
-+        if (vte_terminal_get_cjk_ambiguous_width(vte) != 2) {
-+            vte_terminal_set_cjk_ambiguous_width(vte, 2);
-+        }
-+    }
-+#endif
-     if (vte_widget)
-         *vte_widget = roxterm->widget;
-     if (adjustment)

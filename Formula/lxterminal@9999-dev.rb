@@ -1,9 +1,4 @@
-
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
 class LxterminalAT9999Dev < Formula
-  include DiffDataMixin
-
   desc "Desktop-independent VTE-based terminal emulator"
   homepage "https://wiki.lxde.org/en/LXTerminal"
 
@@ -12,9 +7,9 @@ class LxterminalAT9999Dev < Formula
     branch:   "master",
     revision: CURRENT_COMMIT
   version "git-#{CURRENT_COMMIT[0..7]}"
-  revision 1
+  revision 2
 
-  keg_only :versioned_formula
+  keg_only "this is an alternate version of another formula"
 
   depends_on "autoconf" => :build
   depends_on "automake" => :build
@@ -29,7 +24,10 @@ class LxterminalAT9999Dev < Formula
   depends_on "gtk+3"
   depends_on "vte3"
 
-  patch :p1, :DATA
+  patch :p1 do
+    file "Patches/lxterminal/lxterminal-HEAD-#{CURRENT_COMMIT[0..7]}-fix.diff"
+    type :unofficial
+  end
 
   def install
     ENV.prepend_path "PERL5LIB", "#{Formula["perl-xml-parser"].opt_libexec}/lib/perl5"
@@ -63,56 +61,3 @@ class LxterminalAT9999Dev < Formula
     assert_equal "lxterminal 0.4.1", output
   end
 end
-
-__END__
-diff --git a/configure.ac b/configure.ac
-index 638f8fb..171522d 100644
---- a/configure.ac
-+++ b/configure.ac
-@@ -95,11 +95,11 @@ if test x"$enable_man" = x"yes"; then
- 		AC_MSG_ERROR([xsltproc is required to regenerate the pre-built man page; consider --disable-man])
- 	fi
- 
--	dnl check for DocBook DTD and stylesheets in the local catalog.
--	JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
--		[DocBook XML DTD V4.1.2], [], AC_MSG_ERROR([DocBook XML DTD is required to regenerate the pre-built man page; consider --disable-man]))
--	JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
--		[DocBook XSL Stylesheets >= 1.70.1], [], AC_MSG_ERROR([DocBook XSL Stylesheets are required to regenerate the pre-built man page; consider --disable-man]))
-+	#dnl check for DocBook DTD and stylesheets in the local catalog.
-+	#JH_CHECK_XML_CATALOG([-//OASIS//DTD DocBook XML V4.1.2//EN],
-+	#	[DocBook XML DTD V4.1.2], [], AC_MSG_ERROR([DocBook XML DTD is required to regenerate the pre-built man page; consider --disable-man]))
-+	#JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
-+	#	[DocBook XSL Stylesheets >= 1.70.1], [], AC_MSG_ERROR([DocBook XSL Stylesheets are required to regenerate the pre-built man page; consider --disable-man]))
- 
- 	rm -f $srcdir/man/lxterminal.1
- fi
-diff --git a/src/lxterminal.c b/src/lxterminal.c
-index 18ac81a..c05dfae 100644
---- a/src/lxterminal.c
-+++ b/src/lxterminal.c
-@@ -1187,6 +1187,10 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
-     /* Create and initialize Term structure for new terminal. */
-     Term * term = g_slice_new0(Term);
-     term->parent = terminal;
-+#ifndef NO_UTF8_CJK
-+    /* Value of environment variable 'VTE_CJK_WIDTH'. */
-+    gchar *vte_cjk_width = NULL;
-+#endif
- 
-     /* Create a VTE and a vertical scrollbar, and place them inside a horizontal box. */
-     term->vte = vte_terminal_new();
-@@ -1227,6 +1231,14 @@ static Term * terminal_new(LXTerminal * terminal, const gchar * label, const gch
- #endif
-     vte_terminal_set_backspace_binding(VTE_TERMINAL(term->vte), VTE_ERASE_ASCII_DELETE);
-     vte_terminal_set_delete_binding(VTE_TERMINAL(term->vte), VTE_ERASE_DELETE_SEQUENCE);
-+#ifndef NO_UTF8_CJK
-+    vte_cjk_width = g_getenv("VTE_CJK_WIDTH");
-+    if ((vte_cjk_width != NULL) && (strncmp((const char *)vte_cjk_width, "1", (size_t)1) == 0)) {
-+        if (vte_terminal_get_cjk_ambiguous_width(VTE_TERMINAL(term->vte)) != 2) {
-+            vte_terminal_set_cjk_ambiguous_width(VTE_TERMINAL(term->vte), 2);
-+        }
-+    }
-+#endif
- 
-     /* steal from tilda-0.09.6/src/tilda_terminal.c:145 */
-     /* Match URL's, etc. */

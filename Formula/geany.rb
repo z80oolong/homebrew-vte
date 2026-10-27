@@ -1,11 +1,10 @@
-require "#{Tap.fetch("z80oolong/vte").path}/lib/extend.rb"
-
 class Geany < Formula
-  include DiffDataMixin
-
   desc "Fast and lightweight IDE"
   homepage "https://www.geany.org/"
-  revision 1
+  revision 2
+
+  CURRENT_COMMIT = "2010df99c7a0a754d686cf3c50e0dc4b3e9b5c14".freeze
+  CURRENT_PLUGIN_COMMIT = "2116bb243c12a09cf3179cee4fc1f50922f11386".freeze
 
   stable do
     url "https://download.geany.org/geany-2.1.tar.gz"
@@ -14,9 +13,17 @@ class Geany < Formula
     resource("geany-plugins") do
       url "https://github.com/geany/geany-plugins/archive/refs/tags/2.1.0.tar.gz"
       sha256 "9ca8412763c2f8a7141f6a1569166f4fabf95fc8aad5149a754265673ffce5bb"
+
+      patch :p1 do
+        file "Patches/geany/geany-plugin-2.1-fix.diff"
+        type :unofficial
+      end
     end
 
-    patch :p1, Formula["z80oolong/vte/geany@2.1"].diff_data
+    patch :p1 do
+      file "Patches/geany/geany-2.1-fix.diff"
+      type :unofficial
+    end
   end
 
   head do
@@ -24,9 +31,17 @@ class Geany < Formula
 
     resource("geany-plugins") do
       url "https://github.com/geany/geany-plugins.git"
+
+      patch :p1 do
+        file "Patches/geany/geany-plugin-HEAD-#{CURRENT_PLUGIN_COMMIT[0..7]}-fix.diff"
+        type :unofficial
+      end
     end
 
-    patch :p1, Formula["z80oolong/vte/geany@9999-dev"].diff_data
+    patch :p1 do
+      file "Patches/geany/geany-HEAD-#{CURRENT_COMMIT[0..7]}-fix.diff"
+      type :unofficial
+    end
   end
 
   depends_on "autoconf" => :build
@@ -102,7 +117,6 @@ class Geany < Formula
 
     resource("geany-plugins").stage do
       system "sh", "./autogen.sh"
-      system "patch -p1 < #{buildpath}/geany-plugins.diff"
       inreplace "./git-changebar/src/gcb-plugin.c", /\*bool/, "*boolean" unless build.head?
       inreplace "./configure", "webkit2gtk-4.0", "webkit2gtk-4.1"
 
