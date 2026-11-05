@@ -1,5 +1,24 @@
 # z80oolong/vte -- libvte 対応端末エミュレータ及びアプリケーションの各種問題を修正する Formula 群
 
+## 告知 (2026-06-30)
+
+Homebrew がバージョン 6.0.0 に更新されたことに伴い、セキュリティ対策が強化されました。**これにより、サードパーティの Tap リポジトリを導入する際には、明示的に信頼を設定する必要があります。**
+
+本 Tap リポジトリをご利用の際は、以下の手順に従ってください。
+
+```
+  $ brew tap z80oolong/tmux
+  $ brew trust z80oolong/tmux
+```
+
+その後、通常通り Formula のインストールを行えます。
+
+```
+  $ brew install <formula>
+```
+
+詳細は `brew trust --help` コマンドまたは Homebrew 公式ドキュメントを参照してください。
+
 ## 概要
 
 [Homebrew for Linux][BREW] は、Linux の各ディストリビューションにおけるソースコードの取得およびビルドに基づくパッケージ管理システムです。このシステムを使用することで、ソースコードからのソフトウェアのインストールを簡単かつ効率的に行うことができます。
@@ -28,6 +47,7 @@
 
 ```
   $ brew tap z80oolong/tmux
+  $ brew trust z80oolong/tmux
   $ brew install <formula>
 ```
 
